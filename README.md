@@ -22,19 +22,19 @@ El sistema adopta una arquitectura modular y escalable, permitiendo la incorpora
 
 ## Tecnologías
 
-- **Frontend:** React.js
+- **Frontend:** React.js + Tailwind CSS
 - **Backend:** Node.js + Express
 - **Base de datos:** MongoDB
-- **Utilidades:** Zod, JWT, Nodemailer, Socket.IO, Helmet, Morgan, CORS
+- **Utilidades:** React Router DOM, Axios, React Hook Form, js-cookie, Zod, JWT, Nodemailer, Socket.IO, Helmet, Morgan, CORS
 - **Reportes y tareas:** PDFKit, ExcelJS, json2csv, node-cron
 
 ## Estructura del proyecto
 
-**En desarrollo.** *Esta sección será actualizada conforme avance el proyecto.*
+**En desarrollo.** _Esta sección será actualizada conforme avance el proyecto._
 
 ## Licencia
 
-Este proyecto está licenciado bajo los términos de Creative Commons Atribución-NoComercial-SinObraDerivada 4.0 Internacional (CC BY-NC-ND 4.0).  
+Este proyecto está licenciado bajo los términos de Creative Commons Atribución-NoComercial-SinObraDerivada 4.0 Internacional (CC BY-NC-ND 4.0).
 Consulta el archivo [LICENSE](./LICENSE) para más detalles.
 
 ## Autor
