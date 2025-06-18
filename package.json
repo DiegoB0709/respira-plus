@@ -1,0 +1,36 @@
+{
+  "name": "respira-plus",
+  "version": "1.0.0",
+  "description": "Aplicación web MERN para gestionar terapias médicas en pacientes con tuberculosis",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js"
+  },
+  "keywords": ["mern", "tuberculosis", "salud", "terapias", "node", "express", "react"],
+  "author": "Diego Barreto - dbarretou@autonoma.edu.pe",
+  "license": "CC-BY-NC-ND-4.0",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.5.0",
+    "exceljs": "^4.4.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "json2csv": "^6.0.0-alpha.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.15.1",
+    "morgan": "^1.10.0",
+    "nanoid": "^5.1.5",
+    "node-cron": "^4.1.0",
+    "nodemailer": "^7.0.3",
+    "pdfkit": "^0.17.1",
+    "socket.io": "^4.8.1",
+    "zod": "^3.25.62"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
