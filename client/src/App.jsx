@@ -4,7 +4,7 @@ import DoctorPage from "./pages/DoctorPage";
 import AdminPage from "./pages/AdminPage";
 import PatientPage from "./pages/PatientPage";
 import ProtectedRoute from "./ProtectedRoute";
-
+import NotFound from "./pages/NotFound";
 
 function App() {
   return (
@@ -24,6 +24,8 @@ function App() {
         <Route element={<ProtectedRoute allowedRoles={["patient"]} />}>
           <Route path="/patient" element={<PatientPage />} />
         </Route>
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
