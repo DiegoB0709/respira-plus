@@ -6,8 +6,8 @@ import ContextContainer from "./context/ContextContainer.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    {/*<ContextContainer>*/}
-    <App />
-    {/*</ContextContainer>*/}
+    <ContextContainer>
+      <App />
+    </ContextContainer>
   </StrictMode>
 );

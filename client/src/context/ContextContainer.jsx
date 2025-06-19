@@ -1,5 +1,10 @@
+import { AuthProvider } from "./AuthContext";
 function ContextContainer({ children }) {
-  return {children};
+  return (
+    <AuthProvider>
+      { children }
+    </AuthProvider>
+  );
 }
 
-export default ContextContainer
+export default ContextContainer;
