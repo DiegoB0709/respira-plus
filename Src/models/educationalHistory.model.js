@@ -4,7 +4,7 @@ const educationalHistorySchema = new mongoose.Schema(
   {
     patient: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Users",
       required: true,
     },
     content: {
@@ -18,7 +18,7 @@ const educationalHistorySchema = new mongoose.Schema(
     },
     feedback: {
       type: String,
-      default: "", 
+      default: "",
     },
     completed: {
       type: Boolean,
@@ -30,4 +30,4 @@ const educationalHistorySchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("EducationalHistory", educationalHistorySchema);
+export default mongoose.models.EducationalHistory || mongoose.model("EducationalHistory", educationalHistorySchema);

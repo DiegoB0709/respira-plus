@@ -30,7 +30,7 @@ router.get(
 
 router.post("/view/:contentId", authorizeRole("patient"), registerContentView);
 
-router.get("/history", authorizeRole("patient"), getEducationalHistory);
+router.get("/history", authorizeRole("patient, doctor"), getEducationalHistory);
 
 router.get("/public", getPublicEducationalContent);
 

@@ -14,7 +14,7 @@ router.get("/doctor", authorizeRole("doctor"), getAlertsByDoctor);
 
 router.get("/patient/:patientId", authRequired, getAlertsByPatient);
 
-router.get("/:id", authRequired, getAlertById);
+router.get("/:alertId", authRequired, getAlertById);
 
 router.patch("/:id/status", authRequired, updateAlertStatus);
 

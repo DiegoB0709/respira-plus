@@ -1,7 +1,7 @@
 import { evaluatePatient } from "../services/ai.service.js";
 import { analyzeAndNotifyContent } from "../services/educationalNotification.service.js";
-import EducationalContent from "../models/EducationalContent.model.js";
-import EducationalHistory from "../models/EducationalHistory.model.js";
+import EducationalContent from "../models/educationalContent.model.js";
+import EducationalHistory from "../models/educationalHistory.model.js";
 
 export const getRecommendedContentForPatient = async (req, res) => {
   try {

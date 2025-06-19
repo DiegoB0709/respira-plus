@@ -7,7 +7,7 @@ const treatmentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
       required: true,
-      unique: true, 
+      unique: true,
     },
     doctor: {
       type: mongoose.Schema.Types.ObjectId,

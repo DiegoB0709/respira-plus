@@ -11,7 +11,7 @@ const educationalContentSchema = new mongoose.Schema(
     },
     fileUrl: {
       type: String,
-      required: true, 
+      required: true,
     },
     fileType: {
       type: String,
@@ -20,13 +20,13 @@ const educationalContentSchema = new mongoose.Schema(
     },
     uploadBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "Users",
       required: true,
     },
 
     relatedSymptoms: [
       {
-        type: String, 
+        type: String,
       },
     ],
     treatmentStage: {
@@ -36,7 +36,7 @@ const educationalContentSchema = new mongoose.Schema(
     },
     clinicalTags: [
       {
-        type: String, 
+        type: String,
       },
     ],
 
@@ -50,4 +50,5 @@ const educationalContentSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("EducationalContent", educationalContentSchema);
+export default mongoose.models.EducationalContent ||
+  mongoose.model("EducationalContent", educationalContentSchema);

@@ -1,4 +1,5 @@
 import Notification from "../models/notification.model.js";
+import Users from "../models/user.model.js";
 import { transporter, transporterReady } from "../libs/mailer.js";
 
 export const sendPendingNotifications = async () => {

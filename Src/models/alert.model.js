@@ -4,7 +4,7 @@ const alertSchema = new mongoose.Schema(
   {
     patient: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Users", 
+      ref: "Users",
       required: true,
     },
     doctor: {

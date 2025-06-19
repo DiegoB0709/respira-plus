@@ -1,4 +1,5 @@
 import Alert from "../models/alert.model.js";
+import Users from "../models/user.model.js";
 import { crearNotificacion } from "./notification.service.js";
 
 /**
