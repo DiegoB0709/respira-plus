@@ -6,6 +6,8 @@ import {
   logout as logoutRequest,
   generateToken,
 } from "../api/auth";
+import { handleApiError } from "../utils/handleError";
+import { useAutoClearErrors } from "../hooks/useAutoClearErrors";
 import Cookies from "js-cookie";
 
 export const AuthContext = createContext();
@@ -30,7 +32,7 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      handleErrors(error);
+      handleApiError(error, "Error al registrar", setErrors);
     }
   };
 
@@ -40,7 +42,7 @@ export const AuthProvider = ({ children }) => {
       setUser(res.data);
       setIsAuthenticated(true);
     } catch (error) {
-      handleErrors(error);
+      handleApiError(error, "Error al iniciar sesión", setErrors);
     }
   };
 
@@ -59,7 +61,7 @@ export const AuthProvider = ({ children }) => {
       const res = await generateToken(data);
       return res.data.token;
     } catch (error) {
-      handleErrors(error);
+      handleApiError(error, "Error al generar token", setErrors);
       return null;
     }
   };
@@ -80,7 +82,7 @@ export const AuthProvider = ({ children }) => {
       } catch (error) {
         setIsAuthenticated(false);
         setUser(null);
-        console.error("Error al verificar el usuario:", error);
+        handleApiError(error, "Error al verificar la sesión", setErrors);
       } finally {
         setLoading(false);
       }
@@ -88,22 +90,7 @@ export const AuthProvider = ({ children }) => {
     checkLogin();
   }, []);
 
-  useEffect(() => {
-    if (errors.length > 0) {
-      const timer = setTimeout(() => setErrors([]), 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [errors]);
-
-  const handleErrors = (error) => {
-    if (Array.isArray(error.response?.data)) {
-      setErrors(error.response.data);
-    } else if (error.response?.data?.message) {
-      setErrors([error.response.data.message]);
-    } else {
-      setErrors(["Ocurrió un error inesperado"]);
-    }
-  };
+  useAutoClearErrors(errors, setErrors);
 
   return (
     <AuthContext.Provider
