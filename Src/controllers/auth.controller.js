@@ -45,6 +45,7 @@ export const register = async (req, res, next) => {
     const userSaved = await userByToken.save();
     const token = await CreateAccessToken({
       id: userSaved._id,
+      username: userSaved.username,
       role: userSaved.role,
     });
 
@@ -77,6 +78,7 @@ export const login = async (req, res, next) => {
 
     const token = await CreateAccessToken({
       id: userFound._id,
+      username: userFound.username,
       role: userFound.role,
     });
     res.cookie("token", token);

@@ -5,12 +5,16 @@ import AdminPage from "./pages/AdminPage";
 import PatientPage from "./pages/PatientPage";
 import ProtectedRoute from "./ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import TestPage from "./tests/TestPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<AuthPage />} />
+
+        {/* TESTS */}
+        <Route path="/test" element={<TestPage />} />
 
         {/* Rutas Protegidas */}
         <Route element={<ProtectedRoute allowedRoles={["admin"]} />}>

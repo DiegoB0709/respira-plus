@@ -7,8 +7,8 @@ export const getAppointmentsByPatient = (patientId) =>
 
 export const getAppointmentsByDoctor = () => axios.get("/appointments/doctor");
 
-export const updateAppointmentStatus = (appointmentId, status) =>
-  axios.put(`/appointments/${appointmentId}/status`, { status });
+export const updateAppointmentStatus = (appointmentId, newStatus) =>
+  axios.put(`/appointments/${appointmentId}/status`, { newStatus });
 
 export const getAppointmentHistory = (appointmentId) =>
   axios.get(`/appointments/${appointmentId}/history`);

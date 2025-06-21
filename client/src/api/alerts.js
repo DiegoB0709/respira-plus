@@ -7,5 +7,5 @@ export const getAlertsByPatient = (patientId) =>
 
 export const getAlertById = (alertId) => axios.get(`/alerts/${alertId}`);
 
-export const updateAlertStatus = (id, status) =>
-  axios.patch(`/alerts/${id}/status`, { status });
+export const updateAlertStatus = (id, status, actionTaken) =>
+  axios.patch(`/alerts/${id}/status`, { status, actionTaken });

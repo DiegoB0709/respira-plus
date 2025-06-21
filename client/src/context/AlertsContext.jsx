@@ -67,7 +67,6 @@ export const AlertsProvider = ({ children }) => {
     try {
       const res = await updateAlertStatusRequest(id, status, actionTaken);
       setSelectedAlert(res.data.alert);
-      // Opcional: actualizar la lista si ya está cargada
       setAlerts((prev) =>
         prev.map((alert) => (alert._id === id ? res.data.alert : alert))
       );

@@ -8,7 +8,7 @@ import ExcelJS from "exceljs";
 
 export const getMetricsForDoctor = async (req, res) => {
   try {
-    const doctorId = req.user._id;
+    const doctorId = req.user.id;
 
     const metrics = await getDoctorMetrics(doctorId);
 
@@ -44,7 +44,7 @@ export const getMetricsForAdmin = async (req, res) => {
 
 export const exportDoctorMetricsPDF = async (req, res) => {
   try {
-    const doctorId = req.user._id;
+    const doctorId = req.user.id;
     const metrics = await getDoctorMetrics(doctorId);
 
     const doc = new PDFDocument();
