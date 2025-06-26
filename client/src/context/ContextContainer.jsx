@@ -9,6 +9,7 @@ import { ExportProvider } from "./ExportContext";
 import { MetricsProvider } from "./MetricsContext";
 import { NotificationProvider } from "./NotificationContext";
 import { TreatmentProvider } from "./TreatmentContext";
+import { UserProvider } from "./UserContext";
 
 function ContextContainer({ children }) {
   return (
@@ -22,7 +23,9 @@ function ContextContainer({ children }) {
                   <ExportProvider>
                     <MetricsProvider>
                       <NotificationProvider>
-                        <TreatmentProvider>{children}</TreatmentProvider>
+                        <TreatmentProvider>
+                          <UserProvider>{children}</UserProvider>
+                        </TreatmentProvider>
                       </NotificationProvider>
                     </MetricsProvider>
                   </ExportProvider>
