@@ -5,17 +5,16 @@ import {
   getAlertById,
   updateAlertStatus,
 } from "../controllers/alerts.controller.js";
-import { authRequired } from "../middlewares/authRequired.js";
 import { authorizeRole } from "../middlewares/authorizeRole.js";
 
 const router = Router();
 
 router.get("/doctor", authorizeRole("doctor"), getAlertsByDoctor);
 
-router.get("/patient/:patientId", authRequired, getAlertsByPatient);
+router.get("/patient/:patientId", authorizeRole("doctor"), getAlertsByPatient);
 
-router.get("/:alertId", authRequired, getAlertById);
+router.get("/:alertId", authorizeRole("doctor"), getAlertById);
 
-router.patch("/:id/status", authRequired, updateAlertStatus);
+router.patch("/:id/status", authorizeRole("doctor"), updateAlertStatus);
 
 export default router;

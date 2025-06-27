@@ -32,7 +32,7 @@ function AuthPage() {
   const SwitchToLogin = () => setIsRegisterActive(false);
   return (
     <div className="flex min-h-screen items-center justify-center px-6 py-12 bg-white">
-      <div className="w-full max-w-sm">
+      <div className="w-full max-w-sm md:max-w-md md:scale-[1.25]">
         <div className="flex justify-center items-center gap-2">
           <i className="fa-solid fa-lungs text-teal-600 text-4xl"></i>
           <p className="text-teal-700 pb-3 text-3xl font-bold tracking-wide">

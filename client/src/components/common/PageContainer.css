@@ -1,0 +1,244 @@
+:root {
+  --base-clr: #f9f9fb;
+  --line-clr: #d4d4d8;
+  --hover-clr: #e0e0e5;
+  --text-clr: #1f2937;
+  --accent-clr: #0d9488;
+  --secondary-text-clr: #4b5563;
+}
+
+.pageContainer {
+  background-color: var(--base-clr);
+  color: var(--text-clr);
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: auto 1fr;
+}
+
+#sidebar {
+  box-sizing: border-box;
+  height: 100vh;
+  width: 320px;
+  background-color: var(--base-clr);
+  border-right: 1px solid var(--line-clr);
+  padding: 5px 1rem;
+  position: sticky;
+  top: 0;
+  align-self: start;
+  transition: 300ms ease-in-out;
+  overflow: hidden;
+  text-wrap: nowrap;
+}
+
+#sidebar.close {
+  padding: 0px;
+  width: 50px;
+  transition: 300ms ease-in-out;
+  ul li a i {
+    margin-right: 0.5rem;
+  }
+}
+
+#sidebar ul {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+#sidebar ul li:last-child {
+  margin-top: auto;padding-top: .5rem;
+  border-top: 1px solid var(--line-clr);
+}
+
+#sidebar ul li.logo-cont {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  .logo {
+    padding: 0.85rem;
+    text-decoration: none;
+    font-weight: 700;
+    color: var(--accent-clr);
+    font-size: 1.8rem;
+  }
+}
+
+#sidebar ul li a {
+  font-size: 1.2rem;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  i {
+    transition: all 0.2s ease-in-out;
+    font-size: 1.3rem;
+  }
+}
+
+#sidebar ul li.active a {
+  color: var(--accent-clr);
+  transition: all 0.2s ease-in-out;
+}
+
+#sidebar a,
+#sidebar .dropdown-btn {
+  border-radius: 0.5rem;
+  padding: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text-clr);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 1.2rem;
+}
+
+#sidebar a span,
+#sidebar .dropdown-btn span {
+  flex-grow: 1;
+}
+
+#sidebar a:hover,
+#sidebar .dropdown-btn:hover {
+  background-color: var(--hover-clr);
+}
+
+#sidebar .sub-menu {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: all 0.3s ease-in-out;
+  div {
+    overflow: hidden;
+  }
+}
+
+#sidebar .sub-menu.show {
+  grid-template-rows: 1fr;
+
+  transition: all 0.3s ease-in-out;
+}
+
+.dropdown-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  font: inherit;
+  cursor: pointer;
+}
+
+.dropdown-btn i {
+  transition: transform 0.3s ease-in-out;
+}
+
+.rotate i:last-child {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+#sidebar .sub-menu {
+  padding-left: 2rem;
+}
+
+#toggle-btn {
+  margin-left: auto;
+  font-size: 1.2rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  background: none;
+  color: var(--text-clr);
+  cursor: pointer;
+  i {
+    transition: rotatet 150ms ease;
+  }
+}
+
+#toggle-btn:hover {
+  background-color: var(--hover-clr);
+}
+
+main {
+  padding: min(30px, 7%);
+}
+
+@media (max-width: 800px) {
+  .pageContainer {
+    grid-template-columns: 1fr;
+  }
+
+  #sidebar {
+    width: 100%;
+    height: 61px;
+    border-right: none;
+    border-top: 1px solid var(--line-clr);
+    padding: 0;
+    position: fixed;
+    top: unset;
+    bottom: 0;
+
+    ul {
+      padding: 0;
+      display: grid;
+      grid-auto-columns: 60px;
+      grid-auto-flow: column;
+      align-items: center;
+      overflow-x: scroll;
+    }
+
+    ul li {
+      font-size: 19px;
+      height: 100%;
+    }
+
+    ul li:last-child {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    ul a,
+    ul .dropdown-btn {
+      width: 60px;
+      height: 60px;
+      padding: 0;
+      border-radius: 0;
+      justify-content: center;
+    }
+
+    ul li span,
+    ul li.logo-cont,
+    .dropdown-btn i:last-child {
+      display: none;
+    }
+
+    ul li .sub-menu.show {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      padding: 0;
+      width: 100%;
+      height: 60px;
+      background-color: var(--hover-clr);
+      border-top: 1px solid var(--line-clr);
+      display: flex;
+      justify-content: center;
+      div {
+        overflow-x: scroll;
+      }
+      li {
+        display: inline-flex;
+      }
+
+      a {
+        box-sizing: border-box;
+        padding: 1rem;
+        width: auto;
+        justify-content: center;
+      }
+    }
+  }
+  main {
+    padding: 2rem 1rem 60px 1rem;
+  }
+}
