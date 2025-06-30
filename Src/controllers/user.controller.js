@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import bcrypt from "bcryptjs";
 
 export const getUserProfile = async (req, res) => {
   const userId = req.user.id;
@@ -82,6 +83,13 @@ export const updateUser = async (req, res) => {
       if (updates[key] !== undefined) {
         filteredUpdates[key] = updates[key];
       }
+    }
+
+    if (filteredUpdates.password) {
+      filteredUpdates.password = await bcrypt.hash(
+        filteredUpdates.password,
+        10
+      );
     }
 
     const updatedUser = await User.findByIdAndUpdate(userId, filteredUpdates, {

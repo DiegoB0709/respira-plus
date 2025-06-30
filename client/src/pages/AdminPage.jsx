@@ -6,16 +6,25 @@ import { toggleSidebar } from "../utils/SideBar";
 import { useState } from "react";
 import Dashboard from "../components/admin/Dashboard";
 import Usuarios from "../components/admin/Usuarios";
-import Perfil from "../components/common/Perfil";
+import ProfileContainer from "../components/common/Modals/ProfileContainer";
 import { useAuth } from "../context/AuthContext";
+import ModalContainer from "../components/common/Modals/ModalContainer";
 
 function AdminPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("DashBoard");
+  const [activeProfile, setActiveProfile] = useState(false);
+
+  const handleOpenProfile = () => setActiveProfile(true);
+  const handleCloseProfile = () => setActiveProfile(false);
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
       handleSignout();
+      return;
+    }
+    if (section === "Perfil") {
+      handleOpenProfile();
       return;
     }
     setActiveSection(section);
@@ -38,8 +47,6 @@ function AdminPage() {
         return <Dashboard />;
       case "Usuarios":
         return <Usuarios />;
-      case "Perfil":
-        return <Perfil />;
       default:
         return null;
     }
@@ -60,7 +67,14 @@ function AdminPage() {
         ))}
       </SideBar>
       <main>
-        <div className="main-content">{renderContent()}</div>
+        <div className="main-content">
+          {renderContent()}
+          {activeProfile && (
+            <ModalContainer onClose={handleCloseProfile}>
+              <ProfileContainer />
+            </ModalContainer>
+          )}
+        </div>
       </main>
     </PageContainer>
   );

@@ -6,7 +6,6 @@ import SideBar from "../components/common/SideBar/SideBar";
 import { useAuth } from "../context/AuthContext";
 import { toggleSidebar } from "../utils/SideBar";
 import Dashboard from "../components/doctor/Dashboard";
-import Perfil from "../components/common/Perfil";
 import Pacientes from "../components/doctor/Pacientes";
 import EvaluatePatients from "../components/doctor/EvaluatePatients";
 import Alertas from "../components/doctor/Alertas";
@@ -14,14 +13,20 @@ import CitasMedicas from "../components/doctor/CitasMedicas";
 import ContenidoMedico from "../components/doctor/ContenidoMedico";
 import Treatment from "../components/doctor/Treatment";
 import Notification from "../components/common/Modals/Notification";
+import ModalContainer from "../components/common/Modals/ModalContainer";
+import ProfileContainer from "../components/common/Modals/ProfileContainer";
 
 function DoctorPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("DashBoard");
   const [activeNotification, setActiveNotification] = useState(false);
+  const [activeProfile, setActiveProfile] = useState(false);
 
   const handleOpenNotification = () => setActiveNotification(true);
   const handleCloseNotification = () => setActiveNotification(false);
+
+  const handleOpenProfile = () => setActiveProfile(true);
+  const handleCloseProfile = () => setActiveProfile(false);
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
@@ -30,6 +35,10 @@ function DoctorPage() {
     }
     if (section === "Notificaciones") {
       handleOpenNotification();
+      return;
+    }
+    if (section === "Perfil") {
+      handleOpenProfile();
       return;
     }
     setActiveSection(section);
@@ -68,8 +77,6 @@ function DoctorPage() {
         return <ContenidoMedico />;
       case "Tratamiento de Pacientes":
         return <Treatment />;
-      case "Perfil":
-        return <Perfil />;
       default:
         return null;
     }
@@ -93,7 +100,14 @@ function DoctorPage() {
         <div className="main-content">
           {renderContent()}
           {activeNotification && (
-            <Notification onClose={handleCloseNotification} />
+            <ModalContainer onClose={handleCloseNotification}>
+              <Notification />
+            </ModalContainer>
+          )}
+          {activeProfile && (
+            <ModalContainer onClose={handleCloseProfile}>
+              <ProfileContainer />
+            </ModalContainer>
           )}
         </div>
       </main>

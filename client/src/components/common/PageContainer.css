@@ -46,6 +46,10 @@
   height: 100%;
 }
 
+#sidebar ul li{
+  cursor: pointer;
+}
+
 #sidebar ul li:last-child {
   margin-top: auto;padding-top: .5rem;
   border-top: 1px solid var(--line-clr);
@@ -55,6 +59,7 @@
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
+  cursor: default;
   .logo {
     padding: 0.85rem;
     text-decoration: none;

@@ -6,20 +6,25 @@ import { toggleSidebar } from "../utils/SideBar";
 import Logo from "../components/common/SideBar/Logo";
 import Option from "../components/common/SideBar/Option";
 import Notification from "../components/common/Modals/Notification";
-import Perfil from "../components/common/Perfil";
 import Home from "../components/patient/Home";
 import CitasMedicas from "../components/patient/CitasMedicas";
 import Treatment from "../components/patient/Treatment";
 import ClinicalDetails from "../components/patient/ClinicalDetails";
 import EducationalContent from "../components/patient/EducationalContent";
+import ModalContainer from "../components/common/Modals/ModalContainer";
+import ProfileContainer from "../components/common/Modals/ProfileContainer";
 
 function PatientPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("Inicio");
   const [activeNotification, setActiveNotification] = useState(false);
+  const [activeProfile, setActiveProfile] = useState(false);
 
   const handleOpenNotification = () => setActiveNotification(true);
   const handleCloseNotification = () => setActiveNotification(false);
+
+  const handleOpenProfile = () => setActiveProfile(true);
+  const handleCloseProfile = () => setActiveProfile(false);
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
@@ -28,6 +33,10 @@ function PatientPage() {
     }
     if (section === "Notificaciones") {
       handleOpenNotification();
+      return;
+    }
+    if (section === "Perfil") {
+      handleOpenProfile();
       return;
     }
     setActiveSection(section);
@@ -60,8 +69,6 @@ function PatientPage() {
         return <ClinicalDetails />;
       case "Contenido Educativo":
         return <EducationalContent />;
-      case "Perfil":
-        return <Perfil />;
       default:
         return null;
     }
@@ -85,7 +92,14 @@ function PatientPage() {
         <div className="main-content">
           {renderContent()}
           {activeNotification && (
-            <Notification onClose={handleCloseNotification} />
+            <ModalContainer onClose={handleCloseNotification}>
+              <Notification />
+            </ModalContainer>
+          )}
+          {activeProfile && (
+            <ModalContainer onClose={handleCloseProfile}>
+              <ProfileContainer />
+            </ModalContainer>
           )}
         </div>
       </main>
