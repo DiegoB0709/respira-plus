@@ -27,6 +27,7 @@ export const getAllUsers = async (req, res) => {
       phone,
       page = 1,
       limit = 10,
+      hasToken,
     } = req.query;
 
     const query = {};
@@ -51,12 +52,19 @@ export const getAllUsers = async (req, res) => {
       query.phone = { $regex: phone, $options: "i" };
     }
 
+    if (hasToken === "true") {
+      query.registrationToken = { $exists: true, $ne: "" };
+    } else {
+      query.registrationToken = { $in: [null, ""] };
+    }
+
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const users = await User.find(query)
-      .select("-password")
-      .skip(skip)
-      .limit(parseInt(limit));
+  const users = await User.find(query)
+    .select("-password")
+    .populate({ path: "doctor", select: "username" })
+    .skip(skip)
+    .limit(parseInt(limit));
 
     const total = await User.countDocuments(query);
 
@@ -68,6 +76,23 @@ export const getAllUsers = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Error al obtener usuarios", error });
+  }
+};
+
+export const getDoctors = async (req, res) => {
+  try {
+    const doctors = await User.find({
+      role: "doctor",
+      $or: [
+        { registrationToken: { $exists: false } },
+        { registrationToken: null },
+        { registrationToken: "" },
+      ],
+    }).select("username _id");
+
+    res.json(doctors);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener los doctores" });
   }
 };
 

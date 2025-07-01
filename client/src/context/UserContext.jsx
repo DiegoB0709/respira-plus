@@ -1,5 +1,10 @@
 import { createContext, useContext, useState } from "react";
-import { getAllUsers, getUserProfile, updateUser } from "../api/user"; // asegúrate que esta ruta sea correcta
+import {
+  getAllUsers,
+  getUserProfile,
+  getDoctors,
+  updateUser,
+} from "../api/user";
 import { handleApiError } from "../utils/handleError";
 import { useAutoClearErrors } from "../hooks/useAutoClearErrors";
 
@@ -15,6 +20,7 @@ export const useUser = () => {
 
 export const UserProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
+  const [doctors, setDoctors] =useState([])
   const [totalUsers, setTotalUsers] = useState(0);
   const [profile, setProfile] = useState(null);
   const [errors, setErrors] = useState([]);
@@ -45,6 +51,17 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const fetchDoctors = async () =>{
+    setLoading(true);
+    try {
+      const res = await getDoctors();
+      setDoctors(res.data)
+    } catch (error) {
+      handleApiError(error, "Error al obtener a los doctores", setErrors);
+    } finally{
+      setLoading(false);
+    }
+  }
   const updateCurrentUser = async (userData) => {
     try {
       const res = await updateUser(userData);
@@ -61,7 +78,7 @@ export const UserProvider = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
-        users,
+        users,doctors,
         totalUsers,
         profile,
         loading,
@@ -69,6 +86,7 @@ export const UserProvider = ({ children }) => {
         fetchUsers,
         fetchUserProfile,
         updateCurrentUser,
+        fetchDoctors,
       }}
     >
       {children}

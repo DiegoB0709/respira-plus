@@ -62,7 +62,7 @@ function Profile({ onOpenUpdate, onCloseProfile }) {
             onOpenUpdate();
             onCloseProfile();
           }}
-          className="inline-flex items-center justify-center px-6 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-teal-700 hover:shadow-lg active:scale-[0.98] transition-all duration-200"
+          className="cursor-pointer inline-flex items-center justify-center px-6 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-teal-700 hover:shadow-lg active:scale-[0.98] transition-all duration-200"
         >
           Editar Perfil
         </button>

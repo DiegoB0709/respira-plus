@@ -122,7 +122,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
           <button
             type="button"
             onClick={() => setShowPasswordFields((prev) => !prev)}
-            className="text-sm text-teal-600 hover:underline"
+            className="text-sm text-teal-600 hover:underline cursor-pointer"
           >
             {showPasswordFields
               ? "Cancelar cambio de contraseña"
@@ -188,7 +188,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
         <div>
           <button
             type="submit"
-            className="flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-500 focus-visible:outline-teal-600"
+            className="cursor-pointer flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-500 focus-visible:outline-teal-600"
           >
             Actualizar Perfil
           </button>

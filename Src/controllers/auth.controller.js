@@ -34,7 +34,7 @@ export const register = async (req, res, next) => {
     userByToken.email = email;
     userByToken.phone = phone;
     userByToken.password = passwordHash;
-    delete userByToken.registrationToken;
+    userByToken.set("registrationToken", undefined);
 
     if (userByToken.role === "patient" && userByToken.doctor) {
       await User.findByIdAndUpdate(userByToken.doctor, {

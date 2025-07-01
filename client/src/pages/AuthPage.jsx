@@ -53,7 +53,7 @@ function AuthPage() {
           {isRegisterActive ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"}{" "}
           <a
             href="#"
-            className="font-semibold text-teal-600 hover:text-teal-500"
+            className="font-semibold text-teal-600 hover:text-teal-500 cursor-pointer"
             onClick={(e) => {
               e.preventDefault();
               isRegisterActive ? SwitchToLogin() : SwitchToRegister();

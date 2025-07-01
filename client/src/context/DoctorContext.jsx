@@ -19,13 +19,15 @@ export const useDoctor = () => {
 export const DoctorProvider = ({ children }) => {
   const [patients, setPatients] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [totalPatients, setTotalPatients] = useState(0);
   const [selectedPatient, setSelectedPatient] = useState(null);
 
-  const fetchMyPatients = async () => {
+  const fetchMyPatients = async (filters = {}) => {
     setErrors([]);
     try {
-      const res = await getMyPatientsRequest();
-      setPatients(res.data.patients);
+      const res = await getMyPatientsRequest(filters);
+      setPatients(res.data.patients || []);
+      setTotalPatients(res.data.total || 0);
     } catch (error) {
       handleApiError(error, "Error al obtener pacientes asignados", setErrors);
     }
@@ -58,6 +60,7 @@ export const DoctorProvider = ({ children }) => {
         errors,
         fetchMyPatients,
         updatePatient,
+        totalPatients,
       }}
     >
       {children}
