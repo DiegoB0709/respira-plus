@@ -41,6 +41,7 @@ export const ClinicalDetailsProvider = ({ children }) => {
 
   const fetchClinicalDetails = async (patientId) => {
     setErrors([]);
+    setClinicalDetails(null);
     try {
       const res = await fetchClinicalDetailsRequest(patientId);
       setClinicalDetails(res.data);

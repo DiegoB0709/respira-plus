@@ -24,7 +24,6 @@ export const AlertsProvider = ({ children }) => {
   const [selectedAlert, setSelectedAlert] = useState(null);
   const [errors, setErrors] = useState([]);
 
-  // Obtener alertas de un doctor
   const fetchAlertsByDoctor = async () => {
     setErrors([]);
     try {
@@ -35,7 +34,6 @@ export const AlertsProvider = ({ children }) => {
     }
   };
 
-  // Obtener alertas de un paciente
   const fetchAlertsByPatient = async (patientId) => {
     setErrors([]);
     try {
@@ -46,7 +44,6 @@ export const AlertsProvider = ({ children }) => {
     }
   };
 
-  // Obtener una alerta específica
   const fetchAlertById = async (alertId) => {
     setErrors([]);
     try {
@@ -61,7 +58,6 @@ export const AlertsProvider = ({ children }) => {
     }
   };
 
-  // Actualizar estado de una alerta
   const updateAlertStatus = async (id, status, actionTaken) => {
     setErrors([]);
     try {

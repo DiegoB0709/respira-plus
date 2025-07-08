@@ -31,7 +31,6 @@ export const EducationalProvider = ({ children }) => {
   const [history, setHistory] = useState([]);
   const [errors, setErrors] = useState([]);
 
-  // Paciente
   const fetchRecommendedContent = async () => {
     setErrors([]);
     try {
@@ -75,7 +74,6 @@ export const EducationalProvider = ({ children }) => {
     }
   };
 
-  // Doctor
   const fetchMyUploads = async () => {
     setErrors([]);
     try {

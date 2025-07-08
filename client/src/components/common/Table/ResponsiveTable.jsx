@@ -14,7 +14,6 @@ function ResponsiveTable({
 
   return (
     <>
-      {/* Tabla (solo MD en adelante) */}
       <div className="hidden md:block bg-white shadow-md rounded-xl overflow-hidden">
         <div className="w-full overflow-x-auto max-w-full">
           <table className="w-full table-auto divide-y divide-gray-200 text-sm">

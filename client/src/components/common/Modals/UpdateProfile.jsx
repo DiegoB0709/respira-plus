@@ -52,25 +52,27 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
   };
 
   return (
-    <>
-      <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        Actualizar Datos
+    <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl ">
+      <h1 className="text-2xl sm:text-3xl font-bold text-teal-600 mb-6 text-center flex flex-col items-center justify-center gap-2">
+        <i className="fas fa-user-edit text-teal-500 text-2xl" />
+        <span>Actualizar Datos</span>
       </h1>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="mt-10 space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label
               htmlFor="username"
-              className="block text-sm font-medium text-gray-900"
+              className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
             >
+              <i className="fas fa-user text-gray-400" />
               Nombre de Usuario
             </label>
             <input
               id="username"
               type="text"
               {...register("username", { required: "Nombre requerido" })}
-              className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-teal-600 sm:text-sm"
+              className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
             />
             {errors.username && (
               <p className="mt-1 text-sm text-red-600">
@@ -82,15 +84,16 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
           <div>
             <label
               htmlFor="phone"
-              className="block text-sm font-medium text-gray-900"
+              className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
             >
+              <i className="fas fa-phone text-gray-400" />
               Teléfono
             </label>
             <input
               id="phone"
               type="text"
               {...register("phone", { required: "Teléfono requerido" })}
-              className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-teal-600 sm:text-sm"
+              className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
             />
             {errors.phone && (
               <p className="mt-1 text-sm text-red-600">
@@ -103,15 +106,16 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-gray-900"
+            className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
           >
+            <i className="fas fa-envelope text-gray-400" />
             Correo Electrónico
           </label>
           <input
             id="email"
             type="email"
             {...register("email", { required: "Correo requerido" })}
-            className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-teal-600 sm:text-sm"
+            className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
           />
           {errors.email && (
             <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -122,7 +126,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
           <button
             type="button"
             onClick={() => setShowPasswordFields((prev) => !prev)}
-            className="text-sm text-teal-600 hover:underline cursor-pointer"
+            className="cursor-pointer text-sm font-medium text-teal-600 hover:underline transition"
           >
             {showPasswordFields
               ? "Cancelar cambio de contraseña"
@@ -135,8 +139,9 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-900"
+                className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
               >
+                <i className="fas fa-lock text-gray-400" />
                 Nueva Contraseña
               </label>
               <input
@@ -148,7 +153,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
                     ? { value: 6, message: "Mínimo 6 caracteres" }
                     : undefined,
                 })}
-                className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-teal-600 sm:text-sm"
+                className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
               />
               {errors.password && (
                 <p className="mt-1 text-sm text-red-600">
@@ -160,8 +165,9 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
             <div>
               <label
                 htmlFor="repeatPassword"
-                className="block text-sm font-medium text-gray-900"
+                className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
               >
+                <i className="fas fa-lock text-gray-400" />
                 Confirmar Contraseña
               </label>
               <input
@@ -174,7 +180,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
                         value === password || "Las contraseñas no coinciden"
                     : undefined,
                 })}
-                className="block w-full rounded-md px-3 py-1.5 text-base text-gray-900 outline-1 outline-gray-300 focus:outline-teal-600 sm:text-sm"
+                className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
               />
               {errors.repeatPassword && (
                 <p className="mt-1 text-sm text-red-600">
@@ -188,8 +194,9 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
         <div>
           <button
             type="submit"
-            className="cursor-pointer flex w-full justify-center rounded-md bg-teal-600 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-500 focus-visible:outline-teal-600"
+            className="cursor-pointer w-full flex justify-center items-center gap-2 rounded-md bg-teal-600 px-6 py-2.5 text-sm font-medium text-white shadow-md hover:bg-teal-700 active:scale-[0.98] transition-all"
           >
+            <i className="fas fa-save" />
             Actualizar Perfil
           </button>
         </div>
@@ -202,7 +209,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
           </div>
         )}
       </form>
-    </>
+    </div>
   );
 }
 

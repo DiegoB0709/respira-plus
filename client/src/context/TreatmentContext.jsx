@@ -21,6 +21,8 @@ export const TreatmentProvider = ({ children }) => {
   useAutoClearErrors(setError);
 
   const fetchTreatmentByPatient = useCallback(async (patientId) => {
+    setTreatment(null);
+    setError([]);
     try {
       const { data } = await getTreatmentByPatient(patientId);
       setTreatment(data);
@@ -34,6 +36,8 @@ export const TreatmentProvider = ({ children }) => {
   }, []);
 
   const fetchAllTreatmentsForDoctor = useCallback(async () => {
+    setTreatments([]);
+    setError([]);
     try {
       const { data } = await getAllTreatmentsForDoctor();
       setTreatments(data);
@@ -65,6 +69,8 @@ export const TreatmentProvider = ({ children }) => {
   }, []);
 
   const fetchTreatmentHistory = useCallback(async (patientId) => {
+    setHistory([]);
+    setError([]);
     try {
       const { data } = await getTreatmentHistory(patientId);
       setHistory(data);

@@ -29,8 +29,8 @@ export const AppointmentProvider = ({ children }) => {
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [appointmentHistory, setAppointmentHistory] = useState([]);
   const [errors, setErrors] = useState([]);
+  const [totalAppointments, setTotalAppointments] = useState(0);
 
-  // Crear nueva cita
   const createAppointment = async (data) => {
     setErrors([]);
     try {
@@ -41,7 +41,6 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  // Obtener citas por paciente
   const fetchAppointmentsByPatient = async (patientId) => {
     setErrors([]);
     try {
@@ -52,18 +51,17 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  // Obtener citas por doctor
-  const fetchAppointmentsByDoctor = async () => {
+  const fetchAppointmentsByDoctor = async (filters = {}) => {
     setErrors([]);
     try {
-      const res = await getAppointmentsByDoctorRequest();
-      setAppointments(res.data);
+      const res = await getAppointmentsByDoctorRequest(filters);
+      setAppointments(res.data.appointments);
+      setTotalAppointments(res.data.total || 0);
     } catch (error) {
       handleApiError(error, "Error al obtener citas del doctor", setErrors);
     }
   };
 
-  // Actualizar estado de una cita
   const updateAppointmentStatus = async (appointmentId, newStatus) => {
     setErrors([]);
     try {
@@ -84,7 +82,6 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  // Obtener historial de una cita
   const fetchAppointmentHistory = async (appointmentId) => {
     setErrors([]);
     try {
@@ -95,7 +92,6 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  // Reprogramar una cita
   const rescheduleAppointment = async (appointmentId, data) => {
     setErrors([]);
     try {
@@ -104,12 +100,14 @@ export const AppointmentProvider = ({ children }) => {
       setAppointments((prev) =>
         prev.map((a) => (a._id === appointmentId ? res.data : a))
       );
+      return res.data;
     } catch (error) {
       handleApiError(error, "Error al reprogramar la cita", setErrors);
+      return null;
     }
   };
+  
 
-  // Eliminar una cita
   const deleteAppointment = async (appointmentId) => {
     setErrors([]);
     try {
@@ -120,12 +118,12 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  // Obtener próximas citas del usuario
-  const fetchUpcomingAppointments = async () => {
+  const fetchUpcomingAppointments = async (filters = {}) => {
     setErrors([]);
     try {
-      const res = await getUpcomingAppointmentsRequest();
-      setAppointments(res.data);
+      const res = await getUpcomingAppointmentsRequest(filters);
+      setAppointments(res.data.appointments);
+      setTotalAppointments(res.data.total || 0);
     } catch (error) {
       handleApiError(error, "Error al obtener próximas citas", setErrors);
     }
@@ -148,6 +146,7 @@ export const AppointmentProvider = ({ children }) => {
         rescheduleAppointment,
         deleteAppointment,
         fetchUpcomingAppointments,
+        totalAppointments,
       }}
     >
       {children}

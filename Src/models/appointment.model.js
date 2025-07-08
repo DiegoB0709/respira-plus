@@ -11,7 +11,7 @@ const appointmentHistorySchema = new mongoose.Schema(
   {
     action: {
       type: String,
-      enum: ["creada", "asistió", "no asistió", "cancelada", "reprogramada"],
+      enum: ["confirmada","creada", "asistió", "no asistió", "cancelada", "reprogramada"],
       required: true,
     },
     date: {

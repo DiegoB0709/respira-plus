@@ -1,4 +1,3 @@
-// models/treatment.model.js
 import mongoose from "mongoose";
 
 const treatmentSchema = new mongoose.Schema(

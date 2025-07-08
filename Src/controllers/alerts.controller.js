@@ -39,9 +39,11 @@ export const getAlertsByPatient = async (req, res) => {
       return res.status(403).json({ message: "No autorizado" });
     }
 
-    const alerts = await Alert.find({ patient: patientId }).sort({
-      createdAt: -1,
-    });
+    const alerts = await Alert.find({ patient: patientId })
+      .sort({
+        createdAt: -1,
+      })
+      .populate("doctor", "username");;
 
     res.status(200).json(alerts);
   } catch (error) {

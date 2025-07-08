@@ -75,6 +75,7 @@ export const createAppointment = async (req, res) => {
     });
 
     await newAppointment.save();
+    await newAppointment.populate("patient", "username email");
 
     await crearNotificacion({
       recipientId: patientId,
@@ -123,6 +124,16 @@ export const getAppointmentsByPatient = async (req, res) => {
 
     const appointments = await Appointment.find(filter)
       .sort({ date: 1, time: 1 })
+      .populate([
+        {
+          path: "patient",
+          select: "username email",
+        },
+        {
+          path: "doctor",
+          select: "username email",
+        },
+      ])
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
@@ -135,10 +146,17 @@ export const getAppointmentsByPatient = async (req, res) => {
 
 export const getAppointmentsByDoctor = async (req, res) => {
   const doctorId = req.user.id;
-  const { startDate, endDate, page = 1, limit = 10 } = req.query;
+  const {
+    startDate,
+    endDate,
+    page = 1,
+    limit = 10,
+    patientName = "",
+  } = req.query;
 
   try {
     const filter = { doctor: doctorId };
+
     if (startDate || endDate) {
       filter.date = {};
       if (startDate) filter.date.$gte = new Date(startDate);
@@ -146,12 +164,29 @@ export const getAppointmentsByDoctor = async (req, res) => {
     }
 
     const appointments = await Appointment.find(filter)
-      .sort({ date: 1, time: 1 })
-      .skip((page - 1) * limit)
-      .limit(Number(limit))
-      .populate("patient", "username email");
+      .sort({ date: 1 })
+      .populate({
+        path: "patient",
+        select: "username email",
+        match: patientName
+          ? { username: { $regex: patientName, $options: "i" } }
+          : {},
+      });
 
-    res.status(200).json(appointments);
+    const filteredAppointments = appointments.filter((appt) => appt.patient);
+
+    const total = filteredAppointments.length;
+
+    const startIndex = (page - 1) * limit;
+    const paginatedAppointments = filteredAppointments.slice(
+      startIndex,
+      startIndex + Number(limit)
+    );
+
+    res.status(200).json({
+      total,
+      appointments: paginatedAppointments,
+    });
   } catch (error) {
     console.error("[Error] Error en getAppointmentsByDoctor:", error);
     res.status(500).json({ message: "Error al obtener citas del doctor" });
@@ -274,6 +309,8 @@ export const rescheduleAppointment = async (req, res) => {
     });
 
     await appointment.save();
+    await appointment.populate("patient", "username email");
+
 
     await crearNotificacion({
       recipientId: appointment.patient,
@@ -347,7 +384,11 @@ export const getAppointmentHistory = async (req, res) => {
   const userId = req.user.id;
 
   try {
-    const appointment = await Appointment.findById(appointmentId);
+    const appointment = await Appointment.findById(appointmentId).populate({
+      path: "history.updatedBy",
+      select: "username role",
+    });
+
     if (!appointment) {
       return res.status(404).json({ message: "Cita no encontrada" });
     }
@@ -371,9 +412,11 @@ export const getAppointmentHistory = async (req, res) => {
 export const getUpcomingAppointmentsForUser = async (req, res) => {
   const userId = req.user.id;
   const role = req.user.role;
+  const { page = 1, limit = 10 } = req.query;
 
   try {
     const today = new Date();
+
     let filter = {
       date: { $gte: today },
       status: { $in: ["pendiente", "confirmada"] },
@@ -387,14 +430,26 @@ export const getUpcomingAppointmentsForUser = async (req, res) => {
       return res.status(403).json({ message: "Rol no autorizado" });
     }
 
-    const appointments = await Appointment.find(filter)
+    const allAppointments = await Appointment.find(filter)
       .sort({ date: 1, time: 1 })
       .populate("patient", "username")
       .populate("doctor", "username");
 
-    res.status(200).json(appointments);
+    const total = allAppointments.length;
+
+    const startIndex = (page - 1) * limit;
+    const paginatedAppointments = allAppointments.slice(
+      startIndex,
+      startIndex + Number(limit)
+    );
+
+    res.status(200).json({
+      total,
+      appointments: paginatedAppointments,
+    });
   } catch (error) {
     console.error("[Error] Error en getUpcomingAppointmentsForUser:", error);
     res.status(500).json({ message: "Error al obtener próximas citas" });
   }
 };
+

@@ -6,7 +6,20 @@ import ResponsiveTable from "../common/Table/ResponsiveTable";
 import TableRow from "../common/Table/TableRow";
 import Card from "../common/Table/Card";
 import ActionButton from "../common/Buttons/ActionButton";
-import PatientDetails from "../common/Modals/PatientDetails";
+import PatientDetails from "./Modal Content/PatientDetails";
+import EvaluatePatient from "./Modal Content/EvaluatePatient";
+import PatientTreatment from "./Modal Content/PatientTreatment";
+import ClinicalData from "./Modal Content/ClinicalData";
+import ViewedContent from "./Modal Content/ViewedContent";
+import PatientAppointments from "./Modal Content/PatientAppointments";
+import ClinicalForm from "./Modal Content/ClinicalForm";
+import TreatmentForm from "./Modal Content/TreatmentForm";
+import TreatmentsHistory from "./Modal Content/TreatmentsHistory";
+import PatientAlerts from "./Modal Content/PatientAlerts";
+import UpdateAlert from "./Modal Content/UpdateAlert";
+import AppointmentForm from "./Modal Content/AppointmentForm";
+import HistoryAppointment from "./Modal Content/HistoryAppointment";
+import UpdateStatusAppo from "./Modal Content/UpdateStatusAppo";
 
 function Pacientes() {
   const {
@@ -18,7 +31,10 @@ function Pacientes() {
   } = useDoctor();
 
   const [activeModal, setActiveModal] = useState(null);
+  const [patientId, setPatientId] = useState("");
+  const [alertId, setAlertId] = useState("");
   const [onlyWithToken, setOnlyWithToken] = useState(false);
+  const [selectedAppointment, setSelectedAppointment] = useState("");
   const [filters, setFilters] = useState({
     username: "",
     email: "",
@@ -71,40 +87,63 @@ function Pacientes() {
   return (
     <>
       <div className="p-4 max-w-7xl mx-auto overflow-x-hidden">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-teal-500">
+        <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-teal-500 flex items-center gap-3">
+          <i className="fas fa-user-injured text-teal-400 text-2xl"></i>
           Pacientes
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-          <input
-            type="text"
-            name="username"
-            placeholder="Nombre"
-            value={filters.username}
-            onChange={handleChange}
-            disabled={onlyWithToken}
-            className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
-          />
+        <h3 className="text-lg font-semibold text-gray-700 mb-2 col-span-full">
+          Filtrar por:
+        </h3>
 
-          <input
-            type="text"
-            name="email"
-            placeholder="Email"
-            value={filters.email}
-            onChange={handleChange}
-            disabled={onlyWithToken}
-            className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+              <i className="fas fa-user text-gray-500"></i>
+              Nombre
+            </label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Ej. Diego Barreto"
+              value={filters.username}
+              onChange={handleChange}
+              disabled={onlyWithToken}
+              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+            />
+          </div>
 
-          <input
-            type="text"
-            name="phone"
-            placeholder="Teléfono"
-            value={filters.phone}
-            onChange={handleChange}
-            disabled={onlyWithToken}
-            className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
-          />
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+              <i className="fas fa-envelope text-gray-500"></i>
+              Email
+            </label>
+            <input
+              type="text"
+              name="email"
+              placeholder="Ej. correo@ejemplo.com"
+              value={filters.email}
+              onChange={handleChange}
+              disabled={onlyWithToken}
+              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+              <i className="fas fa-phone text-gray-500"></i>
+              Teléfono
+            </label>
+            <input
+              type="text"
+              name="phone"
+              placeholder="Ej. 999 999 999"
+              value={filters.phone}
+              onChange={handleChange}
+              disabled={onlyWithToken}
+              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+            />
+          </div>
         </div>
 
         <div className="mb-4 flex items-center justify-between flex-wrap gap-3">
@@ -130,8 +169,9 @@ function Pacientes() {
 
           <button
             onClick={() => setActiveModal("generator")}
-            className="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg text-sm transition font-bold cursor-pointer"
+            className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
           >
+            <i className="fas fa-key"></i>
             Generar token de registro
           </button>
         </div>
@@ -213,7 +253,7 @@ function Pacientes() {
                           <ActionButton
                             key={`view-${user._id}`}
                             type="info"
-                            title="Ver"
+                            title="Ver Paciente"
                             onClick={() => {
                               setSelectedPatient(user);
                               setActiveModal("patient");
@@ -230,13 +270,118 @@ function Pacientes() {
 
       {activeModal === "generator" && (
         <ModalContainer onClose={() => setActiveModal(null)}>
-          <RegisterToken />
+          <RegisterToken patientId={patientId} />
         </ModalContainer>
       )}
-
       {activeModal === "patient" && (
         <ModalContainer onClose={() => setActiveModal(null)}>
-          <PatientDetails />
+          <PatientDetails
+            patientId={patientId}
+            setPatientId={setPatientId}
+            setActiveModal={setActiveModal}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "treatments" && (
+        <ModalContainer onClose={() => setActiveModal("patient")}>
+          <PatientTreatment
+            patientId={patientId}
+            setActiveModal={setActiveModal}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "treatmentForm" && (
+        <ModalContainer onClose={() => setActiveModal("treatments")}>
+          <TreatmentForm
+            patientId={patientId}
+            setActiveModal={() => setActiveModal("treatments")}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "treatmentHistory" && (
+        <ModalContainer onClose={() => setActiveModal("treatments")}>
+          <TreatmentsHistory
+            patientId={patientId}
+            setActiveModal={() => setActiveModal("treatments")}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "clinical" && (
+        <ModalContainer onClose={() => setActiveModal("patient")}>
+          <ClinicalData
+            patientId={patientId}
+            setActiveModal={() => setActiveModal("clinicalForm")}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "clinicalForm" && (
+        <ModalContainer onClose={() => setActiveModal("clinical")}>
+          <ClinicalForm
+            patientId={patientId}
+            setActiveModal={() => setActiveModal("clinical")}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "evaluate" && (
+        <ModalContainer onClose={() => setActiveModal("patient")}>
+          <EvaluatePatient patientId={patientId} />
+        </ModalContainer>
+      )}
+      {activeModal === "educate" && (
+        <ModalContainer onClose={() => setActiveModal("patient")}>
+          <ViewedContent patientId={patientId} />
+        </ModalContainer>
+      )}
+      {activeModal === "appointments" && (
+        <ModalContainer onClose={() => setActiveModal("patient")}>
+          <PatientAppointments
+            patientId={patientId}
+            setActiveModal={setActiveModal}
+            setSelectedAppointment={setSelectedAppointment}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "createAppointment" && (
+        <ModalContainer onClose={() => setActiveModal("appointments")}>
+          <AppointmentForm
+            setActiveModal={() => setActiveModal("appointments")}
+            patientId={patientId}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "editAppointment" && (
+        <ModalContainer onClose={() => setActiveModal("appointments")}>
+          <AppointmentForm
+            setActiveModal={() => setActiveModal("appointments")}
+            selectedAppointment={selectedAppointment}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "historyAppoint" && (
+        <ModalContainer onClose={() => setActiveModal("appointments")}>
+          <HistoryAppointment selectedAppointment={selectedAppointment} />
+        </ModalContainer>
+      )}
+      {activeModal === "updateAppointStatus" && (
+        <ModalContainer onClose={() => setActiveModal("appointments")}>
+          <UpdateStatusAppo
+            selectedAppointment={selectedAppointment}
+            activeModal={() => setActiveModal("appointments")}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "alerts" && (
+        <ModalContainer onClose={() => setActiveModal("patient")}>
+          <PatientAlerts
+            patientId={patientId}
+            setAlertId={setAlertId}
+            setActiveModal={setActiveModal}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "UpdateAlert" && (
+        <ModalContainer onClose={() => setActiveModal("alerts")}>
+          <UpdateAlert setActiveModal={setActiveModal} alertId={alertId} />
         </ModalContainer>
       )}
     </>

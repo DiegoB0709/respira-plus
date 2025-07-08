@@ -15,7 +15,7 @@ export const useNotifications = () => useContext(NotificationContext);
 
 export const NotificationProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
-  const [error, setError] = useState([]); // Inicializado como array para el hook
+  const [error, setError] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const { isAuthenticated } = useAuth();

@@ -17,14 +17,7 @@ import ProfileContainer from "../components/common/Modals/ProfileContainer";
 function PatientPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("Inicio");
-  const [activeNotification, setActiveNotification] = useState(false);
-  const [activeProfile, setActiveProfile] = useState(false);
-
-  const handleOpenNotification = () => setActiveNotification(true);
-  const handleCloseNotification = () => setActiveNotification(false);
-
-  const handleOpenProfile = () => setActiveProfile(true);
-  const handleCloseProfile = () => setActiveProfile(false);
+  const [activeModal, setActiveModal] = useState(null);
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
@@ -32,11 +25,11 @@ function PatientPage() {
       return;
     }
     if (section === "Notificaciones") {
-      handleOpenNotification();
+      setActiveModal("notification");
       return;
     }
     if (section === "Perfil") {
-      handleOpenProfile();
+      setActiveModal("profile");
       return;
     }
     setActiveSection(section);
@@ -52,7 +45,7 @@ function PatientPage() {
     { name: "Tratamiento", icon: "capsules" },
     { name: "Detalles Clinicos", icon: "file-medical" },
     { name: "Contenido Educativo", icon: "book-open-reader" },
-    { name: "Notificaciones", icon: "bell"},
+    { name: "Notificaciones", icon: "bell" },
     { name: "Perfil", icon: "user" },
     { name: "Cerrar Sesion", icon: "power-off" },
   ];
@@ -91,18 +84,18 @@ function PatientPage() {
       <main>
         <div className="main-content">
           {renderContent()}
-          {activeNotification && (
-            <ModalContainer onClose={handleCloseNotification}>
-              <Notification />
-            </ModalContainer>
-          )}
-          {activeProfile && (
-            <ModalContainer onClose={handleCloseProfile}>
-              <ProfileContainer />
-            </ModalContainer>
-          )}
         </div>
       </main>
+      {activeModal === "notification" && (
+        <ModalContainer onClose={() => setActiveModal(null)}>
+          <Notification />
+        </ModalContainer>
+      )}
+      {activeModal === "profile" && (
+        <ModalContainer onClose={() => setActiveModal(null)}>
+          <ProfileContainer />
+        </ModalContainer>
+      )}
     </PageContainer>
   );
 }

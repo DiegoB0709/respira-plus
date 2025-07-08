@@ -13,6 +13,7 @@ import ModalContainer from "../components/common/Modals/ModalContainer";
 function AdminPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("DashBoard");
+
   const [activeProfile, setActiveProfile] = useState(false);
 
   const handleOpenProfile = () => setActiveProfile(true);

@@ -34,10 +34,10 @@ function AuthPage() {
     <div className="flex min-h-screen items-center justify-center px-6 py-12 bg-white">
       <div className="w-full max-w-sm md:max-w-md md:scale-[1.25]">
         <div className="flex justify-center items-center gap-2">
-          <i className="fa-solid fa-lungs text-teal-600 text-4xl"></i>
-          <p className="text-teal-700 pb-3 text-3xl font-bold tracking-wide">
+          <i className="fa-solid fa-lungs text-teal-400 text-4xl"></i>
+          <p className="text-teal-500 pb-3 text-3xl font-bold tracking-wide">
             Respira
-            <span className="text-teal-700 pb-0 text-5xl font-bold tracking-wide">
+            <span className="text-teal-400 pb-0 text-5xl font-bold tracking-wide">
               +
             </span>
           </p>
@@ -53,7 +53,7 @@ function AuthPage() {
           {isRegisterActive ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"}{" "}
           <a
             href="#"
-            className="font-semibold text-teal-600 hover:text-teal-500 cursor-pointer"
+            className="font-semibold text-teal-500 hover:text-teal-400 cursor-pointer duration-150 ease-in-out"
             onClick={(e) => {
               e.preventDefault();
               isRegisterActive ? SwitchToLogin() : SwitchToRegister();

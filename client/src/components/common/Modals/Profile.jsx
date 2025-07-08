@@ -9,21 +9,26 @@ function Profile({ onOpenUpdate, onCloseProfile }) {
   }, []);
 
   return (
-    <>
-      <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
+    <div className="p-6">
+      <h1 className="text-2xl sm:text-3xl font-bold text-center text-teal-500 mb-6 flex items-center justify-center gap-2">
+        <i className="fas fa-user text-teal-400 text-xl sm:text-2xl shrink-0" />
         Perfil del Usuario
       </h1>
 
       {loading && (
-        <p className="text-teal-600 text-center text-base mb-6 animate-pulse">
+        <p className="text-center text-teal-600 text-base mb-6 animate-pulse flex items-center justify-center gap-2">
+          <i className="fas fa-spinner fa-spin" />
           Cargando perfil...
         </p>
       )}
 
       {!loading && errors.length > 0 && (
-        <div className="bg-red-100 text-red-700 border border-red-300 rounded-md px-4 py-3 mb-6">
-          <p className="font-medium">Error al cargar el perfil:</p>
-          <ul className="list-disc list-inside text-sm mt-1">
+        <div className="bg-red-50 text-red-700 border-l-4 border-red-500 rounded-lg px-5 py-4 mb-6 shadow-sm">
+          <p className="font-medium flex items-center gap-2">
+            <i className="fas fa-exclamation-triangle" />
+            Error al cargar el perfil:
+          </p>
+          <ul className="list-disc list-inside text-sm mt-2">
             {errors.map((e, i) => (
               <li key={i}>{e}</li>
             ))}
@@ -32,18 +37,31 @@ function Profile({ onOpenUpdate, onCloseProfile }) {
       )}
 
       {!loading && profile ? (
-        <div className="space-y-4 text-gray-800 bg-white rounded-xl shadow-sm p-6 border border-gray-200">
-          <div>
-            <p className="text-sm text-gray-500">Nombre de usuario</p>
-            <p className="text-lg font-medium">{profile.username}</p>
+        <div className="space-y-6 text-gray-800 bg-white rounded-xl shadow-md p-6 border border-gray-200">
+          <div className="space-y-1">
+            <p className="text-sm text-gray-600 flex items-center gap-2">
+              <i className="fas fa-user text-teal-400" />
+              Nombre de usuario
+            </p>
+            <p className="text-lg font-semibold">{profile.username}</p>
           </div>
-          <div>
-            <p className="text-sm text-gray-500">Email</p>
-            <p className="text-lg font-medium">{profile.email}</p>
+          <div className="space-y-1">
+            <p className="text-sm text-gray-600 flex items-center gap-2">
+              <i className="fas fa-envelope text-teal-400" />
+              Email
+            </p>
+            <div className="max-w-full">
+              <p className="text-lg font-semibold break-words whitespace-normal">
+                {profile.email}
+              </p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm text-gray-500">Teléfono</p>
-            <p className="text-lg font-medium">
+          <div className="space-y-1">
+            <p className="text-sm text-gray-600 flex items-center gap-2">
+              <i className="fas fa-phone text-teal-400" />
+              Teléfono
+            </p>
+            <p className="text-lg font-semibold">
               {profile.phone || "No registrado"}
             </p>
           </div>
@@ -62,14 +80,14 @@ function Profile({ onOpenUpdate, onCloseProfile }) {
             onOpenUpdate();
             onCloseProfile();
           }}
-          className="cursor-pointer inline-flex items-center justify-center px-6 py-2.5 bg-teal-600 text-white text-sm font-medium rounded-md shadow-md hover:bg-teal-700 hover:shadow-lg active:scale-[0.98] transition-all duration-200"
+          className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white text-sm font-medium rounded-lg shadow-md hover:bg-teal-600 hover:shadow-lg active:scale-[0.97] transition-transform duration-200 ease-in-out"
         >
+          <i className="fas fa-edit" />
           Editar Perfil
         </button>
       </div>
-    </>
+    </div>
   );
-  
 }
 
 export default Profile;

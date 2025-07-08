@@ -27,12 +27,17 @@ function RegisterToken() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg ">
-      <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
-        Token de Registro
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg">
+      <h1 className="text-2xl font-bold text-center text-teal-600 mb-6 flex flex-wrap items-center justify-center gap-2">
+        <i className="fas fa-key text-teal-500 text-xl shrink-0"></i>
+        <span className="whitespace-normal">Token de Registro</span>
       </h1>
 
-      <label htmlFor="role" className="block font-medium text-gray-700 mb-1">
+      <label
+        htmlFor="role"
+        className="block font-medium text-gray-700 mb-1 flex items-center gap-2"
+      >
+        <i className="fas fa-user-tag text-gray-500"></i>
         Generar token para:
       </label>
       <select
@@ -50,7 +55,8 @@ function RegisterToken() {
 
       {role === "Paciente" && (
         <>
-          <label className="block font-medium text-gray-700 mb-1">
+          <label className=" font-medium text-gray-700 mb-1 flex items-center gap-2">
+            <i className="fas fa-user-md text-gray-500"></i>
             Asignar a doctor:
           </label>
           <select
@@ -73,7 +79,11 @@ function RegisterToken() {
 
       {tokenErrors &&
         tokenErrors.map((error, i) => (
-          <div key={i} className="text-red-600 text-sm mb-2">
+          <div
+            key={i}
+            className="text-red-600 text-sm mb-2 flex items-center gap-2"
+          >
+            <i className="fas fa-exclamation-circle"></i>
             {error}
           </div>
         ))}
@@ -81,22 +91,25 @@ function RegisterToken() {
       <button
         onClick={handleGenerateToken}
         disabled={!!token || (role === "Paciente" && !selectedDoctor)}
-        className={`w-full py-2 rounded-xl text-white font-bold transition ${
+        className={`w-full py-2 rounded-xl text-white font-bold transition flex items-center justify-center gap-2 ${
           token || (role === "Paciente" && !selectedDoctor)
             ? "bg-gray-400 cursor-not-allowed"
             : "bg-teal-600 cursor-pointer hover:bg-teal-700"
         }`}
       >
+        <i className="fas fa-magic"></i>
         Generar Token
       </button>
 
       {token && (
-        <div className="mt-4 text-green-600 font-semibold text-center">
+        <div className="mt-4 text-green-600 font-semibold text-center flex items-center justify-center gap-2">
+          <i className="fas fa-check-circle"></i>
           Token generado: {token}
         </div>
       )}
     </div>
   );
+  
 }
 
 export default RegisterToken;
