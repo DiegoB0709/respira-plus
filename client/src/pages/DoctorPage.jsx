@@ -14,12 +14,14 @@ import Notification from "../components/common/Modals/Notification";
 import ModalContainer from "../components/common/Modals/ModalContainer";
 import ProfileContainer from "../components/common/Modals/ProfileContainer";
 import UpdateAlert from "../components/doctor/Modal Content/UpdateAlert";
+import useUnreadCounts from "../hooks/useUnreadCounts";
 
 function DoctorPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("Pacientes");
   const [activeModal, setActiveModal] = useState(null);
   const [alertId, setAlertId] = useState("");
+  const { unresolvedAlertCount, unreadNotifCount } = useUnreadCounts();
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
@@ -46,14 +48,22 @@ function DoctorPage() {
   };
 
   const menuOptions = [
-    { name: "DashBoard", icon: "chart-simple" },
-    { name: "Pacientes", icon: "user-injured" },
-    { name: "Citas Medicas", icon: "calendar-check" },
-    { name: "Contenido Medico", icon: "book-medical" },
-    { name: "Alertas", icon: "triangle-exclamation" },
-    { name: "Notificaciones", icon: "bell" },
-    { name: "Perfil", icon: "user" },
-    { name: "Cerrar Sesion", icon: "power-off" },
+    { name: "DashBoard", icon: "chart-simple", number: 0 },
+    { name: "Pacientes", icon: "user-injured", number: 0 },
+    { name: "Citas Medicas", icon: "calendar-check", number: 0 },
+    { name: "Contenido Medico", icon: "book-medical", number: 0 },
+    {
+      name: "Alertas",
+      icon: "triangle-exclamation",
+      number: unresolvedAlertCount,
+    },
+    {
+      name: "Notificaciones",
+      icon: "bell",
+      number: unreadNotifCount,
+    },
+    { name: "Perfil", icon: "user", number: 0 },
+    { name: "Cerrar Sesion", icon: "power-off", number: 0 },
   ];
 
   const renderContent = () => {
@@ -81,6 +91,7 @@ function DoctorPage() {
             icon={option.icon}
             name={option.name}
             active={activeSection === option.name}
+            number={option.number}
             handleSectionClick={() => handleSectionClick(option.name)}
           />
         ))}

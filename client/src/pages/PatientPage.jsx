@@ -13,11 +13,14 @@ import ClinicalDetails from "../components/patient/ClinicalDetails";
 import EducationalContent from "../components/patient/EducationalContent";
 import ModalContainer from "../components/common/Modals/ModalContainer";
 import ProfileContainer from "../components/common/Modals/ProfileContainer";
+import useUnreadCounts from "../hooks/useUnreadCounts";
 
 function PatientPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("Inicio");
   const [activeModal, setActiveModal] = useState(null);
+    const { unreadNotifCount } = useUnreadCounts();
+  
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
@@ -40,14 +43,14 @@ function PatientPage() {
   };
 
   const menuOptions = [
-    { name: "Inicio", icon: "house" },
-    { name: "Citas Medicas", icon: "calendar-check" },
-    { name: "Tratamiento", icon: "capsules" },
-    { name: "Detalles Clinicos", icon: "file-medical" },
-    { name: "Contenido Educativo", icon: "book-open-reader" },
-    { name: "Notificaciones", icon: "bell" },
-    { name: "Perfil", icon: "user" },
-    { name: "Cerrar Sesion", icon: "power-off" },
+    { name: "Inicio", icon: "house", number: 0 },
+    { name: "Citas Medicas", icon: "calendar-check", number: 0 },
+    { name: "Tratamiento", icon: "capsules", number: 0 },
+    { name: "Detalles Clinicos", icon: "file-medical", number: 0 },
+    { name: "Contenido Educativo", icon: "book-open-reader", number: 0 },
+    { name: "Notificaciones", icon: "bell", number: unreadNotifCount },
+    { name: "Perfil", icon: "user", number: 0 },
+    { name: "Cerrar Sesion", icon: "power-off", number: 0 },
   ];
 
   const renderContent = () => {
@@ -75,6 +78,7 @@ function PatientPage() {
           <Option
             key={option.name}
             icon={option.icon}
+            number={option.number}
             name={option.name}
             active={activeSection === option.name}
             handleSectionClick={() => handleSectionClick(option.name)}
@@ -82,9 +86,7 @@ function PatientPage() {
         ))}
       </SideBar>
       <main>
-        <div className="main-content">
-          {renderContent()}
-        </div>
+        <div className="main-content">{renderContent()}</div>
       </main>
       {activeModal === "notification" && (
         <ModalContainer onClose={() => setActiveModal(null)}>
