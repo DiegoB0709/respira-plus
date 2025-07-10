@@ -25,8 +25,8 @@ function TreatmentsHistory({ patientId, setActiveModal }) {
     <div className="flex flex-col max-w-4xl mx-auto px-4 sm:px-6 py-6">
       <header className="sticky top-0 z-50 bg-white w-full">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <h2 className="text-base sm:text-xl md:text-2xl font-semibold text-center text-teal-700 flex items-center justify-center gap-2">
-            <i className="fa fa-notes-medical text-teal-500 text-lg sm:text-xl" />
+          <h2 className="text-base sm:text-xl md:text-2xl font-semibold text-center text-teal-500 flex items-center justify-center gap-2">
+            <i className="fa fa-notes-medical text-teal-400 text-lg sm:text-xl" />
             <span className="truncate">Historial de Tratamientos</span>
           </h2>
         </div>
@@ -46,20 +46,20 @@ function TreatmentsHistory({ patientId, setActiveModal }) {
               <div className="grid md:grid-cols-2 gap-6 text-sm sm:text-base text-gray-800">
                 <div className="space-y-2">
                   <p>
-                    <span className="font-semibold text-teal-700">
-                      <i className="fa fa-tasks mr-1 text-sm" /> Acción:
+                    <span className="font-semibold text-teal-500">
+                      <i className="fa fa-tasks mr-1 text-sm text-teal-400" /> Acción:
                     </span>{" "}
                     {translateAction[entry.action] || entry.action}
                   </p>
                   <p>
-                    <span className="font-semibold text-teal-700">
-                      <i className="fa fa-calendar-day mr-1 text-sm" /> Fecha:
+                    <span className="font-semibold text-teal-500">
+                      <i className="fa fa-calendar-day mr-1 text-sm text-teal-400" /> Fecha:
                     </span>{" "}
                     {formatDate(entry.createdAt)}
                   </p>
                   <p>
-                    <span className="font-semibold text-teal-700">
-                      <i className="fa fa-user-md mr-1 text-sm" /> Médico:
+                    <span className="font-semibold text-teal-500">
+                      <i className="fa fa-user-md mr-1 text-sm text-teal-400" /> Médico:
                     </span>{" "}
                     {entry.doctor?.username || "Desconocido"}
                   </p>
@@ -67,20 +67,20 @@ function TreatmentsHistory({ patientId, setActiveModal }) {
 
                 <div className="space-y-2">
                   <p>
-                    <span className="font-semibold text-teal-700">
-                      <i className="fa fa-play mr-1 text-sm" /> Inicio:
+                    <span className="font-semibold text-teal-500">
+                      <i className="fa fa-play mr-1 text-sm text-teal-400" /> Inicio:
                     </span>{" "}
                     {formatDate(entry.treatmentSnapshot.startDate)}
                   </p>
                   <p>
-                    <span className="font-semibold text-teal-700">
-                      <i className="fa fa-stop mr-1 text-sm" /> Fin:
+                    <span className="font-semibold text-teal-500">
+                      <i className="fa fa-stop mr-1 text-sm text-teal-400" /> Fin:
                     </span>{" "}
                     {formatDate(entry.treatmentSnapshot.endDate)}
                   </p>
                   <p>
-                    <span className="font-semibold text-teal-700">
-                      <i className="fa fa-sticky-note mr-1 text-sm" /> Notas:
+                    <span className="font-semibold text-teal-500">
+                      <i className="fa fa-sticky-note mr-1 text-sm text-teal-400" /> Notas:
                     </span>{" "}
                     {entry.treatmentSnapshot.notes || "-"}
                   </p>
@@ -88,8 +88,9 @@ function TreatmentsHistory({ patientId, setActiveModal }) {
               </div>
 
               <div className="mt-5">
-                <h4 className="text-teal-700 font-semibold mb-2 flex items-center gap-2">
-                  <i className="fa fa-pills text-sm" /> Medicamentos
+                <h4 className="text-teal-500 font-semibold mb-2 flex items-center gap-2">
+                  <i className="fa fa-pills text-sm text-teal-400" />{" "}
+                  Medicamentos
                 </h4>
                 {entry.treatmentSnapshot.medications.length > 0 ? (
                   <ul className="space-y-1 list-disc list-inside text-gray-700 text-sm sm:text-base ml-2">

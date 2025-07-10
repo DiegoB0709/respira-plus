@@ -28,26 +28,26 @@ function AppointDetail({
 
       <div className="text-sm text-gray-800 space-y-2">
         <p className="flex items-start gap-2">
-          <span className="font-semibold text-teal-600 flex items-center gap-1">
+          <span className="font-semibold text-teal-500 flex items-center gap-1">
             <i className="fas fa-user text-teal-400"></i> Paciente:
           </span>{" "}
           {selectedAppointment.patient?.username}
         </p>
         <p className="flex items-start gap-2">
-          <span className="font-semibold text-teal-600 flex items-center gap-1">
+          <span className="font-semibold text-teal-500 flex items-center gap-1">
             <i className="fas fa-pencil-alt text-teal-400"></i> Motivo:
           </span>{" "}
           {selectedAppointment.reason}
         </p>
         <p className="flex items-start gap-2">
-          <span className="font-semibold text-teal-600 flex items-center gap-1">
+          <span className="font-semibold text-teal-500 flex items-center gap-1">
             <i className="fas fa-info-circle text-teal-400"></i> Estado:
           </span>{" "}
           {selectedAppointment.status.charAt(0).toUpperCase() +
             selectedAppointment.status.slice(1)}
         </p>
         <p className="flex items-start gap-2">
-          <span className="font-semibold text-teal-600 flex items-center gap-1">
+          <span className="font-semibold text-teal-500 flex items-center gap-1">
             <i className="fas fa-calendar-alt text-teal-400"></i> Fecha:
           </span>{" "}
           {new Date(selectedAppointment.date).toLocaleString("es-PE", {
@@ -71,14 +71,14 @@ function AppointDetail({
           <>
             <button
               onClick={() => setActiveModal("editAppointmen")}
-              className="cursor-pointer bg-teal-600 hover:bg-teal-700 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
+              className="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
             >
               <i className="fas fa-sync-alt text-white"></i> Reprogramar
             </button>
 
             <button
               onClick={() => setActiveModal("updateAppointStatus")}
-              className="cursor-pointer bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
+              className="cursor-pointer bg-teal-500 hover:bg-teal-400 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
             >
               <i className="fas fa-clipboard-check text-white"></i> Actualizar
               Estado
@@ -86,7 +86,7 @@ function AppointDetail({
 
             <button
               onClick={() => setShowConfirm(true)}
-              className="cursor-pointer bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
+              className="cursor-pointer bg-red-500 hover:bg-red-400 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
             >
               <i className="fas fa-trash-alt text-white"></i> Eliminar
             </button>

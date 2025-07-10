@@ -62,7 +62,7 @@ function Alertas({ setAlertId, setActiveModal }) {
       <header className="mb-6 text-center">
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
           <i className="fas fa-bell text-teal-400 text-2xl sm:text-3xl" />
-          <h1 className="text-2xl sm:text-3xl font-bold text-teal-700">
+          <h1 className="text-2xl sm:text-3xl font-bold text-teal-500">
             Alertas del Paciente
           </h1>
           {unresolvedCount > 0 && (
@@ -173,7 +173,7 @@ function Alertas({ setAlertId, setActiveModal }) {
                           setAlertId(alert._id);
                           setActiveModal("UpdateAlert");
                         }}
-                        className="cursor-pointer inline-flex items-center gap-1 text-sm text-white bg-teal-600 hover:bg-teal-700 font-medium py-1.5 px-4 rounded transition"
+                        className="cursor-pointer inline-flex items-center gap-1 text-sm text-white bg-teal-500 hover:bg-teal-400 font-medium py-1.5 px-4 rounded transition"
                       >
                         <i className="fa-regular fa-pen-to-square" />
                         Actualizar

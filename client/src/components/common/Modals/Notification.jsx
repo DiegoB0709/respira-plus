@@ -59,7 +59,7 @@ function Notification() {
                   <div className="flex-1">
                     <h2
                       className={`text-sm font-semibold mb-0.5 ${
-                        n.read ? "text-gray-500" : "text-teal-700"
+                        n.read ? "text-gray-500" : "text-teal-500"
                       }`}
                     >
                       {n.title}
@@ -83,7 +83,7 @@ function Notification() {
                           onClick={() => markNotificationAsRead(n._id)}
                           className={`w-full ${
                             showBothButtons ? "sm:w-1/2" : "sm:w-full"
-                          } text-sm text-white bg-teal-600 hover:bg-teal-700 px-3 py-2 rounded-md transition flex items-center justify-center gap-2`}
+                          } text-sm text-white bg-teal-500 hover:bg-teal-400 px-3 py-2 rounded-md transition flex items-center justify-center gap-2`}
                         >
                           <i className="fa-regular fa-circle-check text-base" />
                           Leer
@@ -106,7 +106,7 @@ function Notification() {
                       <button
                         onClick={() => markNotificationAsRead(n._id)}
                         title="Marcar como leída"
-                        className="cursor-pointer text-teal-600 hover:bg-teal-50 hover:text-teal-800 px-2 py-2 rounded-full transition"
+                        className="cursor-pointer text-teal-500 hover:bg-teal-50 hover:text-teal-400 px-2 py-2 rounded-full transition"
                       >
                         <i className="fa-regular fa-circle-check text-base" />
                       </button>
@@ -131,7 +131,7 @@ function Notification() {
           <button
             onClick={markAllNotificationsAsRead}
             title="Marcar todas como leídas"
-            className="cursor-pointer text-teal-600 hover:text-white hover:bg-teal-600  py-2 px-4 rounded-full transition flex items-center justify-center gap-2"
+            className="cursor-pointer text-teal-500 hover:text-white hover:bg-teal-400  py-2 px-4 rounded-full transition duration-500 flex items-center justify-center gap-2"
           >
             <i className="fa-solid fa-envelope-open text-lg" />
             <span className="text-sm font-medium">

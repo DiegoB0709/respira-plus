@@ -37,7 +37,7 @@ function ClinicalData({ patientId, setActiveModal }) {
       {clinicalDetails ? (
         <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 space-y-6">
           <div className="space-y-2">
-            <h2 className="text-teal-600 font-semibold text-lg border-b pb-1">
+            <h2 className="text-teal-500 font-semibold text-lg border-b pb-1">
               Datos básicos
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -66,7 +66,7 @@ function ClinicalData({ patientId, setActiveModal }) {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-teal-600 font-semibold text-lg border-b pb-1">
+            <h2 className="text-teal-500 font-semibold text-lg border-b pb-1">
               Estado clínico
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -110,7 +110,7 @@ function ClinicalData({ patientId, setActiveModal }) {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-teal-600 font-semibold text-lg border-b pb-1">
+            <h2 className="text-teal-500 font-semibold text-lg border-b pb-1">
               Antecedentes
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -156,7 +156,7 @@ function ClinicalData({ patientId, setActiveModal }) {
           <div className="pt-6 text-center">
             <button
               onClick={setActiveModal}
-              className="cursor-pointer inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
+              className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
             >
               <i className="fa fa-pen" />
               Editar Datos Clínicos
@@ -170,7 +170,7 @@ function ClinicalData({ patientId, setActiveModal }) {
           </p>
           <button
             onClick={setActiveModal}
-            className="cursor-pointer inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
+            className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
           >
             <i className="fa fa-plus" />
             Añadir Datos Clínicos

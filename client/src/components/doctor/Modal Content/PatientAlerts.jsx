@@ -46,7 +46,7 @@ function PatientAlerts({ patientId, setActiveModal, setAlertId }) {
   return (
     <div className="p-4 sm:p-6 max-w-5xl mx-auto">
       <header className="sticky top-0 z-10 bg-white pt-4 pb-4 px-4">
-        <h2 className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xl sm:text-2xl font-bold text-teal-600 text-center">
+        <h2 className="flex flex-col sm:flex-row items-center justify-center gap-2 text-xl sm:text-2xl font-bold text-teal-500 text-center">
           <i className="fas fa-bell text-teal-400 text-2xl" />
           <span className="leading-tight">Alertas del Paciente</span>
         </h2>
@@ -99,7 +99,7 @@ function PatientAlerts({ patientId, setActiveModal, setAlertId }) {
                         setActiveModal("UpdateAlert");
                         setAlertId(alert._id);
                       }}
-                      className="cursor-pointer text-sm text-teal-600 hover:text-teal-800 font-medium flex items-center gap-1 self-start sm:self-auto"
+                      className="cursor-pointer text-sm text-teal-500 hover:text-teal-400 font-medium flex items-center gap-1 self-start sm:self-auto"
                     >
                       <i className="fas fa-edit" />
                       Actualizar
@@ -140,7 +140,7 @@ function PatientAlerts({ patientId, setActiveModal, setAlertId }) {
                     )}
 
                     <p className="flex items-center gap-2 sm:col-span-2">
-                      <i className="fas fa-tasks text-teal-500" />
+                      <i className="fas fa-tasks text-teal-400" />
                       Acción: {alert.actionTaken?.trim() || "No registrada"}
                     </p>
 

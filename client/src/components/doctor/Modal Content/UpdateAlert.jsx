@@ -24,8 +24,8 @@ function UpdateAlert({ setActiveModal, alertId }) {
   };
   return (
     <div className="p-4 sm:p-6 max-w-lg mx-auto">
-      <h2 className="text-xl sm:text-2xl font-bold text-teal-700 text-center mb-6 flex items-center justify-center gap-2">
-        <i className="fas fa-pen-to-square text-teal-500" />
+      <h2 className="text-xl sm:text-2xl font-bold text-teal-500 text-center mb-6 flex items-center justify-center gap-2">
+        <i className="fas fa-pen-to-square text-teal-400" />
         Actualizar Alerta
       </h2>
 
@@ -67,7 +67,7 @@ function UpdateAlert({ setActiveModal, alertId }) {
         <div className="pt-4 text-center">
           <button
             type="submit"
-            className="cursor-pointer inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-6 rounded transition"
+            className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold py-2 px-6 rounded transition"
           >
             <i className="fas fa-check-circle" />
             Actualizar Alerta

@@ -58,8 +58,8 @@ function ClinicalForm({ patientId, setActiveModal }) {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl sm:text-3xl font-bold text-center text-teal-700 mb-8 flex flex-col sm:flex-row items-center justify-center gap-2">
-        <i className="fa fa-notes-medical text-teal-500 text-3xl sm:text-2xl" />
+      <h1 className="text-2xl sm:text-3xl font-bold text-center text-teal-500 mb-8 flex flex-col sm:flex-row items-center justify-center gap-2">
+        <i className="fa fa-notes-medical text-teal-400 text-3xl sm:text-2xl" />
         <span>Datos Clínicos</span>
       </h1>
 
@@ -201,7 +201,7 @@ function ClinicalForm({ patientId, setActiveModal }) {
               name="smoking"
               checked={form.smoking}
               onChange={handleChange}
-              className="text-teal-600"
+              className="text-teal-500"
             />
             <span>
               <i className="fa fa-smoking text-yellow-500" /> Fuma
@@ -214,7 +214,7 @@ function ClinicalForm({ patientId, setActiveModal }) {
               name="alcoholUse"
               checked={form.alcoholUse}
               onChange={handleChange}
-              className="text-teal-600"
+              className="text-teal-500"
             />
             <span>
               <i className="fa fa-wine-bottle text-amber-500" /> Consumo de
@@ -228,7 +228,7 @@ function ClinicalForm({ patientId, setActiveModal }) {
               name="contactWithTb"
               checked={form.contactWithTb}
               onChange={handleChange}
-              className="text-teal-600"
+              className="text-teal-500"
             />
             <span>
               <i className="fa fa-head-side-mask text-cyan-500" /> Contacto con
@@ -242,7 +242,7 @@ function ClinicalForm({ patientId, setActiveModal }) {
               name="priorTbTreatment"
               checked={form.priorTbTreatment}
               onChange={handleChange}
-              className="text-teal-600"
+              className="text-teal-500"
             />
             <span>
               <i className="fa fa-history text-cyan-500" /> Tratamiento previo
@@ -298,7 +298,7 @@ function ClinicalForm({ patientId, setActiveModal }) {
         <div className="text-center">
           <button
             type="submit"
-            className="cursor-pointer mt-6 inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-6 rounded shadow text-sm sm:text-base"
+            className="cursor-pointer mt-6 inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold py-2 px-6 rounded shadow text-sm sm:text-base"
           >
             <i className="fa fa-save" /> Guardar
           </button>

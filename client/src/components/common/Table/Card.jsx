@@ -1,6 +1,6 @@
 function Card({ fields = [] }) {
   return (
-    <div className="bg-white shadow-md rounded-2xl p-4 space-y-3 text-sm border border-teal-100">
+    <div className="bg-white shadow-md rounded-2xl p-4 space-y-3 text-sm border border-gray-100">
       {fields.map(({ label, value }, i) => (
         <div
           key={i}

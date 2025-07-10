@@ -49,8 +49,8 @@ function PatientDetails({ setActiveModal, setPatientId }) {
 
   return (
     <div className="p-5">
-      <h1 className="text-3xl font-bold text-center text-teal-600 mb-6 flex flex-wrap items-center justify-center gap-2">
-        <i className="fas fa-user-injured text-teal-500 text-2xl shrink-0"></i>
+      <h1 className="text-3xl font-bold text-center text-teal-500 mb-6 flex flex-wrap items-center justify-center gap-2">
+        <i className="fas fa-user-injured text-teal-400 text-2xl shrink-0"></i>
         Perfil del Paciente
       </h1>
 
@@ -69,7 +69,7 @@ function PatientDetails({ setActiveModal, setPatientId }) {
         <div>
           <label
             className={`block text-sm font-medium flex items-center gap-2 ${
-              onEdit ? "text-teal-600" : "text-gray-700"
+              onEdit ? "text-teal-500" : "text-gray-700"
             }`}
           >
             <i
@@ -96,7 +96,7 @@ function PatientDetails({ setActiveModal, setPatientId }) {
         <div>
           <label
             className={`block text-sm font-medium flex items-center gap-2 ${
-              onEdit ? "text-teal-600" : "text-gray-700"
+              onEdit ? "text-teal-500" : "text-gray-700"
             }`}
           >
             <i
@@ -123,7 +123,7 @@ function PatientDetails({ setActiveModal, setPatientId }) {
         <div>
           <label
             className={`block text-sm font-medium flex items-center gap-2 ${
-              onEdit ? "text-teal-600" : "text-gray-700"
+              onEdit ? "text-teal-500" : "text-gray-700"
             }`}
           >
             <i
@@ -151,14 +151,14 @@ function PatientDetails({ setActiveModal, setPatientId }) {
           <button
             type="button"
             onClick={onEdit ? handleOffEdit : handleOnEdit}
-            className="cursor-pointer text-sm text-teal-600 hover:underline"
+            className="cursor-pointer text-sm text-teal-500 hover:underline"
           >
             {onEdit ? "Cancelar" : "Editar Datos"}
           </button>
           {onEdit && (
             <button
               type="submit"
-              className="cursor-pointer bg-teal-600 text-white text-sm px-4 py-2 rounded-md hover:bg-teal-500 transition 
+              className="cursor-pointer bg-teal-500 text-white text-sm px-4 py-2 rounded-md hover:bg-teal-400 transition
                   hover:brightness-110  font-medium flex items-center justify-center gap-2 "
             >
               <i className="fa-solid fa-floppy-disk text-white hidden sm:inline-flex"></i>
@@ -174,31 +174,31 @@ function PatientDetails({ setActiveModal, setPatientId }) {
             label: "Tratamientos",
             icon: "fas fa-pills",
             modal: "treatments",
-            color: "bg-teal-600",
+            color: "bg-teal-500",
           },
           {
             label: "Detalles Clínicos",
             icon: "fas fa-notes-medical",
             modal: "clinical",
-            color: "bg-teal-600",
+            color: "bg-teal-500",
           },
           {
             label: "Evaluar Paciente",
             icon: "fas fa-heartbeat",
             modal: "evaluate",
-            color: "bg-teal-600",
+            color: "bg-teal-500",
           },
           {
             label: "Contenido Visto",
             icon: "fas fa-book-reader",
             modal: "educate",
-            color: "bg-teal-600",
+            color: "bg-teal-500",
           },
           {
             label: "Citas Médicas",
             icon: "fas fa-calendar-check",
             modal: "appointments",
-            color: "bg-teal-600",
+            color: "bg-teal-500",
           },
           {
             label: "Alertas",

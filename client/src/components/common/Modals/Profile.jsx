@@ -16,7 +16,7 @@ function Profile({ onOpenUpdate, onCloseProfile }) {
       </h1>
 
       {loading && (
-        <p className="text-center text-teal-600 text-base mb-6 animate-pulse flex items-center justify-center gap-2">
+        <p className="text-center text-teal-500 text-base mb-6 animate-pulse flex items-center justify-center gap-2">
           <i className="fas fa-spinner fa-spin" />
           Cargando perfil...
         </p>
@@ -80,7 +80,7 @@ function Profile({ onOpenUpdate, onCloseProfile }) {
             onOpenUpdate();
             onCloseProfile();
           }}
-          className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white text-sm font-medium rounded-lg shadow-md hover:bg-teal-600 hover:shadow-lg active:scale-[0.97] transition-transform duration-200 ease-in-out"
+          className="cursor-pointer inline-flex items-center justify-center gap-2 px-6 py-3 bg-teal-500 text-white text-sm font-medium rounded-lg shadow-md hover:bg-teal-400 hover:shadow-lg active:scale-[0.97] transition-transform duration-200 ease-in-out"
         >
           <i className="fas fa-edit" />
           Editar Perfil

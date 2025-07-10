@@ -62,8 +62,8 @@ function TreatmentForm({ patientId, setActiveModal }) {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl ">
-      <h2 className="text-xl sm:text-2xl font-bold text-center text-teal-600 mb-8 flex items-center justify-center gap-2">
-        <i className="fa fa-notes-medical text-teal-500" />
+      <h2 className="text-xl sm:text-2xl font-bold text-center text-teal-500 mb-8 flex items-center justify-center gap-2">
+        <i className="fa fa-notes-medical text-teal-400" />
         {treatment ? "Editar Tratamiento" : "Nuevo Tratamiento"}
       </h2>
 
@@ -74,7 +74,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
               htmlFor="startDate"
               className="text-sm font-medium text-gray-600 mb-1 block"
             >
-              <i className="fa fa-calendar-day text-teal-600 mr-1" />
+              <i className="fa fa-calendar-day text-teal-400 mr-1" />
               Fecha de inicio
             </label>
             <input
@@ -92,7 +92,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
               htmlFor="endDate"
               className="text-sm font-medium text-gray-600 mb-1 block"
             >
-              <i className="fa fa-calendar-check text-teal-600 mr-1" />
+              <i className="fa fa-calendar-check text-teal-500 mr-1" />
               Fecha de fin
             </label>
             <input
@@ -110,7 +110,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
             htmlFor="notes"
             className="text-sm font-medium text-gray-600 mb-1 block"
           >
-            <i className="fa fa-sticky-note text-teal-600 mr-1" />
+            <i className="fa fa-sticky-note text-teal-500 mr-1" />
             Notas
           </label>
           <textarea
@@ -123,7 +123,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
         </div>
 
         <fieldset className="border border-teal-200 bg-gray-50 rounded-xl p-4">
-          <legend className="text-teal-700 font-semibold text-base flex items-center gap-2">
+          <legend className="text-teal-500 font-semibold text-base flex items-center gap-2">
             <i className="fa fa-pills" />
             Medicamentos
           </legend>
@@ -188,7 +188,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
           <button
             type="button"
             onClick={addMedication}
-            className="cursor-pointer mt-4 text-teal-700 hover:underline text-sm font-medium flex items-center gap-1"
+            className="cursor-pointer mt-4 text-teal-500 hover:text-teal-400 hover:underline text-sm font-medium flex items-center gap-1"
           >
             <i className="fa fa-plus-circle" />
             Añadir medicamento
@@ -218,14 +218,14 @@ function TreatmentForm({ patientId, setActiveModal }) {
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.75)] flex items-center justify-center z-50 p-5">
           <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm text-center space-y-4">
             <h3 className="text-base sm:text-lg font-semibold text-teal-500 flex items-center justify-center gap-1.5 leading-snug break-words">
-                {isEditing
-                  ? "¡Tratamiento actualizado correctamente!"
-                  : "¡Tratamiento registrado correctamente!"}
+              {isEditing
+                ? "¡Tratamiento actualizado correctamente!"
+                : "¡Tratamiento registrado correctamente!"}
             </h3>
 
             <button
               onClick={handleCloseSuccess}
-              className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer inline-flex items-center gap-2"
+              className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer inline-flex items-center gap-2"
             >
               <i className="fas fa-check text-white text-sm" />
               Aceptar

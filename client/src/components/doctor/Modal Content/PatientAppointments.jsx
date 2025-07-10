@@ -56,7 +56,7 @@ function PatientAppointments({
       <div className="mb-6">
         <button
           onClick={() => setActiveModal("createAppointment")}
-          className="w-full cursor-pointer bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition inline-flex items-center justify-center gap-2"
+          className="w-full cursor-pointer bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm sm:text-base font-medium transition inline-flex items-center justify-center gap-2"
         >
           <i className="fa fa-calendar-plus" />
           Agendar Cita Médica
@@ -125,7 +125,7 @@ function PatientAppointments({
                         setSelectedAppointment(appt);
                         setActiveModal("editAppointment");
                       }}
-                      className="cursor-pointer bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2"
+                      className="cursor-pointer bg-teal-500 hover:bg-teal-400 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2"
                     >
                       <i className="fa fa-edit" />
                       <span className="hidden sm:inline">Reprogramar</span>

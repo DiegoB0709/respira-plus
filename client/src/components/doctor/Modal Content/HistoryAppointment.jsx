@@ -24,7 +24,7 @@ function HistoryAppointment({ selectedAppointment }) {
 
   return (
     <div className="p-6 max-w-2xl mx-auto bg-white rounded-xl  space-y-6">
-      <h2 className="text-xl sm:text-2xl font-bold text-center text-teal-700 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2">
+      <h2 className="text-xl sm:text-2xl font-bold text-center text-teal-500 flex flex-col sm:flex-row items-center justify-center gap-1.5 sm:gap-2">
         <i className="fas fa-history text-teal-400 text-xl sm:text-2xl"></i>
         Historial de la Cita
       </h2>
@@ -53,14 +53,14 @@ function HistoryAppointment({ selectedAppointment }) {
               className="bg-gray-50 border border-gray-200 rounded-lg p-4 shadow-sm space-y-2"
             >
               <div className="text-sm text-gray-800 flex flex-col sm:flex-row sm:items-start sm:gap-2">
-                <span className="font-semibold text-teal-600 flex items-center gap-1 shrink-0">
+                <span className="font-semibold text-teal-500 flex items-center gap-1 shrink-0">
                   <i className="fas fa-tasks text-teal-400"></i> Acción:
                 </span>
                 <span>{entry.action}</span>
               </div>
 
               <div className="text-sm text-gray-800 flex flex-col sm:flex-row sm:items-start sm:gap-2">
-                <span className="font-semibold text-teal-600 flex items-center gap-1 shrink-0">
+                <span className="font-semibold text-teal-500 flex items-center gap-1 shrink-0">
                   <i className="fas fa-calendar-alt text-teal-400"></i> Fecha:
                 </span>
                 <span>
@@ -72,7 +72,7 @@ function HistoryAppointment({ selectedAppointment }) {
               </div>
 
               <div className="text-sm text-gray-800 flex flex-col sm:flex-row sm:items-start sm:gap-2">
-                <span className="font-semibold text-teal-600 flex items-center gap-1 shrink-0">
+                <span className="font-semibold text-teal-500 flex items-center gap-1 shrink-0">
                   <i className="fas fa-user-edit text-teal-400"></i> Actualizado
                   por:
                 </span>

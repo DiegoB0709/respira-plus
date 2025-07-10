@@ -20,7 +20,6 @@ function CitasMedicas() {
   } = useAppointments();
 
   const statusOptions = [
-    "",
     "pendiente",
     "confirmada",
     "asistió",
@@ -202,7 +201,7 @@ function CitasMedicas() {
           onClick={() => {
             setActiveModal("createAppointment");
           }}
-          className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
+          className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
         >
           <i className="fas fa-plus-circle text-white text-base"></i>
           Crear nueva cita

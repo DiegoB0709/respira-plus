@@ -53,8 +53,8 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl ">
-      <h1 className="text-2xl sm:text-3xl font-bold text-teal-600 mb-6 text-center flex flex-col items-center justify-center gap-2">
-        <i className="fas fa-user-edit text-teal-500 text-2xl" />
+      <h1 className="text-2xl sm:text-3xl font-bold text-teal-500 mb-6 text-center flex flex-col items-center justify-center gap-2">
+        <i className="fas fa-user-edit text-teal-400 text-2xl" />
         <span>Actualizar Datos</span>
       </h1>
 
@@ -126,7 +126,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
           <button
             type="button"
             onClick={() => setShowPasswordFields((prev) => !prev)}
-            className="cursor-pointer text-sm font-medium text-teal-600 hover:underline transition"
+            className="cursor-pointer text-sm font-medium text-teal-500 hover:text-teal-400 hover:underline transition"
           >
             {showPasswordFields
               ? "Cancelar cambio de contraseña"
@@ -194,7 +194,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
         <div>
           <button
             type="submit"
-            className="cursor-pointer w-full flex justify-center items-center gap-2 rounded-md bg-teal-600 px-6 py-2.5 text-sm font-medium text-white shadow-md hover:bg-teal-700 active:scale-[0.98] transition-all"
+            className="cursor-pointer w-full flex justify-center items-center gap-2 rounded-md bg-teal-500 px-6 py-2.5 text-sm font-medium text-white shadow-md hover:bg-teal-400 active:scale-[0.98] transition-all"
           >
             <i className="fas fa-save" />
             Actualizar Perfil

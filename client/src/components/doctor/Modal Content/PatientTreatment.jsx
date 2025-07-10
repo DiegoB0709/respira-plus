@@ -26,9 +26,9 @@ function PatientTreatment({ patientId, setActiveModal }) {
         <section className="bg-white border border-gray-200 rounded-2xl shadow-md p-6 space-y-6">
           <div className="space-y-3 text-gray-700 text-sm sm:text-base">
             <p className="flex items-center gap-2">
-              <i className="fas fa-calendar-alt text-teal-500" />
+              <i className="fas fa-calendar-alt text-teal-400" />
               <span>
-                <span className="font-medium text-teal-700">
+                <span className="font-medium text-teal-7500">
                   Fecha de Inicio:
                 </span>{" "}
                 {new Date(treatment.startDate).toLocaleDateString("es-PE", {
@@ -39,9 +39,9 @@ function PatientTreatment({ patientId, setActiveModal }) {
               </span>
             </p>
             <p className="flex items-center gap-2">
-              <i className="fas fa-calendar-check text-teal-500" />
+              <i className="fas fa-calendar-check text-teal-400" />
               <span>
-                <span className="font-medium text-teal-700">Fecha de Fin:</span>{" "}
+                <span className="font-medium text-teal-500">Fecha de Fin:</span>{" "}
                 {new Date(treatment.endDate).toLocaleDateString("es-PE", {
                   year: "numeric",
                   month: "long",
@@ -50,16 +50,16 @@ function PatientTreatment({ patientId, setActiveModal }) {
               </span>
             </p>
             <p className="flex items-start gap-2">
-              <i className="fas fa-sticky-note text-teal-500 pt-1" />
+              <i className="fas fa-sticky-note text-teal-400 pt-1" />
               <span>
-                <span className="font-medium text-teal-700">Notas:</span>{" "}
+                <span className="font-medium text-teal-500">Notas:</span>{" "}
                 {treatment.notes || "Sin notas registradas."}
               </span>
             </p>
           </div>
 
           <div>
-            <h4 className="text-base sm:text-lg font-semibold text-teal-700 mb-2 flex items-center gap-2">
+            <h4 className="text-base sm:text-lg font-semibold text-teal-500 mb-2 flex items-center gap-2">
               <i className="fas fa-pills" />
               Medicamentos
             </h4>
@@ -83,7 +83,7 @@ function PatientTreatment({ patientId, setActiveModal }) {
             </button>
             <button
               onClick={() => setActiveModal("treatmentForm")}
-              className="cursor-pointer flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-medium px-4 py-2 rounded-lg transition"
+              className="cursor-pointer flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium px-4 py-2 rounded-lg transition"
             >
               <i className="fas fa-edit text-sm" />
               Editar
@@ -105,7 +105,7 @@ function PatientTreatment({ patientId, setActiveModal }) {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
               onClick={() => setActiveModal("treatmentForm")}
-              className="cursor-pointer flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white font-medium px-5 py-2 rounded-lg transition"
+              className="cursor-pointer flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium px-5 py-2 rounded-lg transition"
             >
               <i className="fas fa-plus-circle text-sm" />
               Añadir Tratamiento

@@ -2,7 +2,7 @@ function NotFound() {
   return (
     <main className="flex h-screen items-center justify-center bg-white px-6 py-24">
       <div className="text-center">
-        <p className="text-5xl font-bold text-teal-600 sm:text-6xl">404</p>
+        <p className="text-5xl font-bold text-teal-500 sm:text-6xl">404</p>
         <h1 className="mt-4 text-4xl font-bold tracking-tight text-balance text-gray-900 sm:text-6xl">
           No se encontró la página
         </h1>
@@ -12,7 +12,7 @@ function NotFound() {
         <div className="mt-10 flex items-center justify-center gap-x-6">
           <a
             href="/"
-            className="rounded-md bg-teal-600 px-4 py-2.5 text-base font-semibold text-white shadow hover:bg-teal-500 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-teal-600"
+            className="rounded-md bg-teal-500 px-4 py-2.5 text-base font-semibold text-white shadow hover:bg-teal-400 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-teal-500"
           >
             Volver al inicio
           </a>

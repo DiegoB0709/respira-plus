@@ -36,13 +36,13 @@ function EvaluatePatient({ patientId }) {
               <i className="fa fa-heartbeat" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-teal-600">
+              <h2 className="text-xl font-semibold text-teal-500">
                 Evaluación de Riesgos
               </h2>
               <ul className="text-sm text-gray-800 space-y-1">
                 <li>
-                  <i className="fa fa-check-circle text-teal-500 mr-1" />
-                  <span className="font-medium text-teal-600">
+                  <i className="fa fa-check-circle text-teal-400 mr-1" />
+                  <span className="font-medium text-teal-500">
                     Nivel de adherencia:
                   </span>{" "}
                   {evaluationResult.adherenceLevel}
@@ -73,17 +73,17 @@ function EvaluatePatient({ patientId }) {
           </div>
 
           <div className="flex flex-col sm:flex-row items-start bg-white border border-gray-100 rounded-xl shadow p-5 gap-4">
-            <div className="text-teal-500 text-4xl flex-shrink-0">
+            <div className="text-teal-400 text-4xl flex-shrink-0">
               <i className="fa fa-lightbulb" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-teal-600">
+              <h3 className="text-lg font-semibold text-teal-500">
                 Recomendaciones
               </h3>
               <ul className="text-sm text-gray-800 space-y-1">
                 {evaluationResult.recommendations.map((rec, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <i className="fa fa-angle-right text-teal-500 mt-0.5" />
+                    <i className="fa fa-angle-right text-teal-400 mt-0.5" />
                     {rec}
                   </li>
                 ))}

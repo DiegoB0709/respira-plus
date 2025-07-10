@@ -28,8 +28,8 @@ function RegisterToken() {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg">
-      <h1 className="text-2xl font-bold text-center text-teal-600 mb-6 flex flex-wrap items-center justify-center gap-2">
-        <i className="fas fa-key text-teal-500 text-xl shrink-0"></i>
+      <h1 className="text-2xl font-bold text-center text-teal-500 mb-6 flex flex-wrap items-center justify-center gap-2">
+        <i className="fas fa-key text-teal-400 text-xl shrink-0"></i>
         <span className="whitespace-normal">Token de Registro</span>
       </h1>
 
@@ -94,7 +94,7 @@ function RegisterToken() {
         className={`w-full py-2 rounded-xl text-white font-bold transition flex items-center justify-center gap-2 ${
           token || (role === "Paciente" && !selectedDoctor)
             ? "bg-gray-400 cursor-not-allowed"
-            : "bg-teal-600 cursor-pointer hover:bg-teal-700"
+            : "bg-teal-500 cursor-pointer hover:bg-teal-400"
         }`}
       >
         <i className="fas fa-magic"></i>

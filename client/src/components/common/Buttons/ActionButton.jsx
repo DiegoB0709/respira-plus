@@ -7,10 +7,10 @@ function ActionButton({
   const baseClasses =
     "text-white text-sm px-3 py-1 rounded-lg flex items-center justify-center gap-1 transition-all";
   const typeClasses = {
-    info: "bg-teal-500 hover:bg-teal-600",
-    danger: "bg-red-500 hover:bg-red-600",
-    warning: "bg-yellow-500 hover:bg-yellow-600 text-black",
-    success: "bg-green-500 hover:bg-green-600",
+    info: "bg-teal-500 hover:bg-teal-400",
+    danger: "bg-red-500 hover:bg-red-400",
+    warning: "bg-yellow-500 hover:bg-yellow-400 text-black",
+    success: "bg-green-500 hover:bg-green-400",
   };
   const icons = {
     info: "fa-solid fa-circle-info",
