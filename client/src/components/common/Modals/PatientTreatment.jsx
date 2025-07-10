@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTreatment } from "../../../context/TreatmentContext";
+import { useAuth } from "../../../context/AuthContext";
 
 function PatientTreatment({ patientId, setActiveModal }) {
   const { treatment, fetchTreatmentByPatient, removeTreatment } =
     useTreatment();
+  const { user } = useAuth();
+
   const [showConfirm, setShowConfirm] = useState(false);
 
   useEffect(() => {
@@ -28,7 +31,7 @@ function PatientTreatment({ patientId, setActiveModal }) {
             <p className="flex items-center gap-2">
               <i className="fas fa-calendar-alt text-teal-400" />
               <span>
-                <span className="font-medium text-teal-7500">
+                <span className="font-medium text-teal-500">
                   Fecha de Inicio:
                 </span>{" "}
                 {new Date(treatment.startDate).toLocaleDateString("es-PE", {
@@ -73,24 +76,37 @@ function PatientTreatment({ patientId, setActiveModal }) {
             </ul>
           </div>
 
-          <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4">
-            <button
-              onClick={() => setShowConfirm(true)}
-              className="cursor-pointer flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-medium px-4 py-2 rounded-lg transition"
-            >
-              <i className="fas fa-trash-alt text-sm" />
-              Eliminar
-            </button>
-            <button
-              onClick={() => setActiveModal("treatmentForm")}
-              className="cursor-pointer flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium px-4 py-2 rounded-lg transition"
-            >
-              <i className="fas fa-edit text-sm" />
-              Editar
-            </button>
+          <div
+            className={`flex ${
+              user.role === "doctor"
+                ? "flex-col sm:flex-row justify-end"
+                : "flex-col"
+            } gap-3 pt-4`}
+          >
+            {user.role === "doctor" && (
+              <>
+                <button
+                  onClick={() => setShowConfirm(true)}
+                  className="cursor-pointer flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-medium px-4 py-2 rounded-lg transition"
+                >
+                  <i className="fas fa-trash-alt text-sm" />
+                  Eliminar
+                </button>
+                <button
+                  onClick={() => setActiveModal("treatmentForm")}
+                  className="cursor-pointer flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium px-4 py-2 rounded-lg transition"
+                >
+                  <i className="fas fa-edit text-sm" />
+                  Editar
+                </button>
+              </>
+            )}
+
             <button
               onClick={() => setActiveModal("treatmentHistory")}
-              className="cursor-pointer flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded-lg transition"
+              className={`cursor-pointer flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-medium px-4 py-2 rounded-lg transition ${
+                user.role !== "doctor" ? "w-full justify-center" : ""
+              }`}
             >
               <i className="fas fa-history text-sm" />
               Historial
@@ -102,17 +118,26 @@ function PatientTreatment({ patientId, setActiveModal }) {
           <p className="text-gray-600 mb-6 text-base">
             No se encontraron tratamientos registrados para este paciente.
           </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button
-              onClick={() => setActiveModal("treatmentForm")}
-              className="cursor-pointer flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium px-5 py-2 rounded-lg transition"
-            >
-              <i className="fas fa-plus-circle text-sm" />
-              Añadir Tratamiento
-            </button>
+          <div
+            className={`flex ${
+              user.role === "doctor" ? "flex-col sm:flex-row" : "flex-col"
+            } justify-center gap-4`}
+          >
+            {user.role === "doctor" && (
+              <button
+                onClick={() => setActiveModal("treatmentForm")}
+                className="cursor-pointer flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium px-5 py-2 rounded-lg transition"
+              >
+                <i className="fas fa-plus-circle text-sm" />
+                Añadir Tratamiento
+              </button>
+            )}
+
             <button
               onClick={() => setActiveModal("treatmentHistory")}
-              className="cursor-pointer flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-medium px-5 py-2 rounded-lg transition"
+              className={`cursor-pointer flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-medium px-5 py-2 rounded-lg transition ${
+                user.role !== "doctor" ? "w-full justify-center" : ""
+              }`}
             >
               <i className="fas fa-history text-sm" />
               Ver Historial
@@ -149,7 +174,6 @@ function PatientTreatment({ patientId, setActiveModal }) {
       )}
     </div>
   );
-
 }
 
 export default PatientTreatment;

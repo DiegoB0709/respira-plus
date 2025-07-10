@@ -8,19 +8,21 @@ import Option from "../components/common/SideBar/Option";
 import Notification from "../components/common/Modals/Notification";
 import Home from "../components/patient/Home";
 import CitasMedicas from "../components/patient/CitasMedicas";
-import Treatment from "../components/patient/Treatment";
-import ClinicalDetails from "../components/patient/ClinicalDetails";
 import EducationalContent from "../components/patient/EducationalContent";
 import ModalContainer from "../components/common/Modals/ModalContainer";
 import ProfileContainer from "../components/common/Modals/ProfileContainer";
 import useUnreadCounts from "../hooks/useUnreadCounts";
+import ClinicalData from "../components/common/Modals/ClinicalData";
+import PatientTreatment from "../components/common/Modals/PatientTreatment";
+import TreatmentsHistory from "../components/common/Modals/TreatmentsHistory";
 
 function PatientPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("Inicio");
   const [activeModal, setActiveModal] = useState(null);
-    const { unreadNotifCount } = useUnreadCounts();
-  
+  const { unreadNotifCount } = useUnreadCounts();
+
+  const { user } = useAuth();
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
@@ -33,6 +35,14 @@ function PatientPage() {
     }
     if (section === "Perfil") {
       setActiveModal("profile");
+      return;
+    }
+    if (section === "Tratamiento") {
+      setActiveModal("treatment");
+      return;
+    }
+    if (section === "Detalles Clinicos") {
+      setActiveModal("ClinicalDetails");
       return;
     }
     setActiveSection(section);
@@ -59,10 +69,6 @@ function PatientPage() {
         return <Home />;
       case "Citas Medicas":
         return <CitasMedicas />;
-      case "Tratamiento":
-        return <Treatment />;
-      case "Detalles Clinicos":
-        return <ClinicalDetails />;
       case "Contenido Educativo":
         return <EducationalContent />;
       default:
@@ -96,6 +102,27 @@ function PatientPage() {
       {activeModal === "profile" && (
         <ModalContainer onClose={() => setActiveModal(null)}>
           <ProfileContainer />
+        </ModalContainer>
+      )}
+      {activeModal === "treatment" && (
+        <ModalContainer onClose={() => setActiveModal(null)}>
+          <PatientTreatment
+            patientId={user.id}
+            setActiveModal={setActiveModal}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "treatmentHistory" && (
+        <ModalContainer onClose={() => setActiveModal("treatment")}>
+          <TreatmentsHistory
+            patientId={user.id}
+            setActiveModal={() => setActiveModal("treatment")}
+          />
+        </ModalContainer>
+      )}
+      {activeModal === "ClinicalDetails" && (
+        <ModalContainer onClose={() => setActiveModal(null)}>
+          <ClinicalData patientId={user.id} />
         </ModalContainer>
       )}
     </PageContainer>

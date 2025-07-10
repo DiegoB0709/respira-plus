@@ -1,11 +1,14 @@
 import { useEffect } from "react";
 import { useClinicalDetails } from "../../../context/ClinicalDetailsContext";
+import { useAuth } from "../../../context/AuthContext";
 
 function ClinicalData({ patientId, setActiveModal }) {
   const { clinicalDetails, fetchClinicalDetails } = useClinicalDetails();
+  const { user } = useAuth();
 
   useEffect(() => {
     fetchClinicalDetails(patientId);
+    console.log(patientId);
   }, []);
 
   const formatDate = (dateStr) => {
@@ -76,12 +79,15 @@ function ClinicalData({ patientId, setActiveModal }) {
                 value={clinicalDetails.bacteriologicalStatus}
                 color="purple"
               />
-              <Row
-                icon="fa-pills"
-                label="Esquema de tratamiento:"
-                value={clinicalDetails.treatmentScheme}
-                color="purple"
-              />
+              {user.role === "doctor" && (
+                <Row
+                  icon="fa-pills"
+                  label="Esquema de tratamiento:"
+                  value={clinicalDetails.treatmentScheme}
+                  color="purple"
+                />
+              )}
+
               <Row
                 icon="fa-hourglass-half"
                 label="Fase:"
@@ -94,12 +100,14 @@ function ClinicalData({ patientId, setActiveModal }) {
                 value={clinicalDetails.symptoms?.join(", ") || "Ninguno"}
                 color="rose"
               />
-              <Row
-                icon="fa-exclamation-circle"
-                label="Riesgo de adherencia:"
-                value={clinicalDetails.adherenceRisk}
-                color="red"
-              />
+              {user.role === "doctor" && (
+                <Row
+                  icon="fa-exclamation-circle"
+                  label="Riesgo de adherencia:"
+                  value={clinicalDetails.adherenceRisk}
+                  color="red"
+                />
+              )}
               <Row
                 icon="fa-file-medical-alt"
                 label="Notas clínicas:"
@@ -152,29 +160,32 @@ function ClinicalData({ patientId, setActiveModal }) {
               />
             </div>
           </div>
-
-          <div className="pt-6 text-center">
-            <button
-              onClick={setActiveModal}
-              className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
-            >
-              <i className="fa fa-pen" />
-              Editar Datos Clínicos
-            </button>
-          </div>
+          {user.role === "doctor" && (
+            <div className="pt-6 text-center">
+              <button
+                onClick={setActiveModal}
+                className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
+              >
+                <i className="fa fa-pen" />
+                Editar Datos Clínicos
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="text-center mt-10 bg-white p-6 rounded-xl shadow-sm">
           <p className="text-gray-600 mb-4">
             No se encontraron datos clínicos registrados para este paciente.
           </p>
-          <button
-            onClick={setActiveModal}
-            className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
-          >
-            <i className="fa fa-plus" />
-            Añadir Datos Clínicos
-          </button>
+          {user.role === "doctor" && (
+            <button
+              onClick={setActiveModal}
+              className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
+            >
+              <i className="fa fa-plus" />
+              Añadir Datos Clínicos
+            </button>
+          )}
         </div>
       )}
     </div>

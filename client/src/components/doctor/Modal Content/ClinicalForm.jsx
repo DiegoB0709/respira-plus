@@ -34,6 +34,18 @@ function ClinicalForm({ patientId, setActiveModal }) {
     }
   }, [clinicalDetails]);
 
+  useEffect(() => {
+    const weight = parseFloat(form.weight);
+    const heightCm = parseFloat(form.height);
+    if (!isNaN(weight) && !isNaN(heightCm) && heightCm > 0) {
+      const heightM = heightCm / 100;
+      const bmi = weight / (heightM * heightM);
+      setForm((prev) => ({ ...prev, bmi: bmi.toFixed(1) }));
+    } else {
+      setForm((prev) => ({ ...prev, bmi: "" }));
+    }
+  }, [form.weight, form.height]);
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm({ ...form, [name]: type === "checkbox" ? checked : value });
@@ -100,8 +112,8 @@ function ClinicalForm({ patientId, setActiveModal }) {
               step="0.1"
               name="bmi"
               value={form.bmi}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-md p-2"
+              readOnly
+              className="w-full border border-gray-300 rounded-md p-2 bg-gray-100"
             />
           </div>
 

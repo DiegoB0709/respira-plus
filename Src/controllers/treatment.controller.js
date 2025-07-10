@@ -46,6 +46,7 @@ export const createOrUpdateTreatment = async (req, res) => {
         action: "update",
         patient: patientId,
         doctor: doctorId,
+        treatment: updated._id,
         treatmentSnapshot: {
           startDate: updated.startDate,
           endDate: updated.endDate,
@@ -77,6 +78,7 @@ export const createOrUpdateTreatment = async (req, res) => {
         action: "create",
         patient: patientId,
         doctor: doctorId,
+        treatment: newTreatment._id,
         treatmentSnapshot: {
           startDate: newTreatment.startDate,
           endDate: newTreatment.endDate,
@@ -102,6 +104,7 @@ export const createOrUpdateTreatment = async (req, res) => {
     res.status(500).json({ message: "Error al guardar tratamiento" });
   }
 };
+
 export const getTreatmentByPatient = async (req, res) => {
   const { patientId } = req.params;
   const userId = req.user.id;
@@ -187,6 +190,7 @@ export const deleteTreatment = async (req, res) => {
       action: "delete",
       patient: patientId,
       doctor: doctorId,
+      treatment: currentTreatment._id,
       treatmentSnapshot: {
         startDate: currentTreatment.startDate,
         endDate: currentTreatment.endDate,

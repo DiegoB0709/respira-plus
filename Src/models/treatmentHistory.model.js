@@ -4,7 +4,7 @@ const treatmentHistorySchema = new mongoose.Schema(
   {
     action: {
       type: String,
-      enum: ["create", "update", "delete"],
+      enum: ["create", "update", "delete", "finished"],
       required: true,
     },
     patient: {
@@ -17,13 +17,18 @@ const treatmentHistorySchema = new mongoose.Schema(
       ref: "Users",
       required: true,
     },
+    treatment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Treatment",
+      required: true,
+    },
     treatmentSnapshot: {
       startDate: Date,
       endDate: Date,
       medications: [
         {
           name: String,
-          dose: String,
+          dosage: String,
           frequency: String,
         },
       ],
