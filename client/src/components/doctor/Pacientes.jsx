@@ -19,7 +19,7 @@ import PatientAlerts from "./Modal Content/PatientAlerts";
 import UpdateAlert from "./Modal Content/UpdateAlert";
 import AppointmentForm from "./Modal Content/AppointmentForm";
 import HistoryAppointment from "./Modal Content/HistoryAppointment";
-import UpdateStatusAppo from "./Modal Content/UpdateStatusAppo";
+import UpdateStatusAppo from "../common/Modals/UpdateStatusAppo";
 
 function Pacientes() {
   const {

@@ -8,7 +8,7 @@ import { toggleSidebar } from "../utils/SideBar";
 import Dashboard from "../components/doctor/Dashboard";
 import Pacientes from "../components/doctor/Pacientes";
 import Alertas from "../components/doctor/Modal Content/Alertas";
-import CitasMedicas from "../components/doctor/CitasMedicas";
+import CitasMedicas from "../components/common/Citas Medicas/CitasMedicas";
 import ContenidoMedico from "../components/doctor/ContenidoMedico";
 import Notification from "../components/common/Modals/Notification";
 import ModalContainer from "../components/common/Modals/ModalContainer";

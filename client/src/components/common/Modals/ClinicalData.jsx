@@ -8,7 +8,6 @@ function ClinicalData({ patientId, setActiveModal }) {
 
   useEffect(() => {
     fetchClinicalDetails(patientId);
-    console.log(patientId);
   }, []);
 
   const formatDate = (dateStr) => {

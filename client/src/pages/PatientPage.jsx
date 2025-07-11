@@ -7,7 +7,7 @@ import Logo from "../components/common/SideBar/Logo";
 import Option from "../components/common/SideBar/Option";
 import Notification from "../components/common/Modals/Notification";
 import Home from "../components/patient/Home";
-import CitasMedicas from "../components/patient/CitasMedicas";
+import CitasMedicas from "../components/common/Citas Medicas/CitasMedicas";
 import EducationalContent from "../components/patient/EducationalContent";
 import ModalContainer from "../components/common/Modals/ModalContainer";
 import ProfileContainer from "../components/common/Modals/ProfileContainer";
@@ -18,7 +18,7 @@ import TreatmentsHistory from "../components/common/Modals/TreatmentsHistory";
 
 function PatientPage() {
   const { signout } = useAuth();
-  const [activeSection, setActiveSection] = useState("Inicio");
+  const [activeSection, setActiveSection] = useState("Citas Medicas");
   const [activeModal, setActiveModal] = useState(null);
   const { unreadNotifCount } = useUnreadCounts();
 

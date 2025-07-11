@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 const appointmentStatusEnum = [
   "pendiente",
-  "confirmada",
   "asistió",
   "no asistió",
   "cancelada",
@@ -11,7 +10,7 @@ const appointmentHistorySchema = new mongoose.Schema(
   {
     action: {
       type: String,
-      enum: ["confirmada","creada", "asistió", "no asistió", "cancelada", "reprogramada"],
+      enum: ["creada", "asistió", "no asistió", "cancelada", "reprogramada"],
       required: true,
     },
     date: {

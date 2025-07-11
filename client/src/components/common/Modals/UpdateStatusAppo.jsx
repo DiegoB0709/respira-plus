@@ -44,10 +44,8 @@ function UpdateStatusAppo({ selectedAppointment, activeModal }) {
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 text-sm"
             >
               <option value="">Selecciona...</option>
-              <option value="confirmada">Confirmada</option>
               <option value="asistió">Asistió</option>
               <option value="no asistió">No asistió</option>
-              <option value="cancelada">Cancelada</option>
             </select>
           </div>
 

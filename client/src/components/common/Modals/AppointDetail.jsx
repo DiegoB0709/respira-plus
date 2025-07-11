@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAppointments } from "../../../context/AppointmentContext";
+import { useAuth } from "../../../context/AuthContext";
 
 function AppointDetail({
   selectedAppointment,
@@ -8,6 +9,7 @@ function AppointDetail({
 }) {
   const { deleteAppointment, errors } = useAppointments();
   const [showConfirm, setShowConfirm] = useState(false);
+  const {user} = useAuth();
 
   const handleDelete = async () => {
     await deleteAppointment(selectedAppointment._id);
@@ -69,26 +71,29 @@ function AppointDetail({
 
         {canDelete && (
           <>
-            <button
-              onClick={() => setActiveModal("editAppointmen")}
-              className="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
-            >
-              <i className="fas fa-sync-alt text-white"></i> Reprogramar
-            </button>
-
-            <button
-              onClick={() => setActiveModal("updateAppointStatus")}
-              className="cursor-pointer bg-teal-500 hover:bg-teal-400 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
-            >
-              <i className="fas fa-clipboard-check text-white"></i> Actualizar
-              Estado
-            </button>
+            {user.role === "doctor" && (
+              <>
+                <button
+                  onClick={() => setActiveModal("editAppointment")}
+                  className="cursor-pointer bg-teal-600 hover:bg-teal-500 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
+                >
+                  <i className="fas fa-sync-alt text-white"></i> Reprogramar
+                </button>
+                <button
+                  onClick={() => setActiveModal("updateAppointStatus")}
+                  className="cursor-pointer bg-teal-500 hover:bg-teal-400 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
+                >
+                  <i className="fas fa-clipboard-check text-white"></i>{" "}
+                  Actualizar Estado
+                </button>
+              </>
+            )}
 
             <button
               onClick={() => setShowConfirm(true)}
               className="cursor-pointer bg-red-500 hover:bg-red-400 text-white font-medium py-2 px-4 rounded-lg transition text-xs sm:text-sm flex items-center justify-center gap-2"
             >
-              <i className="fas fa-trash-alt text-white"></i> Eliminar
+              <i className="fas fa-trash-alt text-white"></i> Cancelar Cita
             </button>
           </>
         )}
@@ -109,7 +114,7 @@ function AppointDetail({
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.95)] flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-sm space-y-4">
             <h3 className="text-lg font-semibold text-gray-800 text-center">
-              ¿Estás seguro de eliminar este tratamiento?
+              ¿Estás seguro de cancelar esta cita medica?
             </h3>
             <p className="text-sm text-gray-600 text-center">
               Esta acción no se puede deshacer.

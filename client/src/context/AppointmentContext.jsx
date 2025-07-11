@@ -41,11 +41,12 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  const fetchAppointmentsByPatient = async (patientId) => {
+  const fetchAppointmentsByPatient = async (patientId, filters = {}) => {
     setErrors([]);
     try {
-      const res = await getAppointmentsByPatientRequest(patientId);
-      setAppointments(res.data);
+      const res = await getAppointmentsByPatientRequest(patientId, filters);
+      setAppointments(res.data.appointments);
+      setTotalAppointments(res.data.total || 0);
     } catch (error) {
       handleApiError(error, "Error al obtener citas del paciente", setErrors);
     }

@@ -2,8 +2,8 @@ import axios from "./axios";
 
 export const createAppointment = (data) => axios.post("/appointments", data);
 
-export const getAppointmentsByPatient = (patientId) =>
-  axios.get(`/appointments/patient/${patientId}`);
+export const getAppointmentsByPatient = (patientId, filters = {}) =>
+  axios.get(`/appointments/patient/${patientId}`, { params: filters });
 
 export const getAppointmentsByDoctor = (filters = {}) =>
   axios.get("/appointments/doctor", { params: filters });

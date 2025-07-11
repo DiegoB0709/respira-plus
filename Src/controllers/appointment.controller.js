@@ -122,6 +122,8 @@ export const getAppointmentsByPatient = async (req, res) => {
       if (endDate) filter.date.$lte = new Date(endDate);
     }
 
+    const total = await Appointment.countDocuments(filter);
+
     const appointments = await Appointment.find(filter)
       .sort({ date: 1, time: 1 })
       .populate([
@@ -137,12 +139,16 @@ export const getAppointmentsByPatient = async (req, res) => {
       .skip((page - 1) * limit)
       .limit(Number(limit));
 
-    res.status(200).json(appointments);
+    res.status(200).json({
+      total,
+      appointments,
+    });
   } catch (error) {
     console.error("[Error] Error en getAppointmentsByPatient:", error);
     res.status(500).json({ message: "Error al obtener citas" });
   }
 };
+
 
 export const getAppointmentsByDoctor = async (req, res) => {
   const doctorId = req.user.id;
@@ -198,7 +204,7 @@ export const updateAppointmentStatus = async (req, res) => {
   const { newStatus } = req.body;
   const doctorId = req.user.id;
 
-  const validStatuses = ["confirmada", "asistió", "no asistió", "cancelada"];
+  const validStatuses = ["asistió", "no asistió", "cancelada"];
   if (!validStatuses.includes(newStatus)) {
     return res.status(400).json({ message: "Estado de cita inválido" });
   }
@@ -343,16 +349,29 @@ export const deleteAppointment = async (req, res) => {
     if (!isOwner && !isDoctor && role !== "admin") {
       return res
         .status(403)
-        .json({ message: "No autorizado para eliminar esta cita" });
+        .json({ message: "No autorizado para cancelar esta cita" });
     }
 
     if (appointment.status === "asistió") {
       return res
         .status(400)
-        .json({ message: "No se puede eliminar una cita ya atendida" });
+        .json({ message: "No se puede cancelar una cita ya atendida" });
     }
 
-    await appointment.deleteOne();
+    if (appointment.status === "cancelada") {
+      return res
+        .status(400)
+        .json({ message: "La cita ya fue cancelada previamente" });
+    }
+
+    appointment.status = "cancelada";
+    appointment.history.push({
+      action: "cancelada",
+      date: new Date(),
+      updatedBy: userId,
+    });
+
+    await appointment.save();
 
     if (isOwner) {
       await crearNotificacion({
@@ -361,8 +380,11 @@ export const deleteAppointment = async (req, res) => {
         message: `El paciente ha cancelado la cita programada para el ${appointment.date}`,
         type: "cita",
       });
-    }
-    if (!isOwner) {
+
+      await createAlertsFromAI(appointment.patient, appointment.doctor, [
+        "ABN03",
+      ]);
+    } else {
       await crearNotificacion({
         recipientId: appointment.patient,
         title: "Cita cancelada",
@@ -371,13 +393,12 @@ export const deleteAppointment = async (req, res) => {
       });
     }
 
-    res.status(200).json({ message: "Cita eliminada correctamente" });
+    res.status(200).json({ message: "Cita cancelada correctamente" });
   } catch (error) {
-    console.error("[Error] Error en deleteAppointment:", error);
-    res.status(500).json({ message: "Error al eliminar cita" });
+    console.error("[Error] Error al cancelar cita:", error);
+    res.status(500).json({ message: "Error al cancelar cita" });
   }
 };
-
 
 export const getAppointmentHistory = async (req, res) => {
   const { appointmentId } = req.params;
