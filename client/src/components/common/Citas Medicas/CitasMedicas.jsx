@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useAppointments } from "../../../context/AppointmentContext";
 import { useAuth } from "../../../context/AuthContext";
 import ResponsiveTable from "../Table/ResponsiveTable";
@@ -8,30 +8,18 @@ import ActionButton from "../Buttons/ActionButton";
 import ModalContainer from "../Modals/ModalContainer";
 import AppointDetail from "../Modals/AppointDetail";
 import UpdateStatusAppo from "../Modals/UpdateStatusAppo";
-import AppointmentForm from "../../doctor/Modal Content/AppointmentForm";
+import AppointmentForm from "../../common/Modals/AppointmentForm";
 import HistoryAppointment from "../../doctor/Modal Content/HistoryAppointment";
 
 function CitasMedicas() {
   const { user } = useAuth();
-  const {
-    appointments,
-    fetchAppointmentsByDoctor,
-    fetchAppointmentsByPatient,
-    fetchUpcomingAppointments,
-    errors,
-    totalAppointments,
-  } = useAppointments();
+  const { appointments, fetchAppointments, errors, totalAppointments } =
+    useAppointments();
 
   const isDoctor = user?.role === "doctor";
 
-  const statusOptions = [
-    "pendiente",
-    "asistió",
-    "no asistió",
-    "cancelada",
-  ];
+  const statusOptions = ["asistió", "no asistió", "cancelada"];
 
-  const [onlyUpcoming, setOnlyUpcoming] = useState(false);
   const [activeModal, setActiveModal] = useState(null);
   const [selectedAppointment, setSelectedAppointment] = useState("");
   const [filters, setFilters] = useState({
@@ -43,15 +31,15 @@ function CitasMedicas() {
     limit: 10,
   });
 
+    useEffect(() => {
+      fetchAppointments(filters);
+    }, []);
+
   const headers = useMemo(() => {
     return isDoctor
       ? ["Fecha", "Paciente", "Motivo", "Estado", "Acciones"]
       : ["Fecha", "Motivo", "Estado", "Doctor", "Acciones"];
   }, [isDoctor]);
-
-  const fetchFn = isDoctor
-    ? fetchAppointmentsByDoctor
-    : (filters) => fetchAppointmentsByPatient(user.id, filters);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -61,31 +49,20 @@ function CitasMedicas() {
       page: 1,
     };
     setFilters(newFilters);
-    if (!onlyUpcoming) fetchFn(newFilters);
+    fetchAppointments(newFilters);
   };
 
   const handlePageChange = (newPage) => {
     const updated = { ...filters, page: newPage };
     setFilters(updated);
-    if (!onlyUpcoming) fetchFn(updated);
+    fetchAppointments(updated);
   };
 
   const handleLimitChange = (newLimit) => {
     const updated = { ...filters, limit: newLimit, page: 1 };
     setFilters(updated);
-    if (!onlyUpcoming) fetchFn(updated);
+    fetchAppointments(updated);
   };
-
-  useEffect(() => {
-    if (onlyUpcoming) {
-      fetchUpcomingAppointments({
-        page: filters.page,
-        limit: filters.limit,
-      });
-    } else {
-      fetchFn(filters);
-    }
-  }, [onlyUpcoming, filters.page, filters.limit]);
 
   const filteredAppointments = useMemo(() => {
     if (!filters.status) return appointments;
@@ -93,14 +70,41 @@ function CitasMedicas() {
   }, [appointments, filters.status]);
 
   const handleAppointmentCreated = () => {
-    if (onlyUpcoming) {
-      fetchUpcomingAppointments({
-        page: filters.page,
-        limit: filters.limit,
-      });
-    } else {
-      fetchFn(filters);
+    fetchAppointments(filters);
+  };
+
+  const [position, setPosition] = useState(0);
+
+  const options = [
+    "Todas",
+    "Próximas",
+    "Pendientes de confirmación",
+    "Solicitadas al doctor",
+  ];
+
+
+  const handleClick = () => {
+    const newPosition = (position + 1) % options.length;
+    setPosition(newPosition);
+
+    let newFilters = { ...filters, page: 1, status: "" };
+
+    switch (newPosition) {
+      case 1:
+        newFilters.status = "confirmada";
+        break;
+      case 2:
+        newFilters.status = "pendiente";
+        break;
+      case 3:
+        newFilters.status = "solicitada";
+        break;
+      default:
+        newFilters.status = "";
     }
+
+    setFilters(newFilters);
+    fetchAppointments(newFilters);
   };
 
   return (
@@ -131,8 +135,8 @@ function CitasMedicas() {
               value={filters.patientName}
               onChange={handleChange}
               placeholder="Ej. Juan Pérez"
-              className="disabled:bg-gray-100 border rounded-lg px-3 py-2 w-full"
-              disabled={onlyUpcoming}
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
+              disabled={position !== 0}
             />
           </div>
         )}
@@ -147,8 +151,8 @@ function CitasMedicas() {
             name="startDate"
             value={filters.startDate}
             onChange={handleChange}
-            className="disabled:bg-gray-100 border rounded-lg px-3 py-2 w-full"
-            disabled={onlyUpcoming}
+            className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
+            disabled={position !== 0}
           />
         </div>
 
@@ -162,8 +166,8 @@ function CitasMedicas() {
             name="endDate"
             value={filters.endDate}
             onChange={handleChange}
-            className="disabled:bg-gray-100 border rounded-lg px-3 py-2 w-full"
-            disabled={onlyUpcoming}
+            className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
+            disabled={position !== 0}
           />
         </div>
 
@@ -174,10 +178,10 @@ function CitasMedicas() {
           </label>
           <select
             name="status"
-            value={filters.status}
+            value={position === 0 ? filters.status : ""}
             onChange={handleChange}
-            className="disabled:bg-gray-100 border rounded-lg px-3 py-2 w-full"
-            disabled={onlyUpcoming}
+            className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
+            disabled={position !== 0}
           >
             <option value="">Todos los estados</option>
             {statusOptions.map((status) => (
@@ -190,38 +194,31 @@ function CitasMedicas() {
       </div>
 
       <div className="mb-6 flex items-center justify-between flex-wrap gap-3">
-        <label
-          htmlFor="onlyUpcoming"
-          className="flex items-center cursor-pointer select-none"
-        >
-          <div className="relative">
-            <input
-              type="checkbox"
-              id="onlyUpcoming"
-              checked={onlyUpcoming}
-              onChange={() => {
-                setOnlyUpcoming((prev) => !prev);
-                setFilters((prev) => ({ ...prev, page: 1 }));
+        <div className="flex items-center space-x-2">
+          <div
+            className="relative w-16 h-5 bg-gray-300 rounded-full cursor-pointer"
+            onClick={handleClick}
+          >
+            <div
+              className="absolute top-1/2 left-0 w-5 h-5 bg-white rounded-full shadow-md transition-all duration-300 -translate-y-1/2"
+              style={{
+                transform: `translateX(${
+                  position * ((64 - 20) / (options.length - 1))
+                }px) `,
               }}
-              className="sr-only peer"
             />
-            <div className="w-10 h-5 bg-gray-300 rounded-full shadow-inner peer-checked:bg-teal-500 transition-colors duration-300"></div>
-            <div className="absolute top-0 left-0 w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-300 peer-checked:translate-x-full"></div>
           </div>
           <span className="ml-3 text-sm text-gray-700 font-medium">
-            Ver solo próximas citas
+            {options[position]}
           </span>
-        </label>
-
-        {isDoctor && (
-          <button
-            onClick={() => setActiveModal("createAppointment")}
-            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
-          >
-            <i className="fas fa-plus-circle text-white text-base"></i>
-            Crear nueva cita
-          </button>
-        )}
+        </div>
+        <button
+          onClick={() => setActiveModal("createAppointment")}
+          className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-2xl text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
+        >
+          <i className="fas fa-plus-circle text-white text-base"></i>
+          {isDoctor ? "Crear nueva cita" : "Solicitar una cita"}
+        </button>
       </div>
 
       {errors.length > 0 && (
@@ -257,8 +254,8 @@ function CitasMedicas() {
                     capitalize(appt.status),
                     <ActionButton
                       key={`view-${appt._id}`}
-                      type="info"
-                      title="Ver Detalles"
+                      type="view"
+                      title="Visualizar"
                       onClick={() => {
                         setSelectedAppointment(appt);
                         setActiveModal("appointDetail");
@@ -275,8 +272,8 @@ function CitasMedicas() {
                     appt.doctor?.username,
                     <ActionButton
                       key={`view-${appt._id}`}
-                      type="info"
-                      title="Ver Detalles"
+                      type="view"
+                      title="Visualizar"
                       onClick={() => {
                         setSelectedAppointment(appt);
                         setActiveModal("appointDetail");
@@ -301,8 +298,8 @@ function CitasMedicas() {
                       value: (
                         <ActionButton
                           key={`view-${appt._id}`}
-                          type="info"
-                          title="Ver Detalles"
+                          type="view"
+                          title="Visualizar"
                           onClick={() => {
                             setSelectedAppointment(appt);
                             setActiveModal("appointDetail");
@@ -321,8 +318,8 @@ function CitasMedicas() {
                       value: (
                         <ActionButton
                           key={`view-${appt._id}`}
-                          type="info"
-                          title="Ver Detalles"
+                          type="view"
+                          title="Visualizar"
                           onClick={() => {
                             setSelectedAppointment(appt);
                             setActiveModal("appointDetail");

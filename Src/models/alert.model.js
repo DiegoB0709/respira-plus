@@ -20,6 +20,7 @@ const alertSchema = new mongoose.Schema(
         "tratamiento_inefectivo",
         "resistencia_medicamentosa",
         "inactividad_prolongada",
+        "falta_educacion",
       ],
       required: true,
     },

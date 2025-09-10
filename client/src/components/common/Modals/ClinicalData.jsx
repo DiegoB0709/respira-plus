@@ -37,7 +37,7 @@ function ClinicalData({ patientId, setActiveModal }) {
       </h1>
 
       {clinicalDetails ? (
-        <div className="bg-white shadow-md rounded-2xl p-6 sm:p-8 space-y-6">
+        <div className="bg-white rounded-2xl p-6 sm:p-8 space-y-6">
           <div className="space-y-2">
             <h2 className="text-teal-500 font-semibold text-lg border-b pb-1">
               Datos básicos
@@ -163,7 +163,7 @@ function ClinicalData({ patientId, setActiveModal }) {
             <div className="pt-6 text-center">
               <button
                 onClick={setActiveModal}
-                className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
+                className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-2xl shadow transition"
               >
                 <i className="fa fa-pen" />
                 Editar Datos Clínicos
@@ -172,14 +172,15 @@ function ClinicalData({ patientId, setActiveModal }) {
           )}
         </div>
       ) : (
-        <div className="text-center mt-10 bg-white p-6 rounded-xl shadow-sm">
-          <p className="text-gray-600 mb-4">
+        <div className="mt-10 flex flex-col items-center justify-center text-center bg-gray-50 p-10 rounded-xl border border-dashed border-gray-300 shadow-sm">
+          <i className="fa fa-notes-medical text-5xl text-gray-400 mb-4" />
+          <p className="text-gray-600 text-lg mb-6 max-w-md">
             No se encontraron datos clínicos registrados para este paciente.
           </p>
           {user.role === "doctor" && (
             <button
               onClick={setActiveModal}
-              className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-md shadow transition"
+              className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium text-sm sm:text-base py-2 px-6 rounded-2xl shadow-md transition"
             >
               <i className="fa fa-plus" />
               Añadir Datos Clínicos

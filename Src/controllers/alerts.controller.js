@@ -6,9 +6,36 @@ export const getAlertsByDoctor = async (req, res) => {
   const doctorId = req.user.id;
 
   try {
-    const alerts = await Alert.find({ doctor: doctorId })
-      .populate("patient", "username email")
-      .sort({ createdAt: -1 });
+    const alerts = await Alert.aggregate([
+      { $match: { doctor: new mongoose.Types.ObjectId(doctorId) } },
+      {
+        $addFields: {
+          statusOrder: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$status", "activa"] }, then: 1 },
+                { case: { $eq: ["$status", "revisada"] }, then: 2 },
+                { case: { $eq: ["$status", "resuelta"] }, then: 3 },
+              ],
+              default: 4,
+            },
+          },
+          severityOrder: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$severity", "alta"] }, then: 1 },
+                { case: { $eq: ["$severity", "media"] }, then: 2 },
+                { case: { $eq: ["$severity", "baja"] }, then: 3 },
+              ],
+              default: 4,
+            },
+          },
+        },
+      },
+      { $sort: { statusOrder: 1, severityOrder: 1, updatedAt: -1 } },
+    ]);
+
+    await Alert.populate(alerts, { path: "patient", select: "username email" });
 
     res.status(200).json(alerts);
   } catch (error) {
@@ -20,7 +47,6 @@ export const getAlertsByDoctor = async (req, res) => {
 export const getAlertsByPatient = async (req, res) => {
   const { patientId } = req.params;
   const requesterId = req.user.id;
-  const requesterRole = req.user.role;
 
   try {
     if (!mongoose.Types.ObjectId.isValid(patientId)) {
@@ -39,11 +65,36 @@ export const getAlertsByPatient = async (req, res) => {
       return res.status(403).json({ message: "No autorizado" });
     }
 
-    const alerts = await Alert.find({ patient: patientId })
-      .sort({
-        createdAt: -1,
-      })
-      .populate("doctor", "username");;
+    const alerts = await Alert.aggregate([
+      { $match: { patient: new mongoose.Types.ObjectId(patientId) } },
+      {
+        $addFields: {
+          statusOrder: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$status", "activa"] }, then: 1 },
+                { case: { $eq: ["$status", "revisada"] }, then: 2 },
+                { case: { $eq: ["$status", "resuelta"] }, then: 3 },
+              ],
+              default: 4,
+            },
+          },
+          severityOrder: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$severity", "alta"] }, then: 1 },
+                { case: { $eq: ["$severity", "media"] }, then: 2 },
+                { case: { $eq: ["$severity", "baja"] }, then: 3 },
+              ],
+              default: 4,
+            },
+          },
+        },
+      },
+      { $sort: { statusOrder: 1, severityOrder: 1, updatedAt: -1 } },
+    ]);
+
+    await Alert.populate(alerts, { path: "doctor", select: "username" });
 
     res.status(200).json(alerts);
   } catch (error) {

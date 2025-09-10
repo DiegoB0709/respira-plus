@@ -1,5 +1,10 @@
 import mongoose from "mongoose";
 
+const mediaSchema = new mongoose.Schema({
+  cloudinaryPublicId: { type: String, required: true },
+  fileType: { type: String, enum: ["image", "video"], required: true },
+});
+
 const educationalContentSchema = new mongoose.Schema(
   {
     title: {
@@ -8,14 +13,21 @@ const educationalContentSchema = new mongoose.Schema(
     },
     description: {
       type: String,
+      default: "",
     },
-    fileUrl: {
-      type: String,
+    media: {
+      type: [mediaSchema],
       required: true,
+      validate: {
+        validator: function (mediaArr) {
+          return mediaArr && mediaArr.length > 0;
+        },
+        message: "Debe proporcionar al menos un archivo de imagen o video.",
+      },
     },
     fileType: {
       type: String,
-      enum: ["video", "image", "pdf", "article"],
+      enum: ["image", "video"],
       required: true,
     },
     uploadBy: {
@@ -23,12 +35,7 @@ const educationalContentSchema = new mongoose.Schema(
       ref: "Users",
       required: true,
     },
-
-    relatedSymptoms: [
-      {
-        type: String,
-      },
-    ],
+    relatedSymptoms: [String],
     treatmentStage: {
       type: String,
       enum: ["inicio", "intermedio", "final", "indefinido"],
@@ -37,12 +44,17 @@ const educationalContentSchema = new mongoose.Schema(
     clinicalTags: [
       {
         type: String,
+        enum: [
+          "riesgo_abandono_alto",
+          "posible_resistencia",
+          "adh_baja",
+          "abandono_probable",
+        ],
       },
     ],
-
     isPublic: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   {

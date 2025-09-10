@@ -1,6 +1,7 @@
 import { Router } from "express";
+import { upload } from "../middlewares/upload.middleware.js";
 import {
-  getRecommendedContentForPatient,
+  getEducationalContentForPatient,
   registerContentView,
   getEducationalHistory,
   uploadEducationalContent,
@@ -8,35 +9,35 @@ import {
   deleteEducationalContent,
   updateEducationalContent,
   getEducationalContentById,
-  getPublicEducationalContent,
+  getEducationalHistoryByContent,
 } from "../controllers/educational.controller.js";
-
 import { authorizeRole } from "../middlewares/authorizeRole.js";
-
 import {
   educationalContentSchema,
   educationalContentUpdateSchema,
 } from "../schemas/educational.schema.js";
 import { validateSchema } from "../middlewares/validateSchema.js";
 
-
 const router = Router();
 
 router.get(
   "/recommendations",
   authorizeRole("patient"),
-  getRecommendedContentForPatient
+  getEducationalContentForPatient
 );
 
 router.post("/view/:contentId", authorizeRole("patient"), registerContentView);
 
-router.get("/history", authorizeRole("patient, doctor"), getEducationalHistory);
-
-router.get("/public", getPublicEducationalContent);
+router.get(
+  "/history/patient/:id",
+  authorizeRole(["doctor"]),
+  getEducationalHistory
+);
 
 router.post(
   "/upload",
   authorizeRole("doctor"),
+  upload.single("file"),
   validateSchema(educationalContentSchema),
   uploadEducationalContent
 );
@@ -53,5 +54,11 @@ router.put(
 router.delete("/delete/:id", authorizeRole("doctor"), deleteEducationalContent);
 
 router.get("/:id", getEducationalContentById);
+
+router.get(
+  "/history/:contentId",
+  authorizeRole(["patient", "doctor"]),
+  getEducationalHistoryByContent
+);
 
 export default router;

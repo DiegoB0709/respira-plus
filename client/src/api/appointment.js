@@ -2,11 +2,8 @@ import axios from "./axios";
 
 export const createAppointment = (data) => axios.post("/appointments", data);
 
-export const getAppointmentsByPatient = (patientId, filters = {}) =>
-  axios.get(`/appointments/patient/${patientId}`, { params: filters });
-
-export const getAppointmentsByDoctor = (filters = {}) =>
-  axios.get("/appointments/doctor", { params: filters });
+export const getAppointments = (filters = {}) =>
+  axios.get("/appointments", { params: filters });
 
 export const updateAppointmentStatus = (appointmentId, newStatus) =>
   axios.put(`/appointments/${appointmentId}/status`, { newStatus });
@@ -19,6 +16,3 @@ export const rescheduleAppointment = (appointmentId, data) =>
 
 export const deleteAppointment = (appointmentId) =>
   axios.delete(`/appointments/${appointmentId}`);
-
-export const getUpcomingAppointmentsForUser = (filters = {}) =>
-  axios.get("/appointments/upcoming", { params: filters });

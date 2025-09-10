@@ -25,13 +25,22 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "doctor", "patient"],
+      enum: ["admin", "doctor", "patient", "server"],
       required: true,
     },
     registrationToken: {
       type: String,
       unique: true,
       sparse: true,
+    },
+    registrationExpiresAt: {
+      type: Date,
+      default: function () {
+        return this.registrationToken
+          ? new Date(Date.now() + 72 * 60 * 60 * 1000)
+          : undefined;
+      },
+      expires: 0,
     },
     assignedPatients: [
       {

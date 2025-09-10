@@ -1,7 +1,6 @@
 import { evaluatePatient } from "../services/ai.service.js";
 import { createAlertsFromAI } from "../services/alert.service.js";
 import Users from "../models/user.model.js";
-import ClinicalDetails from "../models/clinicalDetails.model.js";
 
 export const evaluatePatientController = async (req, res) => {
   try {
@@ -25,7 +24,6 @@ export const evaluatePatientController = async (req, res) => {
       _id: patientId,
       role: "patient",
     });
-
     if (!patient) {
       return res.status(404).json({ message: "Paciente no encontrado." });
     }
@@ -33,7 +31,6 @@ export const evaluatePatientController = async (req, res) => {
     const isAssigned = doctor.assignedPatients
       .map((id) => id.toString())
       .includes(patientId);
-
     if (!isAssigned) {
       return res.status(403).json({
         message: "Paciente no asignado a este doctor.",
@@ -42,11 +39,7 @@ export const evaluatePatientController = async (req, res) => {
 
     const evaluation = await evaluatePatient(patientId);
 
-    await createAlertsFromAI({
-      patientId,
-      doctorId,
-      evaluation,
-    });
+    await createAlertsFromAI(patientId, doctorId, evaluation.triggeredRules);
 
     if (
       !evaluation.recommendations ||
@@ -57,34 +50,9 @@ export const evaluatePatientController = async (req, res) => {
       ];
     }
 
-    const clinical = await ClinicalDetails.findOne({
-      patient: patientId,
-    }).lean();
-
     return res.status(200).json({
       success: true,
       patientId,
-      clinicalSummary: clinical
-        ? {
-            weight: clinical.weight,
-            height: clinical.height,
-            bmi: clinical.bmi,
-            diagnosisDate: clinical.diagnosisDate,
-            bacteriologicalStatus: clinical.bacteriologicalStatus,
-            treatmentScheme: clinical.treatmentScheme,
-            phase: clinical.phase,
-            comorbidities: clinical.comorbidities,
-            hivStatus: clinical.hivStatus,
-            smoking: clinical.smoking,
-            alcoholUse: clinical.alcoholUse,
-            contactWithTb: clinical.contactWithTb,
-            priorTbTreatment: clinical.priorTbTreatment,
-            symptoms: clinical.symptoms,
-            clinicalNotes: clinical.clinicalNotes,
-            adherenceRisk: clinical.adherenceRisk,
-            lastUpdate: clinical.updatedAt,
-          }
-        : null,
       evaluation,
     });
   } catch (error) {
@@ -94,4 +62,3 @@ export const evaluatePatientController = async (req, res) => {
       .json({ message: "Error interno al evaluar paciente." });
   }
 };
-

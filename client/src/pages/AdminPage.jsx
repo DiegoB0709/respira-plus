@@ -36,10 +36,10 @@ function AdminPage() {
   };
 
   const menuOptions = [
-    { name: "DashBoard", icon: "chart-simple" },
-    { name: "Usuarios", icon: "users" },
-    { name: "Perfil", icon: "user" },
-    { name: "Cerrar Sesion", icon: "power-off" },
+    { name: "DashBoard", icon: "chart-simple", number:0 },
+    { name: "Usuarios", icon: "users", number:0 },
+    { name: "Perfil", icon: "user", number:0 },
+    { name: "Cerrar Sesion", icon: "power-off", number:0 },
   ];
 
   const renderContent = () => {
@@ -62,6 +62,7 @@ function AdminPage() {
             key={option.name}
             icon={option.icon}
             name={option.name}
+            number={option.number}
             active={activeSection === option.name}
             handleSectionClick={handleSectionClick}
           />

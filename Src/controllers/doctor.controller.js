@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import User from "../models/user.model.js";
+import { crearNotificacion } from "../services/notification.service.js";
 
 export const getMyPatients = async (req, res) => {
   try {
@@ -86,6 +87,12 @@ export const updatePatientInfo = async (req, res) => {
     patient.phone = phone ?? patient.phone;
 
     await patient.save();
+    await crearNotificacion({
+      recipientId: patientId,
+      title: "Datos Personales Actualizados",
+      message: "Tu doctor ha actualizado los datos de tu cuenta.",
+      type: "info",
+    });
 
     res
       .status(200)

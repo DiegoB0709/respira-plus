@@ -4,7 +4,14 @@ import { evaluatePatient } from "../services/ai.service.js";
 import { createAlertsFromAI } from "../services/alert.service.js";
 
 const revisarPacientes = async () => {
-  const patients = await Users.find({ role: "patient", isActive: true });
+  const patients = await Users.find({
+    role: "patient",
+    isActive: true,
+    $or: [
+      { registrationToken: { $exists: false } },
+      { registrationToken: { $in: [null, undefined] } },
+    ],
+  });
 
   for (const patient of patients) {
     const doctorId = patient.doctor;
@@ -12,13 +19,7 @@ const revisarPacientes = async () => {
 
     const result = await evaluatePatient(patient._id);
 
-    if (result.recommendations.length > 0) {
-      await createAlertsFromAI(
-        patient._id,
-        doctorId,
-        result.recommendations.map((r) => r.slice(0, 5))
-      );
-    }
+    await createAlertsFromAI(patient._id, doctorId, result.triggeredRules);
   }
 };
 

@@ -6,10 +6,8 @@ import {
   deleteTreatment,
   getTreatmentHistory,
 } from "../controllers/treatment.controller.js";
-
 import { authorizeRole } from "../middlewares/authorizeRole.js";
 import { authRequired } from "../middlewares/authRequired.js";
-
 
 const router = Router();
 
@@ -33,6 +31,5 @@ router.delete(
   deleteTreatment
 );
 router.get("/history/:patientId", authRequired, getTreatmentHistory);
-
 
 export default router;

@@ -1,56 +1,49 @@
 import mongoose from "mongoose";
 
-const clinicalDetailsSchema = new mongoose.Schema(
+const clinicalHistorySchema = new mongoose.Schema(
   {
     patient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
       required: true,
-      unique: true,
+    },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
     },
     weight: Number,
-    height: Number,
     bmi: Number,
-    diagnosisDate: Date,
-    bacteriologicalStatus: {
-      type: String,
-      enum: ["positivo", "negativo", "no confirmado"],
-    },
-    treatmentScheme: String,
+    symptoms: [String],
+    clinicalNotes: String,
     phase: {
       type: String,
       enum: ["inicio", "intermedio", "final", "indefinido"],
-      default: "inicio",
+    },
+    bacteriologicalStatus: {
+      type: String,
+      enum: ["positivo", "negativo", "no confirmado"],
     },
     comorbidities: [String],
     hivStatus: {
       type: String,
       enum: ["positivo", "negativo", "desconocido"],
-      default: "desconocido",
     },
     smoking: Boolean,
     alcoholUse: Boolean,
     contactWithTb: Boolean,
     priorTbTreatment: Boolean,
-    symptoms: [String],
-    clinicalNotes: String,
     adherenceRisk: {
       type: String,
       enum: ["bajo", "medio", "alto"],
     },
-    updatedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Users",
-    },
-    updatedAt: {
+    snapshotDate: {
       type: Date,
       default: Date.now,
     },
   },
-  {
-    timestamps: true,
-  }
+  { timestamps: true }
 );
 
-export default mongoose.models.ClinicalDetails ||
-  mongoose.model("ClinicalDetails", clinicalDetailsSchema);
+export default mongoose.models.ClinicalHistory ||
+  mongoose.model("ClinicalHistory", clinicalHistorySchema);

@@ -94,7 +94,7 @@ function Usuarios() {
               name="role"
               value={filters.role}
               onChange={handleChange}
-              className="cursor-pointer border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm cursor-pointer focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             >
               <option value="">Todos</option>
               <option value="doctor">Doctor</option>
@@ -114,7 +114,7 @@ function Usuarios() {
               value={filters.username}
               onChange={handleChange}
               disabled={onlyWithToken}
-              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
           </div>
 
@@ -130,7 +130,7 @@ function Usuarios() {
               value={filters.email}
               onChange={handleChange}
               disabled={onlyWithToken}
-              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
           </div>
 
@@ -146,7 +146,7 @@ function Usuarios() {
               value={filters.phone}
               onChange={handleChange}
               disabled={onlyWithToken}
-              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
           </div>
         </div>
@@ -177,7 +177,7 @@ function Usuarios() {
 
           <button
             onClick={() => setOpenGenerator(true)}
-            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
+            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-2xl text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
           >
             <i className="fas fa-key"></i>
             Generar token de registro
@@ -185,7 +185,7 @@ function Usuarios() {
         </div>
 
         {errors.length > 0 && (
-          <div className="mt-4 bg-red-100 text-red-700 p-4 rounded-lg">
+          <div className="mt-4 bg-red-100 text-red-700 p-4 rounded-xl">
             <h4 className="font-semibold mb-2">Errores:</h4>
             <ul className="list-disc list-inside text-sm">
               {errors.map((e, i) => (

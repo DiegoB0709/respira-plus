@@ -52,7 +52,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto bg-white rounded-xl ">
+    <div className="p-6 max-w-3xl mx-auto bg-white rounded-2xl ">
       <h1 className="text-2xl sm:text-3xl font-bold text-teal-500 mb-6 text-center flex flex-col items-center justify-center gap-2">
         <i className="fas fa-user-edit text-teal-400 text-2xl" />
         <span>Actualizar Datos</span>
@@ -63,7 +63,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
           <div>
             <label
               htmlFor="username"
-              className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
+              className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1"
             >
               <i className="fas fa-user text-gray-400" />
               Nombre de Usuario
@@ -72,10 +72,10 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
               id="username"
               type="text"
               {...register("username", { required: "Nombre requerido" })}
-              className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
+              className="w-full rounded-xl px-4 py-2 text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-400 focus:outline-none shadow-sm transition"
             />
             {errors.username && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-red-500">
                 {errors.username.message}
               </p>
             )}
@@ -84,7 +84,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
           <div>
             <label
               htmlFor="phone"
-              className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
+              className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1"
             >
               <i className="fas fa-phone text-gray-400" />
               Teléfono
@@ -93,10 +93,10 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
               id="phone"
               type="text"
               {...register("phone", { required: "Teléfono requerido" })}
-              className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
+              className="w-full rounded-xl px-4 py-2 text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-400 focus:outline-none shadow-sm transition"
             />
             {errors.phone && (
-              <p className="mt-1 text-sm text-red-600">
+              <p className="mt-1 text-sm text-red-500">
                 {errors.phone.message}
               </p>
             )}
@@ -106,7 +106,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
         <div>
           <label
             htmlFor="email"
-            className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
+            className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1"
           >
             <i className="fas fa-envelope text-gray-400" />
             Correo Electrónico
@@ -115,10 +115,10 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
             id="email"
             type="email"
             {...register("email", { required: "Correo requerido" })}
-            className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
+            className="w-full rounded-xl px-4 py-2 text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-400 focus:outline-none shadow-sm transition"
           />
           {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
+            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
           )}
         </div>
 
@@ -139,7 +139,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
             <div>
               <label
                 htmlFor="password"
-                className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
+                className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1"
               >
                 <i className="fas fa-lock text-gray-400" />
                 Nueva Contraseña
@@ -153,10 +153,10 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
                     ? { value: 6, message: "Mínimo 6 caracteres" }
                     : undefined,
                 })}
-                className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
+                className="w-full rounded-xl px-4 py-2 text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-400 focus:outline-none shadow-sm transition"
               />
               {errors.password && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.password.message}
                 </p>
               )}
@@ -165,7 +165,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
             <div>
               <label
                 htmlFor="repeatPassword"
-                className="text-sm font-medium text-gray-700 flex items-center gap-2 mb-1"
+                className="text-sm font-medium text-gray-500 flex items-center gap-2 mb-1"
               >
                 <i className="fas fa-lock text-gray-400" />
                 Confirmar Contraseña
@@ -180,10 +180,10 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
                         value === password || "Las contraseñas no coinciden"
                     : undefined,
                 })}
-                className="w-full rounded-md px-4 py-2 text-base text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:outline-none shadow-sm"
+                className="w-full rounded-xl px-4 py-2 text-gray-900 border border-gray-300 focus:ring-2 focus:ring-teal-400 focus:outline-none shadow-sm transition"
               />
               {errors.repeatPassword && (
-                <p className="mt-1 text-sm text-red-600">
+                <p className="mt-1 text-sm text-red-500">
                   {errors.repeatPassword.message}
                 </p>
               )}
@@ -194,15 +194,16 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
         <div>
           <button
             type="submit"
-            className="cursor-pointer w-full flex justify-center items-center gap-2 rounded-md bg-teal-500 px-6 py-2.5 text-sm font-medium text-white shadow-md hover:bg-teal-400 active:scale-[0.98] transition-all"
+            className="cursor-pointer relative w-full flex justify-center items-center gap-2 rounded-2xl bg-teal-500 px-6 py-3 text-sm font-medium text-white shadow-md hover:bg-teal-400 hover:shadow-lg active:scale-95 transition-all duration-200"
           >
-            <i className="fas fa-save" />
-            Actualizar Perfil
+            <span className="absolute inset-0 bg-white opacity-10 scale-0 hover:scale-100 transition-transform duration-300 rounded-2xl"></span>
+            <i className="fas fa-save z-10" />
+            <span className="z-10">Actualizar Perfil</span>
           </button>
         </div>
 
         {updateErrors.length > 0 && (
-          <div className="text-sm text-red-600 space-y-1">
+          <div className="text-sm text-red-500 space-y-1 mt-2">
             {updateErrors.map((err, i) => (
               <div key={i}>{err}</div>
             ))}
@@ -211,6 +212,7 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
       </form>
     </div>
   );
+
 }
 
 export default UpdateProfile;

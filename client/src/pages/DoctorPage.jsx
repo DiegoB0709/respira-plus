@@ -18,7 +18,7 @@ import useUnreadCounts from "../hooks/useUnreadCounts";
 
 function DoctorPage() {
   const { signout } = useAuth();
-  const [activeSection, setActiveSection] = useState("Pacientes");
+  const [activeSection, setActiveSection] = useState("DashBoard");
   const [activeModal, setActiveModal] = useState(null);
   const [alertId, setAlertId] = useState("");
   const { unresolvedAlertCount, unreadNotifCount } = useUnreadCounts();

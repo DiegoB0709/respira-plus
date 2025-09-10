@@ -61,7 +61,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl ">
+    <div className="max-w-3xl mx-auto p-6">
       <h2 className="text-xl sm:text-2xl font-bold text-center text-teal-500 mb-8 flex items-center justify-center gap-2">
         <i className="fa fa-notes-medical text-teal-400" />
         {treatment ? "Editar Tratamiento" : "Nuevo Tratamiento"}
@@ -83,7 +83,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               required
-              className="w-full border border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-lg px-3 py-2 shadow-sm transition"
+              className="w-full border border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-2xl px-3 py-2 shadow-sm transition"
             />
           </div>
 
@@ -100,7 +100,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
               type="date"
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="w-full border border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-lg px-3 py-2 shadow-sm transition"
+              className="w-full border border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-2xl px-3 py-2 shadow-sm transition"
             />
           </div>
         </div>
@@ -118,7 +118,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             rows={3}
-            className="w-full border border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-lg px-3 py-2 shadow-sm transition"
+            className="w-full border border-gray-300 focus:border-teal-500 focus:ring-teal-500 rounded-xl px-3 py-2 shadow-sm transition"
           />
         </div>
 
@@ -142,7 +142,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
                       handleMedicationChange(i, "name", e.target.value)
                     }
                     required
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-teal-500 focus:ring-teal-500 shadow-sm"
+                    className="w-full border border-gray-300 rounded-2xl px-3 py-2 focus:border-teal-500 focus:ring-teal-500 shadow-sm"
                   />
                   <input
                     type="text"
@@ -152,7 +152,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
                       handleMedicationChange(i, "dosage", e.target.value)
                     }
                     required
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-teal-500 focus:ring-teal-500 shadow-sm"
+                    className="w-full border border-gray-300 rounded-2xl px-3 py-2 focus:border-teal-500 focus:ring-teal-500 shadow-sm"
                   />
                   <input
                     type="text"
@@ -162,7 +162,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
                       handleMedicationChange(i, "frequency", e.target.value)
                     }
                     required
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:border-teal-500 focus:ring-teal-500 shadow-sm"
+                    className="w-full border border-gray-300 rounded-2xl px-3 py-2 focus:border-teal-500 focus:ring-teal-500 shadow-sm"
                   />
                 </div>
 
@@ -199,7 +199,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
           <button
             type="button"
             onClick={setActiveModal}
-            className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium px-6 py-2 rounded-lg flex items-center gap-2 justify-center shadow-sm transition"
+            className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium px-6 py-2 rounded-2xl flex items-center gap-2 justify-center shadow-sm transition"
           >
             <i className="fa fa-arrow-left" />
             Volver
@@ -207,7 +207,7 @@ function TreatmentForm({ patientId, setActiveModal }) {
 
           <button
             type="submit"
-            className="cursor-pointer bg-teal-600 hover:bg-teal-700 text-white font-medium px-6 py-2 rounded-lg flex items-center gap-2 justify-center shadow-md transition"
+            className="cursor-pointer bg-teal-500 hover:bg-teal-400 text-white font-medium px-6 py-2 rounded-2xl flex items-center gap-2 justify-center shadow-md transition"
           >
             <i className="fa fa-save" />
             Guardar Tratamiento
@@ -215,21 +215,27 @@ function TreatmentForm({ patientId, setActiveModal }) {
         </div>
       </form>
       {showSuccess && (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.75)] flex items-center justify-center z-50 p-5">
-          <div className="bg-white p-6 rounded-xl shadow-lg w-full max-w-sm text-center space-y-4">
-            <h3 className="text-base sm:text-lg font-semibold text-teal-500 flex items-center justify-center gap-1.5 leading-snug break-words">
-              {isEditing
-                ? "¡Tratamiento actualizado correctamente!"
-                : "¡Tratamiento registrado correctamente!"}
-            </h3>
-
-            <button
-              onClick={handleCloseSuccess}
-              className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-md text-sm font-medium cursor-pointer inline-flex items-center gap-2"
-            >
-              <i className="fas fa-check text-white text-sm" />
-              Aceptar
-            </button>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
+            <div className="p-6 flex flex-col items-center space-y-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-600">
+                <i className="fas fa-check text-lg" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-800">
+                {isEditing
+                  ? "¡Tratamiento actualizado!"
+                  : "¡Tratamiento registrado!"}
+              </h3>
+              <p className="text-sm text-gray-500">
+                La acción se completó exitosamente.
+              </p>
+              <button
+                onClick={handleCloseSuccess}
+                className="cursor-pointer w-full bg-teal-500 hover:bg-teal-400 text-white py-2 rounded-xl text-sm font-medium transition-colors"
+              >
+                Aceptar
+              </button>
+            </div>
           </div>
         </div>
       )}

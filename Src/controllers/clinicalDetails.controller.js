@@ -1,6 +1,7 @@
 import ClinicalDetails from "../models/clinicalDetails.model.js";
 import Users from "../models/user.model.js";
 import mongoose from "mongoose";
+import ClinicalHistory from "../models/clinicalHistory.model.js";
 import { evaluatePatient } from "../services/ai.service.js";
 import { createAlertsFromAI } from "../services/alert.service.js";
 import { crearNotificacion } from "../services/notification.service.js";
@@ -47,6 +48,26 @@ export const createOrUpdateClinicalDetails = async (req, res) => {
       result = newDetails;
     }
 
+    const historyEntry = new ClinicalHistory({
+      patient: patientId,
+      updatedBy: doctorId,
+      weight: result.weight,
+      bmi: result.bmi,
+      symptoms: result.symptoms,
+      clinicalNotes: result.clinicalNotes,
+      phase: result.phase,
+      bacteriologicalStatus: result.bacteriologicalStatus,
+      comorbidities: result.comorbidities,
+      hivStatus: result.hivStatus,
+      smoking: result.smoking,
+      alcoholUse: result.alcoholUse,
+      contactWithTb: result.contactWithTb,
+      priorTbTreatment: result.priorTbTreatment,
+      adherenceRisk: result.adherenceRisk,
+      snapshotDate: new Date(),
+    });
+    await historyEntry.save();
+
     const evaluation = await evaluatePatient(patientId);
     await createAlertsFromAI(patientId, doctorId, evaluation.triggeredRules);
 
@@ -65,7 +86,6 @@ export const createOrUpdateClinicalDetails = async (req, res) => {
     res.status(500).json({ message: "Error al guardar detalles clínicos" });
   }
 };
-
 
 export const getClinicalDetailsByPatient = async (req, res) => {
   const { patientId } = req.params;

@@ -6,6 +6,7 @@ export function toggleSidebar() {
   toggleButton.classList.toggle("rotate");
   closeAllSubMenus();
 }
+
 export function toggleSubMenu(event) {
   const button = event.currentTarget;
   const submenu = button.nextElementSibling;

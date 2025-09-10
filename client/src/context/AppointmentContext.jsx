@@ -1,13 +1,11 @@
 import { createContext, useContext, useState } from "react";
 import {
   createAppointment as createAppointmentRequest,
-  getAppointmentsByPatient as getAppointmentsByPatientRequest,
-  getAppointmentsByDoctor as getAppointmentsByDoctorRequest,
   updateAppointmentStatus as updateAppointmentStatusRequest,
   getAppointmentHistory as getAppointmentHistoryRequest,
   rescheduleAppointment as rescheduleAppointmentRequest,
   deleteAppointment as deleteAppointmentRequest,
-  getUpcomingAppointmentsForUser as getUpcomingAppointmentsRequest,
+  getAppointments,
 } from "../api/appointment";
 import { handleApiError } from "../utils/handleError";
 import { useAutoClearErrors } from "../hooks/useAutoClearErrors";
@@ -41,25 +39,14 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  const fetchAppointmentsByPatient = async (patientId, filters = {}) => {
+  const fetchAppointments = async (filters = {}) => {
     setErrors([]);
     try {
-      const res = await getAppointmentsByPatientRequest(patientId, filters);
+      const res = await getAppointments(filters);
       setAppointments(res.data.appointments);
       setTotalAppointments(res.data.total || 0);
     } catch (error) {
-      handleApiError(error, "Error al obtener citas del paciente", setErrors);
-    }
-  };
-
-  const fetchAppointmentsByDoctor = async (filters = {}) => {
-    setErrors([]);
-    try {
-      const res = await getAppointmentsByDoctorRequest(filters);
-      setAppointments(res.data.appointments);
-      setTotalAppointments(res.data.total || 0);
-    } catch (error) {
-      handleApiError(error, "Error al obtener citas del doctor", setErrors);
+      handleApiError(error, "Error al obtener citas", setErrors);
     }
   };
 
@@ -107,7 +94,6 @@ export const AppointmentProvider = ({ children }) => {
       return null;
     }
   };
-  
 
   const deleteAppointment = async (appointmentId) => {
     setErrors([]);
@@ -116,17 +102,6 @@ export const AppointmentProvider = ({ children }) => {
       setAppointments((prev) => prev.filter((a) => a._id !== appointmentId));
     } catch (error) {
       handleApiError(error, "Error al eliminar la cita", setErrors);
-    }
-  };
-
-  const fetchUpcomingAppointments = async (filters = {}) => {
-    setErrors([]);
-    try {
-      const res = await getUpcomingAppointmentsRequest(filters);
-      setAppointments(res.data.appointments);
-      setTotalAppointments(res.data.total || 0);
-    } catch (error) {
-      handleApiError(error, "Error al obtener próximas citas", setErrors);
     }
   };
 
@@ -140,13 +115,11 @@ export const AppointmentProvider = ({ children }) => {
         appointmentHistory,
         errors,
         createAppointment,
-        fetchAppointmentsByPatient,
-        fetchAppointmentsByDoctor,
         updateAppointmentStatus,
         fetchAppointmentHistory,
         rescheduleAppointment,
         deleteAppointment,
-        fetchUpcomingAppointments,
+        fetchAppointments,
         totalAppointments,
       }}
     >

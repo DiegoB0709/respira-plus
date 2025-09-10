@@ -4,6 +4,8 @@ import { CreateAccessToken } from "../libs/jwt.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { nanoid } from "nanoid";
+import {crearNotificacion} from "../services/notification.service.js";
+
 dotenv.config();
 const TOKEN_SECRET = process.env.JWT_SECRET;
 
@@ -35,10 +37,18 @@ export const register = async (req, res, next) => {
     userByToken.phone = phone;
     userByToken.password = passwordHash;
     userByToken.set("registrationToken", undefined);
+    userByToken.set("registrationExpiresAt", undefined);
 
     if (userByToken.role === "patient" && userByToken.doctor) {
       await User.findByIdAndUpdate(userByToken.doctor, {
         $addToSet: { assignedPatients: userByToken._id },
+      });
+
+      await crearNotificacion({
+        recipientId: userByToken.doctor,
+        title: "Nuevo Paciente",
+        message: `Un paciente se registró a las ${new Date().toLocaleString()}.`,
+        type: "info",
       });
     }
 

@@ -32,12 +32,21 @@
 }
 
 #sidebar.close {
-  padding: 0px;
+  padding: 0;
   width: 50px;
   transition: 300ms ease-in-out;
-  ul li a i {
-    margin-right: 0.5rem;
-  }
+}
+
+#sidebar.close ul li a span {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 310ms ease-in-out, visibility 0s linear 310ms;
+}
+
+#sidebar:not(.close) ul li a span {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 310ms ease-in-out;
 }
 
 #sidebar ul {
@@ -46,12 +55,13 @@
   height: 100%;
 }
 
-#sidebar ul li{
+#sidebar ul li {
   cursor: pointer;
 }
 
 #sidebar ul li:last-child {
-  margin-top: auto;padding-top: .5rem;
+  margin-top: auto;
+  padding-top: 0.5rem;
   border-top: 1px solid var(--line-clr);
 }
 
@@ -60,23 +70,25 @@
   justify-content: flex-end;
   margin-bottom: 16px;
   cursor: default;
-  .logo {
-    padding: 0.85rem;
-    text-decoration: none;
-    font-weight: 700;
-    color: var(--accent-clr);
-    font-size: 1.8rem;
-  }
+}
+
+#sidebar ul li.logo-cont .logo {
+  padding: 0.85rem;
+  text-decoration: none;
+  font-weight: 700;
+  color: var(--accent-clr);
+  font-size: 1.8rem;
 }
 
 #sidebar ul li a {
   font-size: 1.2rem;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
-  i {
-    transition: all 0.2s ease-in-out;
-    font-size: 1.3rem;
-  }
+}
+
+#sidebar ul li a i {
+  transition: all 0.2s ease-in-out;
+  font-size: 1.3rem;
 }
 
 #sidebar ul li.active a {
@@ -111,14 +123,15 @@
   display: grid;
   grid-template-rows: 0fr;
   transition: all 0.3s ease-in-out;
-  div {
-    overflow: hidden;
-  }
+  padding-left: 2rem;
+}
+
+#sidebar .sub-menu div {
+  overflow: hidden;
 }
 
 #sidebar .sub-menu.show {
   grid-template-rows: 1fr;
-
   transition: all 0.3s ease-in-out;
 }
 
@@ -140,10 +153,6 @@
   transition: transform 0.3s ease-in-out;
 }
 
-#sidebar .sub-menu {
-  padding-left: 2rem;
-}
-
 #toggle-btn {
   margin-left: auto;
   font-size: 1.2rem;
@@ -154,9 +163,10 @@
   background: none;
   color: var(--text-clr);
   cursor: pointer;
-  i {
-    transition: rotatet 150ms ease;
-  }
+}
+
+#toggle-btn i {
+  transition: rotate 150ms ease;
 }
 
 #toggle-btn:hover {
@@ -181,69 +191,72 @@ main {
     position: fixed;
     top: unset;
     bottom: 0;
-
-    ul {
-      padding: 0;
-      display: grid;
-      grid-auto-columns: 60px;
-      grid-auto-flow: column;
-      align-items: center;
-      overflow-x: scroll;
-    }
-
-    ul li {
-      font-size: 19px;
-      height: 100%;
-    }
-
-    ul li:last-child {
-      margin-top: 0;
-      padding-top: 0;
-      border-top: none;
-    }
-
-    ul a,
-    ul .dropdown-btn {
-      width: 60px;
-      height: 60px;
-      padding: 0;
-      border-radius: 0;
-      justify-content: center;
-    }
-
-    ul li span,
-    ul li.logo-cont,
-    .dropdown-btn i:last-child {
-      display: none;
-    }
-
-    ul li .sub-menu.show {
-      position: fixed;
-      bottom: 60px;
-      left: 0;
-      padding: 0;
-      width: 100%;
-      height: 60px;
-      background-color: var(--hover-clr);
-      border-top: 1px solid var(--line-clr);
-      display: flex;
-      justify-content: center;
-      div {
-        overflow-x: scroll;
-      }
-      li {
-        display: inline-flex;
-      }
-
-      a {
-        box-sizing: border-box;
-        padding: 1rem;
-        width: auto;
-        justify-content: center;
-      }
-    }
   }
-  main {
-    padding: 2rem 1rem 60px 1rem;
+
+  #sidebar ul {
+    padding: 0;
+    display: grid;
+    grid-auto-columns: 60px;
+    grid-auto-flow: column;
+    align-items: center;
+    overflow-x: scroll;
+  }
+
+  #sidebar ul li {
+    font-size: 19px;
+    height: 100%;
+  }
+
+  #sidebar ul li:last-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  #sidebar ul a,
+  #sidebar ul .dropdown-btn {
+    width: 60px;
+    height: 60px;
+    padding: 0;
+    border-radius: 0;
+    justify-content: center;
+  }
+
+  #sidebar ul li span,
+  #sidebar ul li.logo-cont,
+  #sidebar .dropdown-btn i:last-child {
+    display: none;
+  }
+
+  #sidebar ul li .sub-menu.show {
+    position: fixed;
+    bottom: 60px;
+    left: 0;
+    padding: 0;
+    width: 100%;
+    height: 60px;
+    background-color: var(--hover-clr);
+    border-top: 1px solid var(--line-clr);
+    display: flex;
+    justify-content: center;
+  }
+
+  #sidebar ul li .sub-menu.show div {
+    overflow-x: scroll;
+  }
+
+  #sidebar ul li .sub-menu.show li {
+    display: inline-flex;
+  }
+
+  #sidebar ul li .sub-menu.show a {
+    box-sizing: border-box;
+    padding: 1rem;
+    width: auto;
+    justify-content: center;
+  }
+
+  #sidebar.close {
+    width: 100% !important;
   }
 }

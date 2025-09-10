@@ -1,8 +1,8 @@
 import EducationalContent from "../models/EducationalContent.model.js";
 import User from "../models/User.model.js";
-import ClinicalDetails from "../models/clinicalDetails.model.js";
 import EducationalHistory from "../models/EducationalHistory.model.js";
 import { crearNotificacion } from "./notification.service.js";
+import { evaluatePatient } from "./ai.service.js";
 
 export const analyzeAndNotifyContent = async (contenidoId) => {
   try {
@@ -45,23 +45,18 @@ export const analyzeAndNotifyContent = async (contenidoId) => {
         });
         if (yaVisto) continue;
 
-        const clinico = await ClinicalDetails.findOne({
-          patient: paciente._id,
+        const evaluation = await evaluatePatient(paciente._id);
+
+        const match = contenido.clinicalTags.some((tag) => {
+          return (
+            evaluation.triggeredRules.includes(tag) ||
+            (evaluation.flags.abandono && tag === "abandono_probable") ||
+            (evaluation.flags.resistencia && tag === "resistencia_tb") ||
+            (evaluation.adherenceLevel === "baja" && tag === "adh_baja")
+          );
         });
-        if (!clinico) continue;
 
-        const tagsDelPaciente = new Set();
-        if (clinico.adherenceRisk === "alto") tagsDelPaciente.add("adh_baja");
-        if (clinico.phase === "intensiva") tagsDelPaciente.add("fase_inicio");
-        if (clinico.priorTbTreatment) tagsDelPaciente.add("abandono_probable");
-        if (clinico.hivStatus === "positivo")
-          tagsDelPaciente.add("comorbilidad_hiv");
-
-        const interseccion = contenido.clinicalTags.filter((tag) =>
-          tagsDelPaciente.has(tag)
-        );
-
-        if (interseccion.length > 0) {
+        if (match) {
           await crearNotificacion({
             recipientId: paciente._id,
             title: "Recomendación educativa personalizada",

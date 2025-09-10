@@ -53,6 +53,7 @@ export const createOrUpdateTreatment = async (req, res) => {
           medications: updated.medications,
           notes: updated.notes,
         },
+        actionBy: doctorId,
       });
 
       const evaluation = await evaluatePatient(patientId);
@@ -85,6 +86,7 @@ export const createOrUpdateTreatment = async (req, res) => {
           medications: newTreatment.medications,
           notes: newTreatment.notes,
         },
+        actionBy: doctorId,
       });
 
       const evaluation = await evaluatePatient(patientId);
@@ -197,6 +199,7 @@ export const deleteTreatment = async (req, res) => {
         medications: currentTreatment.medications,
         notes: currentTreatment.notes,
       },
+      actionBy: doctorId,
     });
 
     await Treatment.findOneAndDelete({ patient: patientId });
@@ -239,7 +242,8 @@ export const getTreatmentHistory = async (req, res) => {
 
     const history = await TreatmentHistory.find({ patient: patientId })
       .sort({ createdAt: -1 })
-      .populate("doctor", "username");
+      .populate("doctor", "username")
+      .populate("actionBy", "username role");
 
     res.status(200).json(history);
   } catch (error) {

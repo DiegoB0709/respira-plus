@@ -22,8 +22,9 @@ function RegisterForm() {
         <div>
           <label
             htmlFor="username"
-            className="block text-sm font-medium text-gray-900"
+            className="block text-sm font-medium text-gray-900 flex items-center gap-2"
           >
+            <i className="fa-solid fa-user text-teal-500"></i>
             Nombre Completo
           </label>
           <div className="mt-2">
@@ -31,7 +32,7 @@ function RegisterForm() {
               id="username"
               type="text"
               {...register("username", { required: "Nombre requerido" })}
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+              className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
             />
             {errors.username && (
               <p className="mt-1 text-sm text-red-500">
@@ -44,8 +45,9 @@ function RegisterForm() {
         <div>
           <label
             htmlFor="phone"
-            className="block text-sm font-medium text-gray-900"
+            className="block text-sm font-medium text-gray-900 flex items-center gap-2"
           >
+            <i className="fa-solid fa-phone text-teal-500"></i>
             Teléfono
           </label>
           <div className="mt-2">
@@ -56,7 +58,7 @@ function RegisterForm() {
                 valueAsNumber: true,
                 required: "Teléfono requerido",
               })}
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+              className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
             />
             {errors.phone && (
               <p className="mt-1 text-sm text-red-600">
@@ -70,8 +72,9 @@ function RegisterForm() {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-900"
+          className="block text-sm font-medium text-gray-900 flex items-center gap-2"
         >
+          <i className="fa-solid fa-envelope text-teal-500"></i>
           Correo Electrónico
         </label>
         <div className="mt-2">
@@ -80,7 +83,7 @@ function RegisterForm() {
             type="email"
             autoComplete="email"
             {...register("email", { required: "Correo requerido" })}
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+            className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
           />
           {errors.email && (
             <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -92,8 +95,9 @@ function RegisterForm() {
         <div>
           <label
             htmlFor="password"
-            className="block text-sm font-medium text-gray-900"
+            className="block text-sm font-medium text-gray-900 flex items-center gap-2"
           >
+            <i className="fa-solid fa-lock text-teal-500"></i>
             Contraseña
           </label>
           <div className="mt-2">
@@ -103,12 +107,9 @@ function RegisterForm() {
               autoComplete="new-password"
               {...register("password", {
                 required: "Contraseña requerida",
-                minLength: {
-                  value: 6,
-                  message: "Mínimo 6 caracteres",
-                },
+                minLength: { value: 6, message: "Mínimo 6 caracteres" },
               })}
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+              className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
             />
             {errors.password && (
               <p className="mt-1 text-sm text-red-600">
@@ -121,9 +122,10 @@ function RegisterForm() {
         <div>
           <label
             htmlFor="repeatPassword"
-            className="block text-sm font-medium text-gray-900"
+            className="block text-sm font-medium text-gray-900 flex items-center gap-2"
           >
-            Confirmar Contraseña
+            <i className="fa-solid fa-key text-teal-500"></i>
+            Conf. Contraseña
           </label>
           <div className="mt-2">
             <input
@@ -134,7 +136,7 @@ function RegisterForm() {
                 validate: (value) =>
                   value === password || "Las contraseñas no coinciden",
               })}
-              className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+              className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
             />
             {errors.repeatPassword && (
               <p className="mt-1 text-sm text-red-600">
@@ -148,8 +150,9 @@ function RegisterForm() {
       <div>
         <label
           htmlFor="registrationToken"
-          className="block text-sm font-medium text-gray-900"
+          className="block text-sm font-medium text-gray-900 flex items-center gap-2"
         >
+          <i className="fa-solid fa-hashtag text-teal-500"></i>
           Código Asignado
         </label>
         <div className="mt-2">
@@ -157,7 +160,7 @@ function RegisterForm() {
             id="registrationToken"
             type="text"
             {...register("registrationToken", { required: "Código requerido" })}
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+            className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
           />
           {errors.registrationToken && (
             <p className="mt-1 text-sm text-red-600">
@@ -170,7 +173,7 @@ function RegisterForm() {
       <div>
         <button
           type="submit"
-          className="duration-150 ease-in-out cursor-pointer flex w-full justify-center rounded-md bg-teal-500 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
+          className="cursor-pointer flex w-full justify-center rounded-2xl bg-teal-500 px-4 py-3 text-sm font-semibold text-white shadow hover:bg-teal-400 duration-150 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
         >
           Registrarse
         </button>

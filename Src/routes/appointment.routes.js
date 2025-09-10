@@ -1,39 +1,39 @@
 import { Router } from "express";
 import {
   createAppointment,
-  getAppointmentsByPatient,
-  getAppointmentsByDoctor,
   updateAppointmentStatus,
   getAppointmentHistory,
   rescheduleAppointment,
   deleteAppointment,
-  getUpcomingAppointmentsForUser,
+  getAppointments,
 } from "../controllers/appointment.controller.js";
-
 import { authRequired } from "../middlewares/authRequired.js";
 import { authorizeRole } from "../middlewares/authorizeRole.js";
 
 const router = Router();
 
-router.post("/", authRequired, authorizeRole(["doctor"]), createAppointment);
-router.get("/patient/:patientId", authRequired, getAppointmentsByPatient);
+router.post("/", authRequired, authorizeRole(["doctor", "patient"]), createAppointment);
+
 router.get(
-  "/doctor",
-  authorizeRole(["doctor"]),
-  getAppointmentsByDoctor
+  "/",
+  authRequired,
+  authorizeRole(["doctor", "patient"]),
+  getAppointments
 );
+
 router.put(
   "/:appointmentId/status",
-  authorizeRole(["doctor"]),
+  authorizeRole(["doctor","patient"]),
   updateAppointmentStatus
 );
+
 router.get("/:appointmentId/history", authRequired, getAppointmentHistory);
 router.put(
   "/:appointmentId/reschedule",
   authorizeRole(["doctor"]),
   rescheduleAppointment
 );
+
 router.delete("/:appointmentId", authRequired, deleteAppointment);
-router.get("/upcoming", authRequired, getUpcomingAppointmentsForUser);
 
 export default router;

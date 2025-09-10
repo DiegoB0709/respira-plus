@@ -6,7 +6,6 @@ import { toggleSidebar } from "../utils/SideBar";
 import Logo from "../components/common/SideBar/Logo";
 import Option from "../components/common/SideBar/Option";
 import Notification from "../components/common/Modals/Notification";
-import Home from "../components/patient/Home";
 import CitasMedicas from "../components/common/Citas Medicas/CitasMedicas";
 import EducationalContent from "../components/patient/EducationalContent";
 import ModalContainer from "../components/common/Modals/ModalContainer";
@@ -41,7 +40,7 @@ function PatientPage() {
       setActiveModal("treatment");
       return;
     }
-    if (section === "Detalles Clinicos") {
+    if (section === "Datos Clinicos") {
       setActiveModal("ClinicalDetails");
       return;
     }
@@ -53,10 +52,9 @@ function PatientPage() {
   };
 
   const menuOptions = [
-    { name: "Inicio", icon: "house", number: 0 },
     { name: "Citas Medicas", icon: "calendar-check", number: 0 },
     { name: "Tratamiento", icon: "capsules", number: 0 },
-    { name: "Detalles Clinicos", icon: "file-medical", number: 0 },
+    { name: "Datos Clinicos", icon: "file-medical", number: 0 },
     { name: "Contenido Educativo", icon: "book-open-reader", number: 0 },
     { name: "Notificaciones", icon: "bell", number: unreadNotifCount },
     { name: "Perfil", icon: "user", number: 0 },
@@ -65,8 +63,6 @@ function PatientPage() {
 
   const renderContent = () => {
     switch (activeSection) {
-      case "Inicio":
-        return <Home />;
       case "Citas Medicas":
         return <CitasMedicas />;
       case "Contenido Educativo":

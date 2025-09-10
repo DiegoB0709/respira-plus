@@ -18,8 +18,9 @@ function LoginForm() {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-900"
+          className="block text-sm font-medium text-gray-900 flex items-center gap-2"
         >
+          <i className="fa-solid fa-envelope text-teal-500"></i>
           Correo Electrónico
         </label>
         <div className="mt-2">
@@ -28,7 +29,7 @@ function LoginForm() {
             type="email"
             autoComplete="email"
             {...register("email", { required: "Correo requerido" })}
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+            className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
           />
           {errors.email && (
             <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
@@ -37,21 +38,20 @@ function LoginForm() {
       </div>
 
       <div>
-        <div className="flex items-center justify-between">
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-900"
-          >
-            Contraseña
-          </label>
-        </div>
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-900 flex items-center gap-2"
+        >
+          <i className="fa-solid fa-lock text-teal-500"></i>
+          Contraseña
+        </label>
         <div className="mt-2">
           <input
             id="password"
             type="password"
             autoComplete="current-password"
             {...register("password", { required: "Contraseña requerida" })}
-            className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+            className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
           />
           {errors.password && (
             <p className="mt-1 text-sm text-red-600">
@@ -64,7 +64,7 @@ function LoginForm() {
       <div>
         <button
           type="submit"
-          className="duration-150 ease-in-out cursor-pointer flex w-full justify-center rounded-md bg-teal-500 px-3 py-1.5 text-sm font-semibold text-white shadow-xs hover:bg-teal-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
+          className="cursor-pointer flex w-full justify-center rounded-2xl bg-teal-500 px-4 py-3 text-sm font-semibold text-white shadow hover:bg-teal-400 duration-150 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
         >
           Inicia Sesión
         </button>

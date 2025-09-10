@@ -1,17 +1,5 @@
 import Alert from "../models/alert.model.js";
-import Users from "../models/user.model.js";
-import { crearNotificacion } from "./notification.service.js";
 
-/**
- * Crea una alerta si no existe una activa reciente del mismo tipo.
- * @param {Object} options
- * @param {String} options.patientId - ID del paciente
- * @param {String} options.doctorId - ID del doctor
- * @param {String} options.type - Tipo de alerta (según enum del modelo)
- * @param {String} options.description - Descripción de la alerta
- * @param {String[]} options.triggeredRules - Códigos de reglas clínicas que la activaron
- * @param {String} [options.severity="media"] - Nivel de severidad: baja, media, alta
- */
 export async function createAlertIfNotExists({
   patientId,
   doctorId,
@@ -44,17 +32,6 @@ export async function createAlertIfNotExists({
     });
 
     await newAlert.save();
-    const paciente = await Users.findById(patientId).select("username");
-
-    await crearNotificacion({
-      recipientId: doctorId,
-      title: "Nueva alerta clínica",
-      message: `Se generó una alerta para el paciente ${
-        paciente?.username || "sin nombre"
-      }.`,
-      type: "alerta",
-    });
-
 
     return { created: true, alert: newAlert };
   } catch (error) {
@@ -63,13 +40,6 @@ export async function createAlertIfNotExists({
   }
 }
 
-/**
- * Genera múltiples alertas clínicas basadas en las reglas activadas por IA.
- * Agrupa las reglas por tipo de alerta y crea una por cada grupo.
- * @param {String} patientId - ID del paciente
- * @param {String} doctorId - ID del doctor
- * @param {String[]} rulesTriggered - Lista de códigos de reglas activadas (ej. ["ADH01", "ABN02"])
- */
 export async function createAlertsFromAI(
   patientId,
   doctorId,
@@ -82,6 +52,7 @@ export async function createAlertsFromAI(
     riesgo_abandono: ["ABN01", "ABN02", "ABN03"],
     tratamiento_inefectivo: ["TRF01", "TRF02", "TRF03"],
     resistencia_medicamentosa: ["RST01", "RST02", "RST03"],
+    falta_educacion: ["EDU01", "EDU02", "EDU03", "EDU04"],
     inactividad_prolongada: ["CMP01", "CMP02"],
   };
 
@@ -114,6 +85,10 @@ export async function createAlertsFromAI(
         break;
       case "resistencia_medicamentosa":
         description = "Se sospecha posible resistencia a los medicamentos.";
+        break;
+      case "falta_educacion":
+        description =
+          "Se identificaron patrones relacionados con falta o baja efectividad de la educación al paciente.";
         break;
       case "inactividad_prolongada":
         description =

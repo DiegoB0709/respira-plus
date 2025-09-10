@@ -1,5 +1,4 @@
 import { Router } from "express";
-
 import {
   getMyPatients,
   updatePatientInfo,
@@ -13,6 +12,5 @@ router.use(authorizeRole(["doctor"]));
 router.get("/patients", getMyPatients);
 
 router.put("/patient/:patientId", updatePatientInfo);
-
 
 export default router;

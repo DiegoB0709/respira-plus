@@ -25,32 +25,40 @@ function TreatmentsHistory({ patientId, setActiveModal }) {
 
   return (
     <div className="flex flex-col max-w-4xl mx-auto px-4 sm:px-6 py-6">
-      <header className="sticky top-0 z-50 bg-white w-full">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm rounded-b-xl">
         <div className="max-w-4xl mx-auto px-4 py-4">
-          <h2 className="text-base sm:text-xl md:text-2xl font-semibold text-center text-teal-500 flex items-center justify-center gap-2">
+          <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-center text-teal-500 flex flex-col sm:flex-row items-center justify-center gap-2 break-words">
             <i className="fa fa-notes-medical text-teal-400 text-lg sm:text-xl" />
-            <span className="truncate">Historial de Tratamientos</span>
+            <span>Historial de Tratamientos</span>
           </h2>
         </div>
       </header>
 
       {history.length === 0 ? (
-        <p className="text-center text-gray-500 text-base sm:text-lg mt-6">
-          No hay historial disponible para este paciente.
-        </p>
+        <div className="mt-12 flex flex-col items-center justify-center text-center bg-gray-50 p-10 rounded-2xl border border-dashed border-gray-300">
+          <i className="fa fa-file-medical text-5xl text-gray-400 mb-4" />
+          <p className="text-gray-600 text-base sm:text-lg max-w-md">
+            No hay historial disponible para este paciente.
+          </p>
+        </div>
       ) : (
-        <div className="space-y-6 mt-4">
+        <div className="space-y-6 mt-6">
           {Object.entries(groupedHistory).map(([treatmentId, entries]) => (
-            <TreatmentGroup key={treatmentId} entries={entries} />
+            <div
+              key={treatmentId}
+              className="bg-white rounded-2xl border border-gray-200 p-5"
+            >
+              <TreatmentGroup entries={entries} />
+            </div>
           ))}
         </div>
       )}
 
-      <footer className="sticky bottom-0 z-10 bg-white pt-6 mt-6">
+      <footer className="sticky bottom-0 z-10 bg-white/95 backdrop-blur-sm pt-6 mt-8 border-t border-gray-200">
         <div className="text-center">
           <button
             onClick={setActiveModal}
-            className="inline-flex items-center justify-center gap-2 cursor-pointer bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-6 rounded-md shadow-sm transition"
+            className="inline-flex items-center justify-center gap-2 cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-6 rounded-xl transition-colors"
           >
             <i className="fa fa-arrow-left text-sm" />
             <span className="hidden sm:inline">Volver</span>

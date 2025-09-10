@@ -16,11 +16,15 @@ function ResponsiveTable({
     <>
       <div className="hidden md:block bg-white shadow-md rounded-xl overflow-hidden">
         <div className="w-full overflow-x-auto max-w-full">
-          <table className="w-full table-auto divide-y divide-gray-200 text-sm">
+          <table className="w-full table-fixed divide-y divide-gray-200 text-sm">
             <thead className="bg-gray-100 text-gray-700 uppercase text-xs tracking-wider">
               <tr>
                 {headers.map((h, i) => (
-                  <th key={i} className="px-6 py-3 text-center font-semibold">
+                  <th
+                    key={i}
+                    className="px-6 py-3 text-center font-semibold break-words"
+                    style={{ width: `${100 / headers.length}%` }} // ancho igual para todas las columnas
+                  >
                     {h}
                   </th>
                 ))}
@@ -30,7 +34,7 @@ function ResponsiveTable({
         </div>
 
         <div className="max-h-[550px] w-full overflow-y-auto overflow-x-auto max-w-full">
-          <table className="w-full table-auto divide-y divide-gray-200 text-sm">
+          <table className="w-full table-fixed divide-y divide-gray-200 text-sm">
             <tbody className="bg-white divide-y divide-gray-200">
               {loading ? (
                 <tr>
@@ -99,7 +103,7 @@ function ResponsiveTable({
           <select
             value={limit}
             onChange={(e) => onLimitChange(parseInt(e.target.value))}
-            className="cursor-pointer border rounded-lg px-3 py-2 w-full"
+            className="w-full cursor-pointer border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none"
           >
             <option value={10}>10 por página</option>
             <option value={15}>15 por página</option>

@@ -7,11 +7,20 @@
   "scripts": {
     "dev": "nodemon src/index.js"
   },
-  "keywords": ["mern", "tuberculosis", "salud", "terapias", "node", "express", "react"],
+  "keywords": [
+    "mern",
+    "tuberculosis",
+    "salud",
+    "terapias",
+    "node",
+    "express",
+    "react"
+  ],
   "author": "Diego Barreto - dbarretou@autonoma.edu.pe",
   "license": "CC-BY-NC-ND-4.0",
   "dependencies": {
     "bcryptjs": "^3.0.2",
+    "cloudinary": "^1.41.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "date-fns": "^4.1.0",
@@ -23,6 +32,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.1",
     "morgan": "^1.10.0",
+    "multer": "^2.0.2",
+    "multer-storage-cloudinary": "^4.0.0",
     "nanoid": "^5.1.5",
     "node-cron": "^4.1.0",
     "nodemailer": "^7.0.3",

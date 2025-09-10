@@ -30,7 +30,7 @@ export const getAllUsers = async (req, res) => {
       hasToken,
     } = req.query;
 
-    const query = {};
+    const query = { role: { $in: ["doctor", "patient"] } };
 
     if (role && ["doctor", "patient"].includes(role)) {
       query.role = role;
@@ -60,11 +60,11 @@ export const getAllUsers = async (req, res) => {
 
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
-  const users = await User.find(query)
-    .select("-password")
-    .populate({ path: "doctor", select: "username" })
-    .skip(skip)
-    .limit(parseInt(limit));
+    const users = await User.find(query)
+      .select("-password")
+      .populate({ path: "doctor", select: "username" })
+      .skip(skip)
+      .limit(parseInt(limit));
 
     const total = await User.countDocuments(query);
 

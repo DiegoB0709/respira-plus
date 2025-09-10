@@ -48,104 +48,67 @@ function PatientDetails({ setActiveModal, setPatientId }) {
   };
 
   return (
-    <div className="p-5">
+    <div className="p-6 max-w-3xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold text-center text-teal-500 mb-6 flex flex-wrap items-center justify-center gap-2">
         <i className="fas fa-user-injured text-teal-400 text-2xl shrink-0"></i>
         Perfil del Paciente
       </h1>
 
       {errors.length > 0 && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md space-y-1 text-sm">
+        <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-md space-y-1 text-sm">
           {errors.map((err, idx) => (
             <p key={idx} className="flex items-center gap-2">
-              <i className="fas fa-exclamation-circle hidden sm:inline-flex text-red-500"></i>
+              <i className="fas fa-exclamation-circle text-red-500"></i>
               {err}
             </p>
           ))}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label
-            className={`block text-sm font-medium flex items-center gap-2 ${
-              onEdit ? "text-teal-500" : "text-gray-700"
-            }`}
-          >
-            <i
-              className={`fas fa-user ${
-                onEdit ? "text-teal-400" : "text-gray-400"
-              }`}
-            ></i>
-            Nombre de Paciente
-          </label>
-          <input
-            disabled={!onEdit}
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className={`mt-1 block w-full px-4 py-2 border rounded-md text-sm ${
-              onEdit
-                ? "border-gray-300 focus:ring-2 focus:ring-teal-500"
-                : "bg-gray-100 cursor-not-allowed"
-            }`}
-          />
-        </div>
-
-        <div>
-          <label
-            className={`block text-sm font-medium flex items-center gap-2 ${
-              onEdit ? "text-teal-500" : "text-gray-700"
-            }`}
-          >
-            <i
-              className={`fas fa-phone-alt ${
-                onEdit ? "text-teal-400" : "text-gray-400"
-              }`}
-            ></i>
-            Teléfono
-          </label>
-          <input
-            disabled={!onEdit}
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            className={`mt-1 block w-full px-4 py-2 border rounded-md text-sm ${
-              onEdit
-                ? "border-gray-300 focus:ring-2 focus:ring-teal-500"
-                : "bg-gray-100 cursor-not-allowed"
-            }`}
-          />
-        </div>
-
-        <div>
-          <label
-            className={`block text-sm font-medium flex items-center gap-2 ${
-              onEdit ? "text-teal-500" : "text-gray-700"
-            }`}
-          >
-            <i
-              className={`fas fa-envelope ${
-                onEdit ? "text-teal-400" : "text-gray-400"
-              }`}
-            ></i>
-            Correo
-          </label>
-          <input
-            disabled={!onEdit}
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className={`mt-1 block w-full px-4 py-2 border rounded-md text-sm ${
-              onEdit
-                ? "border-gray-300 focus:ring-2 focus:ring-teal-500"
-                : "bg-gray-100 cursor-not-allowed"
-            }`}
-          />
-        </div>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-5 bg-white p-6 rounded-lg border border-gray-100 shadow-sm"
+      >
+        {["username", "phone", "email"].map((field) => {
+          const labels = {
+            username: "Nombre de Paciente",
+            phone: "Teléfono",
+            email: "Correo",
+          };
+          const icons = {
+            username: "fas fa-user",
+            phone: "fas fa-phone-alt",
+            email: "fas fa-envelope",
+          };
+          return (
+            <div key={field}>
+              <label
+                className={`block text-sm font-medium flex items-center gap-2 ${
+                  onEdit ? "text-teal-500" : "text-gray-700"
+                }`}
+              >
+                <i
+                  className={`${icons[field]} ${
+                    onEdit ? "text-teal-400" : "text-gray-400"
+                  }`}
+                ></i>
+                {labels[field]}
+              </label>
+              <input
+                disabled={!onEdit}
+                type={field === "email" ? "email" : "text"}
+                name={field}
+                value={formData[field]}
+                onChange={handleChange}
+                className={`mt-1 block w-full px-4 py-2 border rounded-xl text-sm ${
+                  onEdit
+                    ? "border-teal-300 focus:ring-2 focus:ring-teal-500 focus:outline-none"
+                    : "bg-gray-100 cursor-not-allowed border border-gray-200"
+                }`}
+              />
+            </div>
+          );
+        })}
 
         <div className="flex justify-between items-center pt-2">
           <button
@@ -158,8 +121,7 @@ function PatientDetails({ setActiveModal, setPatientId }) {
           {onEdit && (
             <button
               type="submit"
-              className="cursor-pointer bg-teal-500 text-white text-sm px-4 py-2 rounded-md hover:bg-teal-400 transition
-                  hover:brightness-110  font-medium flex items-center justify-center gap-2 "
+              className="cursor-pointer bg-teal-500 text-white text-sm px-4 py-2 rounded-xl hover:bg-teal-400 transition hover:brightness-110 font-medium flex items-center justify-center gap-2 border"
             >
               <i className="fa-solid fa-floppy-disk text-white hidden sm:inline-flex"></i>
               Actualizar
@@ -177,7 +139,7 @@ function PatientDetails({ setActiveModal, setPatientId }) {
             color: "bg-teal-500",
           },
           {
-            label: "Detalles Clínicos",
+            label: "Datos Clínicos",
             icon: "fas fa-notes-medical",
             modal: "clinical",
             color: "bg-teal-500",

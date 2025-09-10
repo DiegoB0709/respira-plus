@@ -34,6 +34,11 @@ const treatmentHistorySchema = new mongoose.Schema(
       ],
       notes: String,
     },
+    actionBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Users",
+      required: true,
+    },
     timestamp: {
       type: Date,
       default: Date.now,

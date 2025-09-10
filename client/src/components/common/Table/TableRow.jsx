@@ -4,7 +4,7 @@ function TableRow({ columns = [] }) {
       {columns.map((col, i) => (
         <td
           key={i}
-          className="px-6 py-4 text-gray-700 text-sm break-words max-w-[200px] min-w-[120px] whitespace-nowrap"
+          className="px-6 py-4 text-center align-middle text-gray-700 text-sm break-words max-w-[200px] min-w-0"
         >
           {col}
         </td>

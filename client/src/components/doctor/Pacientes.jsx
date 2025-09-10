@@ -17,7 +17,7 @@ import TreatmentForm from "./Modal Content/TreatmentForm";
 import TreatmentsHistory from "../common/Modals/TreatmentsHistory";
 import PatientAlerts from "./Modal Content/PatientAlerts";
 import UpdateAlert from "./Modal Content/UpdateAlert";
-import AppointmentForm from "./Modal Content/AppointmentForm";
+import AppointmentForm from "../common/Modals/AppointmentForm";
 import HistoryAppointment from "./Modal Content/HistoryAppointment";
 import UpdateStatusAppo from "../common/Modals/UpdateStatusAppo";
 
@@ -109,7 +109,7 @@ function Pacientes() {
               value={filters.username}
               onChange={handleChange}
               disabled={onlyWithToken}
-              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
           </div>
 
@@ -125,7 +125,7 @@ function Pacientes() {
               value={filters.email}
               onChange={handleChange}
               disabled={onlyWithToken}
-              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
           </div>
 
@@ -141,7 +141,7 @@ function Pacientes() {
               value={filters.phone}
               onChange={handleChange}
               disabled={onlyWithToken}
-              className="border rounded-lg px-3 py-2 w-full disabled:bg-gray-100"
+              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
           </div>
         </div>
@@ -169,7 +169,7 @@ function Pacientes() {
 
           <button
             onClick={() => setActiveModal("generator")}
-            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-lg text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
+            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-2xl text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
           >
             <i className="fas fa-key"></i>
             Generar token de registro
