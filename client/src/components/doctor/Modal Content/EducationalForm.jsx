@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { useEducational } from "../../../context/EducationalContext";
+import Input from "../../common/Imput/Input";
+import Button from "../../common/Buttons/Button";
+import Modal from "../../common/Modals/Modal";
 
 function EducationalForm({ setActiveModal, contentId = null }) {
   const {
@@ -28,6 +31,44 @@ function EducationalForm({ setActiveModal, contentId = null }) {
     { value: "posible_resistencia", label: "Posible resistencia" },
     { value: "adh_baja", label: "Adherencia baja" },
     { value: "abandono_probable", label: "Abandono probable" },
+  ];
+
+  const fields = [
+    {
+      type: "text",
+      name: "title",
+      label: "Título *",
+      icon: "fa-heading",
+      required: true,
+      placeholder: "Escribe un título descriptivo",
+    },
+    {
+      type: "textarea",
+      name: "description",
+      label: "Descripción *",
+      icon: "fa-align-left",
+      required: true,
+      placeholder: "Agrega una descripción detallada del contenido...",
+    },
+    {
+      type: "text",
+      name: "relatedSymptoms",
+      label: "Síntomas Relacionados",
+      icon: "fa-stethoscope",
+      placeholder: "Ej: Tos, Fiebre, Dolor de cabeza",
+    },
+    {
+      type: "select",
+      name: "treatmentStage",
+      label: "Etapa del Tratamiento",
+      icon: "fa-pills",
+      options: [
+        { value: "inicio", label: "Inicio del tratamiento" },
+        { value: "intermedio", label: "Etapa intermedia" },
+        { value: "final", label: "Etapa final" },
+        { value: "indefinido", label: "Indefinido" },
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -132,67 +173,76 @@ function EducationalForm({ setActiveModal, contentId = null }) {
 
   return (
     <div className="p-1 max-w-4xl mx-auto">
-      <h1 className="text-2xl sm:text-3xl font-bold text-center text-teal-500 mb-8 flex items-center justify-center gap-2">
-        <i className="fa fa-book-medical text-teal-400 text-3xl sm:text-2xl" />
-        <span>{contentId ? "Editar Contenido" : "Subir Contenido"}</span>
-      </h1>
-
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded-lg p-6 pt-0 space-y-4"
+        className="bg-white dark:bg-neutral-900 rounded-lg p-6 pt-0 space-y-4 mt-4 transition-colors duration-300 ease-in-out"
       >
-        <div>
-          <label className="block text-gray-700 font-medium mb-1 flex items-center gap-2">
-            <i className="fa fa-heading text-teal-500" />
-            Título *
-          </label>
-          <input
-            type="text"
-            name="title"
-            className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-            value={form.title}
+        {fields.map((field, i) => (
+          <Input
+            key={i}
+            type={field.type}
+            name={field.name}
+            label={field.label}
+            icon={field.icon}
+            placeholder={field.placeholder}
+            options={field.options}
+            value={form[field.name]}
             onChange={handleChange}
-            required
+            required={field.required}
           />
-        </div>
+        ))}
 
-        <div>
-          <label className="block text-gray-700 font-medium mb-1 flex items-center gap-2">
-            <i className="fa fa-align-left text-teal-500" />
-            Descripción *
+        <div className="flex flex-col">
+          <label className="block text-gray-700 dark:text-neutral-50 font-medium mb-1 flex items-center gap-2 text-sm transition-colors duration-300 ease-in-out">
+            <i className="fa fa-tags bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent" />
+            Etiquetas Clínicas
           </label>
-          <textarea
-            name="description"
-            className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-            rows="4"
-            value={form.description}
-            onChange={handleChange}
-            required
-          />
+          <div className="flex flex-wrap gap-2">
+            {tagsOptions.map((tag) => (
+              <button
+                type="button"
+                key={tag.value}
+                onClick={() => toggleTag(tag.value)}
+                className={`px-3 py-1 rounded-full border text-sm transition-colors duration-300 ease-in-out ${
+                  form.clinicalTags.includes(tag.value)
+                    ? "bg-gradient-to-r from-teal-400 to-sky-500 text-white"
+                    : "bg-white dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 border-gray-300 dark:border-neutral-700 hover:bg-teal-50 dark:hover:bg-neutral-700"
+                }`}
+              >
+                {tag.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {!contentId && !form.file && (
-          <div>
-            <label className="block text-gray-700 font-medium mb-1 flex items-center gap-2">
-              <i className="fa fa-file-upload text-teal-500" />
-              Archivo *
-            </label>
-            <label
-              htmlFor="file-upload"
-              className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-teal-400 rounded-xl cursor-pointer hover:bg-teal-50 transition"
-            >
-              <i className="fa fa-cloud-upload-alt text-teal-500 text-2xl mr-2" />
-              <span className="text-gray-600">
-                Haz clic para seleccionar un archivo
+          <Input
+            type="file"
+            name="file-upload"
+            label="Archivo *"
+            icon="fa-file-upload"
+            onChange={handleChange}
+          />
+        )}
+
+        {form.file && (
+          <div className="flex items-center justify-between bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl px-4 py-3 mt-3 transition-colors duration-300 ease-in-out">
+            <div className="flex items-center gap-3 overflow-hidden">
+              <div className="flex items-center justify-center w-10 h-10 bg-teal-100 text-teal-500 rounded-full">
+                <i className="fa fa-file text-lg bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent" />
+              </div>
+              <span className="text-sm font-medium text-gray-800 dark:text-neutral-50 truncate max-w-[180px] sm:max-w-[260px] transition-colors duration-300 ease-in-out">
+                {form.file.name}
               </span>
-              <input
-                id="file-upload"
-                type="file"
-                className="hidden"
-                accept="image/*,video/*"
-                onChange={handleChange}
-              />
-            </label>
+            </div>
+            <button
+              type="button"
+              onClick={() => setForm((prev) => ({ ...prev, file: null }))}
+              className="cursor-pointer flex items-center gap-2 text-red-500 hover:text-red-600 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium"
+            >
+              <i className="fa fa-times-circle text-base" />
+              Eliminar
+            </button>
           </div>
         )}
 
@@ -211,67 +261,11 @@ function EducationalForm({ setActiveModal, contentId = null }) {
                 className="w-full object-contain rounded-xl border border-teal-200 p-1"
               />
             )}
-            <p className="text-gray-500 text-sm mt-1">
+            <p className="text-gray-500 dark:text-neutral-400 text-sm mt-1 transition-colors duration-300 ease-in-out">
               Este archivo no se puede modificar.
             </p>
           </div>
         )}
-
-        <div>
-          <label className="block text-gray-700 font-medium mb-1 flex items-center gap-2">
-            <i className="fa fa-stethoscope text-teal-500" />
-            Síntomas Relacionados
-          </label>
-          <input
-            type="text"
-            name="relatedSymptoms"
-            placeholder="Ej: Tos, Fiebre, Dolor de cabeza"
-            className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-            value={form.relatedSymptoms}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium mb-1 flex items-center gap-2">
-            <i className="fa fa-pills text-teal-500" />
-            Etapa del Tratamiento
-          </label>
-          <select
-            name="treatmentStage"
-            className="w-full border border-gray-300 rounded-xl px-3 py-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 outline-none transition"
-            value={form.treatmentStage}
-            onChange={handleChange}
-          >
-            <option value="inicio">Inicio del tratamiento</option>
-            <option value="intermedio">Etapa intermedia</option>
-            <option value="final">Etapa final</option>
-            <option value="indefinido">Indefinido</option>
-          </select>
-        </div>
-
-        <div>
-          <label className="block text-gray-700 font-medium mb-1 flex items-center gap-2">
-            <i className="fa fa-tags text-teal-500" />
-            Etiquetas Clínicas
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {tagsOptions.map((tag) => (
-              <button
-                type="button"
-                key={tag.value}
-                onClick={() => toggleTag(tag.value)}
-                className={`px-3 py-1 rounded-full border transition ${
-                  form.clinicalTags.includes(tag.value)
-                    ? "bg-teal-500 text-white border-teal-500"
-                    : "bg-white text-gray-700 border-gray-300 hover:bg-teal-50"
-                }`}
-              >
-                {tag.label}
-              </button>
-            ))}
-          </div>
-        </div>
 
         <label
           htmlFor="isPublic"
@@ -286,79 +280,71 @@ function EducationalForm({ setActiveModal, contentId = null }) {
               onChange={handleChange}
               className="sr-only peer"
             />
-            <div className="w-11 h-6 bg-gray-300 rounded-full shadow-inner peer-checked:bg-teal-500 transition-colors duration-300"></div>
-            <div className="absolute top-0 left-0 w-6 h-6 bg-white rounded-full shadow transform transition-transform duration-300 peer-checked:translate-x-full"></div>
+
+            <div
+              className="
+          w-11 h-6 rounded-full shadow-inner
+          bg-gray-300 dark:bg-neutral-700
+          transition-colors duration-300 ease-in-out
+          peer-checked:bg-gradient-to-r peer-checked:from-teal-400 peer-checked:to-cyan-500
+        "
+            ></div>
+
+            <div
+              className="
+          absolute top-0 left-0 w-6 h-6 bg-white  rounded-full shadow
+          transform transition-transform duration-300
+          peer-checked:translate-x-full
+        "
+            ></div>
           </div>
-          <span className="ml-3 text-sm font-medium text-gray-700">
+
+          <span className="ml-3 text-sm font-medium text-gray-700 dark:text-neutral-50 transition-colors duration-300 ease-in-out">
             {form.isPublic ? "Contenido público" : "Contenido privado"}
           </span>
         </label>
 
-        <button
-          type="submit"
-          className="cursor-pointer w-full bg-teal-500 text-white py-2.5 px-4 rounded-2xl font-medium hover:bg-teal-600 transition-colors disabled:opacity-50 mt-4"
+        <Button
+          submit={true}
+          type="bg1"
+          icon="fa-upload"
           disabled={loading}
-        >
-          <i className="fa fa-upload mr-2" />
-          {loading
-            ? contentId
-              ? "Actualizando..."
-              : "Subiendo..."
-            : contentId
-            ? "Actualizar Contenido"
-            : "Subir Contenido"}
-        </button>
+          label={
+            loading
+              ? contentId
+                ? "Actualizando..."
+                : "Subiendo..."
+              : contentId
+              ? "Actualizar Contenido"
+              : "Subir Contenido"
+          }
+        />
       </form>
 
       {loading && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl p-6 text-center space-y-3 max-w-sm w-full">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-500 mx-auto">
-              <i className="fa fa-spinner fa-spin text-xl" />
-            </div>
-            <p className="text-gray-700">Cargando, por favor espere...</p>
-          </div>
-        </div>
+        <Modal type="loading" title="Cargando" message="Por favor espere..." />
       )}
 
       {success && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl p-6 text-center space-y-4 max-w-sm w-full">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-500 mx-auto">
-              <i className="fa fa-check text-xl" />
-            </div>
-            <p className="text-gray-700 font-medium">
-              {contentId
-                ? "Contenido actualizado exitosamente"
-                : "Contenido subido exitosamente"}
-            </p>
-            <button
-              onClick={resetForm}
-              className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded-xl text-sm font-medium transition-colors cursor-pointer"
-            >
-              Aceptar
-            </button>
-          </div>
-        </div>
+        <Modal
+          type="success"
+          title={contentId ? "Contenido actualizado" : "Contenido subido"}
+          message={
+            contentId
+              ? "El contenido fue actualizado exitosamente."
+              : "El contenido fue subido exitosamente."
+          }
+          onSubmit={resetForm}
+        />
       )}
 
       {errorModal && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl p-6 text-center space-y-4 max-w-sm w-full">
-            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-500 mx-auto">
-              <i className="fa fa-times text-xl" />
-            </div>
-            <p className="text-gray-700 font-medium">
-              Ocurrió un error al subir el contenido. Intenta nuevamente.
-            </p>
-            <button
-              onClick={() => setErrorModal(false)}
-              className="w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl text-sm font-medium transition-colors cursor-pointer"
-            >
-              Cerrar
-            </button>
-          </div>
-        </div>
+        <Modal
+          title={"Ocurrió un error"}
+          type="error"
+          message="Ocurrió un error al subir el contenido. Intenta nuevamente."
+          onSubmit={() => setErrorModal(false)}
+        />
       )}
     </div>
   );

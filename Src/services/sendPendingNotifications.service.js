@@ -14,7 +14,14 @@ export const sendPendingNotifications = async () => {
     const notificacionesPorUsuario = {};
 
     for (const noti of notificaciones) {
-      const userId = noti.recipient._id;
+      if (!noti.recipient) {
+        console.warn(
+          `[MAIL] La notificación ${noti._id} tiene un recipient inválido`
+        );
+        continue;
+      }
+
+      const userId = noti.recipient._id.toString();
       if (!notificacionesPorUsuario[userId]) {
         notificacionesPorUsuario[userId] = {
           user: noti.recipient,
@@ -23,6 +30,7 @@ export const sendPendingNotifications = async () => {
       }
       notificacionesPorUsuario[userId].notificaciones.push(noti);
     }
+
 
     for (const { user, notificaciones } of Object.values(
       notificacionesPorUsuario

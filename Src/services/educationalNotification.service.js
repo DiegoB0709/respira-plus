@@ -12,7 +12,11 @@ export const analyzeAndNotifyContent = async (contenidoId) => {
     if (!contenido) throw new Error("Contenido no encontrado");
 
     if (contenido.isPublic) {
-      const pacientes = await User.find({ role: "patient", isActive: true });
+      const pacientes = await User.find({
+        role: "patient",
+        isActive: true,
+        registrationToken: { $in: [null, undefined] },
+      });
 
       await Promise.all(
         pacientes.map((p) =>

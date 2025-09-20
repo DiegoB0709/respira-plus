@@ -6,6 +6,8 @@ import Card from "../common/Table/Card";
 import EducContent from "../common/Modals/EducContent";
 import ModalContainer from "../common/Modals/ModalContainer";
 import ActionButton from "../common/Buttons/ActionButton";
+import Title from "../Title";
+import Input from "../common/Imput/Input";
 
 function EducationalContent() {
   const {
@@ -77,19 +79,45 @@ function EducationalContent() {
     setActiveModal("viewContent");
   };
 
+  const fields = [
+    {
+      type: "text",
+      name: "title",
+      label: "Título",
+      icon: "fa-heading",
+      placeholder: "Ej. Nutrición básica",
+    },
+    {
+      type: "text",
+      name: "symptom",
+      label: "Síntoma",
+      icon: "fa-notes-medical",
+      placeholder: "Ej. Dolor de cabeza",
+    },
+    {
+      type: "select",
+      name: "treatmentStage",
+      label: "Etapa de tratamiento",
+      icon: "fa-stethoscope",
+      placeholder: "Todas",
+      options: [
+        { value: "inicio", label: "Inicio" },
+        { value: "intermedio", label: "Intermedio" },
+        { value: "final", label: "Final" },
+        { value: "indefinido", label: "Indefinido" },
+      ],
+    },
+  ];
+
+
   return (
     <>
-      <div className="p-4 max-w-7xl mx-auto">
-        <div className="mb-4">
-          <h2 className="text-3xl sm:text-4xl font-bold text-teal-500 flex items-center gap-3">
-            <i className="fa-solid fa-book-medical text-teal-400 text-2xl"></i>
-            Contenido Educativo
-          </h2>
-        </div>
+      <div className="p-4 max-w-7xl mx-auto transition-colors duration-300 ease-in-out">
+        <Title icon="fa-book-medical" title="Contenido Educativo" />
 
         {recommendedContent.length > 0 && (
           <>
-            <h3 className="text-xl font-semibold text-gray-800 mt-8 mb-2">
+            <h3 className="text-xl font-semibold text-gray-800 dark:text-neutral-50 mt-8 mb-2 transition-colors duration-300 ease-in-out">
               Recomendado para ti
             </h3>
             <ResponsiveTable
@@ -145,59 +173,22 @@ function EducationalContent() {
         )}
 
         <div className="mt-12">
-          <h3 className="text-xl font-semibold text-gray-800 mb-2">
+          <h3 className="text-xl font-semibold text-gray-800 dark:text-neutral-50 mb-2 transition-colors duration-300 ease-in-out">
             Contenido Público
           </h3>
 
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          <h3 className="text-lg font-semibold text-gray-700 dark:text-neutral-300 mb-2 transition-colors duration-300 ease-in-out">
             Filtrar por:
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Título
-              </label>
-              <input
-                type="text"
-                name="title"
-                placeholder="Ej. Nutrición básica"
-                value={filters.title}
+            {fields.map((field, i) => (
+              <Input
+                key={i}
+                {...field}
+                value={filters[field.name]}
                 onChange={handleChange}
-                className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none"
               />
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Síntoma
-              </label>
-              <input
-                type="text"
-                name="symptom"
-                placeholder="Ej. Dolor de cabeza"
-                value={filters.symptom}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none"
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <label className="text-sm font-medium text-gray-700 mb-1">
-                Etapa de tratamiento
-              </label>
-              <select
-                name="treatmentStage"
-                value={filters.treatmentStage}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none"
-              >
-                <option value="">Todas</option>
-                <option value="inicio">Inicio</option>
-                <option value="intermedio">Intermedio</option>
-                <option value="final">Final</option>
-                <option value="indefinido">Indefinido</option>
-              </select>
-            </div>
+            ))}
           </div>
 
           <ResponsiveTable

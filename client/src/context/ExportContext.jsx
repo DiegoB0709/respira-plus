@@ -6,6 +6,7 @@ import {
 } from "../api/export";
 import { handleApiError } from "../utils/handleError";
 import { useAutoClearErrors } from "../hooks/useAutoClearErrors";
+import { format } from "date-fns";
 
 const ExportContext = createContext();
 
@@ -27,10 +28,15 @@ export const ExportProvider = ({ children }) => {
     document.body.removeChild(link);
   };
 
+  const buildFileName = (patientId, ext) => {
+    const fechaHora = format(new Date(), "ddMMyyyy_HHmm");
+    return `paciente_${patientId}_${fechaHora}.${ext}`;
+  };
+
   const handleExportPDF = async (patientId) => {
     try {
       const { data } = await exportClinicalDataPDF(patientId);
-      downloadFile(data, `paciente_${patientId}.pdf`, "application/pdf");
+      downloadFile(data, buildFileName(patientId, "pdf"), "application/pdf");
     } catch (error) {
       handleApiError(error, "Error al exportar PDF", setError);
     }
@@ -41,7 +47,7 @@ export const ExportProvider = ({ children }) => {
       const { data } = await exportClinicalDataExcel(patientId);
       downloadFile(
         data,
-        `paciente_${patientId}.xlsx`,
+        buildFileName(patientId, "xlsx"),
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       );
     } catch (error) {
@@ -52,7 +58,7 @@ export const ExportProvider = ({ children }) => {
   const handleExportCSV = async (patientId) => {
     try {
       const { data } = await exportClinicalDataCSV(patientId);
-      downloadFile(data, `paciente_${patientId}.csv`, "text/csv");
+      downloadFile(data, buildFileName(patientId, "csv"), "text/csv");
     } catch (error) {
       handleApiError(error, "Error al exportar CSV", setError);
     }

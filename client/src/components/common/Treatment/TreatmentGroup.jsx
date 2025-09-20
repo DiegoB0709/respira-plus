@@ -19,26 +19,31 @@ function TreatmentGroup({ entries }) {
 
   const actionStyles = {
     create: {
-      text: "text-emerald-500",
-      icon: "text-emerald-400",
-      border: "border-emerald-200 hover:border-emerald-300 hover:bg-emerald-50",
+      text: "text-sky-400",
+      icon: "text-sky-400",
+      border:
+        "border-sky-200 hover:border-sky-300 hover:bg-sky-50 dark:border-sky-600 dark:hover:border-sky-500 dark:hover:bg-neutral-700 transition-colors duration-300 ease-in-out",
     },
     update: {
       text: "text-blue-500",
-      icon: "text-blue-400",
-      border: "border-blue-200 hover:border-blue-300 hover:bg-blue-50",
+      icon: "text-blue-500",
+      border:
+        "border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:border-blue-600 dark:hover:border-blue-500 dark:hover:bg-neutral-700 transition-colors duration-300 ease-in-out",
     },
     delete: {
       text: "text-rose-500",
-      icon: "text-rose-400",
-      border: "border-rose-200 hover:border-rose-300 hover:bg-rose-50",
+      icon: "text-rose-500",
+      border:
+        "border-rose-200 hover:border-rose-300 hover:bg-rose-50 dark:border-rose-600 dark:hover:border-rose-500 dark:hover:bg-neutral-700 transition-colors duration-300 ease-in-out",
     },
     finished: {
-      text: "text-teal-500",
-      icon: "text-teal-400",
-      border: "border-teal-200 hover:border-teal-300 hover:bg-teal-50",
+      text: "text-gray-400",
+      icon: "text-gray-400",
+      border:
+        "border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:border-neutral-600 dark:hover:border-neutral-500 dark:hover:bg-neutral-700 transition-colors duration-300 ease-in-out",
     },
   };
+
 
   const formatDate = (date) =>
     new Date(date).toLocaleDateString("es-PE", {
@@ -65,11 +70,11 @@ function TreatmentGroup({ entries }) {
   };
 
   return (
-    <div className="bg-gray-50 p-4 sm:p-6 rounded-2xl space-y-6">
-      <h3 className="text-base sm:text-lg md:text-xl font-semibold text-teal-500 flex items-center gap-2 flex-wrap">
-        <i className="fas fa-notes-medical text-teal-400" />
+    <div className="p-4 sm:p-6 rounded-2xl space-y-6 transition-colors duration-300 ease-in-out">
+      <h3 className="text-base sm:text-lg md:text-xl font-semibold bg-gradient-to-r from-cyan-400 to-teal-500 bg-clip-text text-transparent flex items-center gap-2 flex-wrap">
+        <i className="fas fa-notes-medical text-cyan-500" />
         ID de Tratamiento:{" "}
-        <span className="text-gray-800 font-normal break-all">
+        <span className="text-gray-800 dark:text-neutral-50 transition-colors duration-300 ease-in-out font-normal break-all">
           {treatmentId}
         </span>
       </h3>
@@ -82,7 +87,7 @@ function TreatmentGroup({ entries }) {
           return (
             <li
               key={entry._id}
-              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100"
+              className="bg-white dark:bg-neutral-700 transition-colors duration-300 ease-in-out rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 border border-gray-100 dark:border-neutral-600"
             >
               <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center p-4 gap-3">
                 <div className="flex items-start gap-3">
@@ -95,7 +100,7 @@ function TreatmentGroup({ entries }) {
                     <p className={`font-medium ${styles.text}`}>
                       {translateAction[entry.action]}
                     </p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-neutral-300 transition-colors duration-300 ease-in-out">
                       {formatDate(entry.createdAt)} por{" "}
                       <span className="font-semibold">
                         {entry.actionBy?.username || "Desconocido"} (
@@ -115,8 +120,10 @@ function TreatmentGroup({ entries }) {
 
               <div
                 className={`overflow-hidden transition-all duration-300 px-6 ${
-                  isOpen ? "max-h-screen py-4" : "max-h-0"
-                } text-gray-700 space-y-2 border-t border-gray-100 text-sm`}
+                  isOpen
+                    ? "max-h-screen py-4 border-t border-gray-100 dark:border-neutral-600"
+                    : "max-h-0"
+                } text-gray-700 dark:text-neutral-300 transition-colors duration-300 ease-in-out space-y-2  text-sm`}
               >
                 <p>
                   <strong className={styles.text}>Inicio:</strong>{" "}
@@ -142,7 +149,7 @@ function TreatmentGroup({ entries }) {
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-gray-500">
+                    <p className="text-gray-500 dark:text-neutral-400 transition-colors duration-300 ease-in-out">
                       Sin medicamentos registrados.
                     </p>
                   )}

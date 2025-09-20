@@ -37,7 +37,7 @@
     "nanoid": "^5.1.5",
     "node-cron": "^4.1.0",
     "nodemailer": "^7.0.3",
-    "pdfkit": "^0.17.1",
+    "pdfkit": "^0.17.2",
     "socket.io": "^4.8.1",
     "zod": "^3.25.62"
   },

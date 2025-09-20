@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAlerts } from "../../../context/AlertsContext";
+import Input from "../../common/Imput/Input";
+import Button from "../../common/Buttons/Button";
+import Modal from "../../common/Modals/Modal";
 
 function UpdateAlert({ setActiveModal, alertId }) {
   const { updateAlertStatus, errors, fetchAlertById, selectedAlert } =
@@ -31,60 +34,50 @@ function UpdateAlert({ setActiveModal, alertId }) {
   };
 
   return (
-    <div className="p-4 sm:p-6 max-w-lg mx-auto">
-      <h2 className="text-xl sm:text-2xl font-bold text-teal-500 text-center mb-6 flex items-center justify-center gap-2">
-        <i className="fas fa-pen-to-square text-teal-400" />
-        Actualizar Alerta
-      </h2>
-
+    <div className="p-4 sm:p-6 max-w-lg mx-auto transition-colors duration-300 ease-in-out">
       <form
-        className="bg-white border border-gray-200 rounded-2xl p-5 sm:p-6 space-y-6 shadow-md"
+        className="bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-600 rounded-2xl p-5 sm:p-6 space-y-6 shadow-md transition-colors duration-300 ease-in-out"
         onSubmit={handleSubmit}
       >
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <i className="fas fa-info-circle text-teal-400" />
-            Nuevo estado
-          </label>
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm transition"
-          >
-            <option value="activa">Activa</option>
-            <option value="revisada">Revisada</option>
-            <option value="resuelta">Resuelta</option>
-          </select>
-        </div>
+        <Input
+          type="select"
+          name="status"
+          label="Nuevo estado"
+          icon="fa-info-circle"
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          options={[
+            { value: "activa", label: "Activa" },
+            { value: "revisada", label: "Revisada" },
+            { value: "resuelta", label: "Resuelta" },
+          ]}
+        />
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-            <i className="fas fa-tasks text-teal-400" />
-            Acción tomada
-          </label>
-          <input
-            type="text"
-            value={actionTaken}
-            onChange={(e) => setActionTaken(e.target.value)}
-            required
-            placeholder="Describe la acción tomada"
-            className="w-full border border-gray-300 rounded-xl px-3 py-2 shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 text-sm transition"
-          />
-        </div>
+        <Input
+          type="text"
+          name="actionTaken"
+          label="Acción tomada"
+          icon="fa-tasks"
+          value={actionTaken}
+          onChange={(e) => setActionTaken(e.target.value)}
+          required
+          placeholder="Describe la acción tomada"
+        />
 
         <div className="pt-4 text-center">
-          <button
-            type="submit"
-            className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold py-2.5 px-6 rounded-2xl shadow-md transition-transform duration-200 hover:scale-[1.02]"
-          >
-            <i className="fas fa-check-circle" />
-            Actualizar Alerta
-          </button>
+          <Button
+            type="bg1"
+            icon="fa-check-circle"
+            label="Actualizar Alerta"
+            submit={true}
+            full={true}
+            classes="px-6 py-2.5"
+          />
         </div>
       </form>
 
       {errors.length > 0 && (
-        <div className="mt-6 bg-red-50 border border-red-300 text-red-700 p-4 rounded-xl shadow-sm">
+        <div className="mt-6 bg-red-50 dark:bg-neutral-800 border border-red-300 dark:border-neutral-700 text-red-700 dark:text-red-400 p-4 rounded-xl shadow-sm transition-colors duration-300 ease-in-out">
           <h3 className="font-semibold mb-2 flex items-center gap-2">
             <i className="fas fa-exclamation-triangle" />
             Errores
@@ -98,27 +91,12 @@ function UpdateAlert({ setActiveModal, alertId }) {
       )}
 
       {showSuccess && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm overflow-hidden">
-            <div className="p-6 flex flex-col items-center space-y-4">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-600">
-                <i className="fas fa-check text-lg" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800">
-                ¡Alerta actualizada!
-              </h3>
-              <p className="text-sm text-gray-500 text-center">
-                El estado y la acción se guardaron correctamente.
-              </p>
-              <button
-                onClick={handleCloseSuccess}
-                className="cursor-pointer w-full bg-teal-500 hover:bg-teal-400 text-white py-2 rounded-xl text-sm font-medium transition-colors"
-              >
-                Aceptar
-              </button>
-            </div>
-          </div>
-        </div>
+        <Modal
+          type="success"
+          title="¡Alerta actualizada!"
+          message="El estado y la acción se guardaron correctamente."
+          onSubmit={handleCloseSuccess}
+        />
       )}
     </div>
   );

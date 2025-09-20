@@ -8,15 +8,19 @@ function EvaluatePatient({ patientId }) {
     evaluate(patientId);
   }, []);
 
-  return (
-    <div className="p-6 max-w-4xl mx-auto space-y-8">
-      <h1 className="text-3xl font-bold text-center text-teal-500 flex items-center justify-center gap-2">
-        <i className="fa fa-user-md text-teal-400" />
-        Evaluación del Paciente
-      </h1>
+  const gradients = {
+    teal: "bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent",
+    amber:
+      "bg-gradient-to-r from-amber-400 to-orange-500 bg-clip-text text-transparent",
+    sky: "bg-gradient-to-r from-sky-400 to-cyan-600 bg-clip-text text-transparent",
+    emerald:
+      "bg-gradient-to-r from-emerald-400 to-green-500 bg-clip-text text-transparent",
+  };
 
+  return (
+    <div className="p-6 max-w-4xl mx-auto space-y-8 transition-colors duration-300 ease-in-out">
       {errors.length > 0 && (
-        <div className="bg-red-50 text-red-700 p-5 rounded-2xl border border-red-200 shadow-sm space-y-3">
+        <div className="bg-red-50 text-red-700 dark:bg-neutral-800 dark:text-neutral-50 p-5 rounded-2xl border border-red-200 dark:border-neutral-700 shadow-sm space-y-3 transition-colors duration-300 ease-in-out">
           <h2 className="text-base font-semibold flex items-center gap-2">
             <i className="fa fa-exclamation-circle" />
             Se encontraron errores:
@@ -31,39 +35,39 @@ function EvaluatePatient({ patientId }) {
 
       {evaluationResult && (
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row items-start bg-white rounded-2xl shadow-md border border-gray-100 p-6 gap-4 hover:shadow-lg transition-shadow">
-            <div className="text-teal-500 text-4xl flex-shrink-0">
+          <div className="flex flex-col sm:flex-row items-start bg-white dark:bg-neutral-800 rounded-2xl shadow-md border border-gray-100 dark:border-neutral-700 p-6 gap-4 hover:shadow-lg transition-colors duration-300 ease-in-out">
+            <div className={`text-4xl flex-shrink-0 ${gradients.teal}`}>
               <i className="fa fa-heartbeat" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-teal-600">
+              <h2 className={`text-xl font-semibold ${gradients.teal}`}>
                 Evaluación de Riesgos
               </h2>
-              <ul className="text-sm text-gray-800 space-y-1">
+              <ul className="text-sm text-gray-800 dark:text-neutral-300 space-y-1">
                 <li>
-                  <i className="fa fa-check-circle text-teal-500 mr-1" />
-                  <span className="font-medium text-teal-600">
+                  <i className="fa fa-check-circle mr-1 text-teal-500" />
+                  <span className="font-medium text-teal-500">
                     Nivel de adherencia:
                   </span>{" "}
                   {evaluationResult.adherenceLevel}
                 </li>
                 <li>
-                  <i className="fa fa-exclamation-triangle text-yellow-500 mr-1" />
-                  <span className="font-medium text-yellow-600">
+                  <i className="fa fa-exclamation-triangle mr-1 text-yellow-500" />
+                  <span className="font-medium text-yellow-500">
                     Riesgo de abandono:
                   </span>{" "}
                   {evaluationResult.dropoutRisk}
                 </li>
                 <li>
-                  <i className="fa fa-user-times text-rose-500 mr-1" />
-                  <span className="font-medium text-rose-600">
+                  <i className="fa fa-user-times mr-1 text-rose-500" />
+                  <span className="font-medium text-rose-500">
                     Abandono detectado:
                   </span>{" "}
                   {evaluationResult.flags.abandono ? "Sí" : "No"}
                 </li>
                 <li>
-                  <i className="fa fa-shield-alt text-indigo-500 mr-1" />
-                  <span className="font-medium text-indigo-600">
+                  <i className="fa fa-shield-alt mr-1 text-indigo-500" />
+                  <span className="font-medium text-indigo-500">
                     Resistencia detectada:
                   </span>{" "}
                   {evaluationResult.flags.resistencia ? "Sí" : "No"}
@@ -72,18 +76,18 @@ function EvaluatePatient({ patientId }) {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start bg-white rounded-2xl shadow-md border border-gray-100 p-6 gap-4 hover:shadow-lg transition-shadow">
-            <div className="text-amber-500 text-4xl flex-shrink-0">
+          <div className="flex flex-col sm:flex-row items-start bg-white dark:bg-neutral-800 rounded-2xl shadow-md border border-gray-100 dark:border-neutral-700 p-6 gap-4 hover:shadow-lg transition-colors duration-300 ease-in-out">
+            <div className={`text-4xl flex-shrink-0 ${gradients.amber}`}>
               <i className="fa fa-lightbulb" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-amber-600">
+              <h3 className={`text-lg font-semibold ${gradients.amber}`}>
                 Recomendaciones
               </h3>
-              <ul className="text-sm text-gray-800 space-y-1">
+              <ul className="text-sm text-gray-800 dark:text-neutral-300 space-y-1">
                 {evaluationResult.recommendations.map((rec, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <i className="fa fa-angle-right text-amber-500 mt-0.5" />
+                    <i className="fa fa-angle-right mt-0.5 text-amber-500" />
                     {rec}
                   </li>
                 ))}
@@ -91,50 +95,50 @@ function EvaluatePatient({ patientId }) {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start bg-white rounded-2xl shadow-md border border-gray-100 p-6 gap-4 hover:shadow-lg transition-shadow">
-            <div className="text-sky-500 text-4xl flex-shrink-0">
+          <div className="flex flex-col sm:flex-row items-start bg-white dark:bg-neutral-800 rounded-2xl shadow-md border border-gray-100 dark:border-neutral-700 p-6 gap-4 hover:shadow-lg transition-colors duration-300 ease-in-out">
+            <div className={`text-4xl flex-shrink-0 ${gradients.sky}`}>
               <i className="fa fa-code-branch" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-sky-600">
+              <h3 className={`text-lg font-semibold ${gradients.sky}`}>
                 Reglas Disparadas
               </h3>
               {evaluationResult.triggeredRules.length > 0 ? (
-                <ul className="text-sm text-gray-800 space-y-1">
+                <ul className="text-sm text-gray-800 dark:text-neutral-300 space-y-1">
                   {evaluationResult.triggeredRules.map((rule, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <i className="fa fa-tag text-sky-500 mt-0.5" />
+                      <i className="fa fa-tag mt-0.5 text-sky-500" />
                       {rule}
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-neutral-400">
                   No se activaron reglas específicas.
                 </p>
               )}
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-start bg-white rounded-2xl shadow-md border border-gray-100 p-6 gap-4 hover:shadow-lg transition-shadow">
-            <div className="text-emerald-500 text-4xl flex-shrink-0">
+          <div className="flex flex-col sm:flex-row items-start bg-white dark:bg-neutral-800 rounded-2xl shadow-md border border-gray-100 dark:border-neutral-700 p-6 gap-4 hover:shadow-lg transition-colors duration-300 ease-in-out">
+            <div className={`text-4xl flex-shrink-0 ${gradients.emerald}`}>
               <i className="fa fa-book-reader" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-emerald-600">
+              <h3 className={`text-lg font-semibold ${gradients.emerald}`}>
                 Educación del Paciente
               </h3>
-              <ul className="text-sm text-gray-800 space-y-1">
+              <ul className="text-sm text-gray-800 dark:text-neutral-300 space-y-1">
                 <li>
-                  <i className="fa fa-book text-emerald-500 mr-1" />
-                  <span className="font-semibold text-emerald-600">
+                  <i className="fa fa-book mr-1 text-emerald-500" />
+                  <span className="font-semibold text-emerald-500">
                     Contenidos vistos:
                   </span>{" "}
                   {evaluationResult.educationStats.totalViewed}
                 </li>
                 <li>
-                  <i className="fa fa-clock text-slate-500 mr-1" />
-                  <span className="font-semibold text-slate-600">
+                  <i className="fa fa-clock mr-1 text-slate-500" />
+                  <span className="font-semibold text-slate-500">
                     Última visualización:
                   </span>{" "}
                   {new Date(

@@ -1,10 +1,6 @@
 import { useState } from "react";
 import PageContainer from "../components/common/PageContainer";
-import Logo from "../components/common/SideBar/Logo";
-import Option from "../components/common/SideBar/Option";
-import SideBar from "../components/common/SideBar/SideBar";
 import { useAuth } from "../context/AuthContext";
-import { toggleSidebar } from "../utils/SideBar";
 import Dashboard from "../components/doctor/Dashboard";
 import Pacientes from "../components/doctor/Pacientes";
 import Alertas from "../components/doctor/Modal Content/Alertas";
@@ -15,6 +11,9 @@ import ModalContainer from "../components/common/Modals/ModalContainer";
 import ProfileContainer from "../components/common/Modals/ProfileContainer";
 import UpdateAlert from "../components/doctor/Modal Content/UpdateAlert";
 import useUnreadCounts from "../hooks/useUnreadCounts";
+import SidebarToggle from "../components/common/SideBar/SidebarToggle";
+import Sidebar from "../components/common/SideBar/Sidebar";
+import SidebarItem from "../components/common/SideBar/SidebarItem";
 
 function DoctorPage() {
   const { signout } = useAuth();
@@ -22,6 +21,7 @@ function DoctorPage() {
   const [activeModal, setActiveModal] = useState(null);
   const [alertId, setAlertId] = useState("");
   const { unresolvedAlertCount, unreadNotifCount } = useUnreadCounts();
+  const [open, setOpen] = useState(false);
 
   const handleSectionClick = (section) => {
     if (section === "Cerrar Sesion") {
@@ -42,28 +42,29 @@ function DoctorPage() {
     }
     setActiveSection(section);
   };
+  
 
   const handleSignout = async () => {
     await signout();
   };
 
   const menuOptions = [
-    { name: "DashBoard", icon: "chart-simple", number: 0 },
-    { name: "Pacientes", icon: "user-injured", number: 0 },
-    { name: "Citas Medicas", icon: "calendar-check", number: 0 },
-    { name: "Contenido Medico", icon: "book-medical", number: 0 },
+    { name: "DashBoard", icon: "fa-chart-simple", number: 0 },
+    { name: "Pacientes", icon: "fa-user-injured", number: 0 },
+    { name: "Citas Medicas", icon: "fa-calendar-check", number: 0 },
+    { name: "Contenido Medico", icon: "fa-book-medical", number: 0 },
     {
       name: "Alertas",
-      icon: "triangle-exclamation",
+      icon: "fa-triangle-exclamation",
       number: unresolvedAlertCount,
     },
     {
       name: "Notificaciones",
-      icon: "bell",
+      icon: "fa-bell",
       number: unreadNotifCount,
     },
-    { name: "Perfil", icon: "user", number: 0 },
-    { name: "Cerrar Sesion", icon: "power-off", number: 0 },
+    { name: "Perfil", icon: "fa-user", number: 0 },
+    { name: "Cerrar Sesion", icon: "fa-right-from-bracket", number: 0 },
   ];
 
   const renderContent = () => {
@@ -83,24 +84,30 @@ function DoctorPage() {
 
   return (
     <PageContainer>
-      <SideBar>
-        <Logo toggleSidebar={toggleSidebar} />
+      <SidebarToggle isOpen={open} onClick={() => setOpen(!open)} />
+      <Sidebar isOpen={open}>
         {menuOptions.map((option) => (
-          <Option
+          <SidebarItem
             key={option.name}
+            label={option.name}
             icon={option.icon}
-            name={option.name}
+            badge={option.number}
             active={activeSection === option.name}
-            number={option.number}
-            handleSectionClick={() => handleSectionClick(option.name)}
+            handleSectionClick={handleSectionClick}
           />
         ))}
-      </SideBar>
-      <main>
-        <div className="main-content">{renderContent()}</div>
+      </Sidebar>
+
+      <main className="overflow-y-auto p-[min(30px,7%)]">
+        <div>{renderContent()}</div>
       </main>
       {activeModal === "notification" && (
-        <ModalContainer onClose={() => setActiveModal(null)}>
+        <ModalContainer
+          onClose={() => setActiveModal(null)}
+          title={"Notificaciones"}
+          icon={"fa-bell"}
+          unread={unreadNotifCount}
+        >
           <Notification />
         </ModalContainer>
       )}
@@ -110,12 +117,21 @@ function DoctorPage() {
         </ModalContainer>
       )}
       {activeModal === "alerts" && (
-        <ModalContainer onClose={() => setActiveModal(null)}>
+        <ModalContainer
+          onClose={() => setActiveModal(null)}
+          title={"Alertas"}
+          icon={"fa-triangle-exclamation"}
+          unresolved={unresolvedAlertCount}
+        >
           <Alertas setAlertId={setAlertId} setActiveModal={setActiveModal} />
         </ModalContainer>
       )}
       {activeModal === "UpdateAlert" && (
-        <ModalContainer onClose={() => setActiveModal("alerts")}>
+        <ModalContainer
+          onClose={() => setActiveModal("alerts")}
+          title={"Actualizar Alerta"}
+          icon={"fa-triangle-exclamation"}
+        >
           <UpdateAlert setActiveModal={setActiveModal} alertId={alertId} />
         </ModalContainer>
       )}

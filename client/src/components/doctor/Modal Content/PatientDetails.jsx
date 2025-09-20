@@ -1,15 +1,21 @@
 import { useState, useEffect } from "react";
 import { useDoctor } from "../../../context/DoctorContext";
+import Input from "../../common/Imput/Input";
+import Button from "../../common/Buttons/Button";
+import { useExport } from "../../../context/ExportContext";
 
 function PatientDetails({ setActiveModal, setPatientId }) {
   const { selectedPatient, setSelectedPatient, updatePatient, errors } =
     useDoctor();
+    const { handleExportPDF, handleExportExcel, handleExportCSV } =
+        useExport();
   const [formData, setFormData] = useState({
     username: "",
     phone: "",
     email: "",
   });
   const [onEdit, setOnEdit] = useState(false);
+  const [onExport, setOnExport] = useState(false);
 
   const handleOnEdit = () => {
     setOnEdit(true);
@@ -49,15 +55,13 @@ function PatientDetails({ setActiveModal, setPatientId }) {
 
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold text-center text-teal-500 mb-6 flex flex-wrap items-center justify-center gap-2">
-        <i className="fas fa-user-injured text-teal-400 text-2xl shrink-0"></i>
-        Perfil del Paciente
-      </h1>
-
       {errors.length > 0 && (
-        <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-md space-y-1 text-sm">
+        <div className="mb-4 p-4 bg-red-50 dark:bg-neutral-800 border-l-4 border-red-500 text-red-700 dark:text-neutral-300 transition-colors duration-300 ease-in-out rounded-md space-y-1 text-sm">
           {errors.map((err, idx) => (
-            <p key={idx} className="flex items-center gap-2">
+            <p
+              key={idx}
+              className="flex items-center gap-2 text-red-500 dark:text-neutral-300 transition-colors duration-300 ease-in-out"
+            >
               <i className="fas fa-exclamation-circle text-red-500"></i>
               {err}
             </p>
@@ -67,7 +71,7 @@ function PatientDetails({ setActiveModal, setPatientId }) {
 
       <form
         onSubmit={handleSubmit}
-        className="space-y-5 bg-white p-6 rounded-lg border border-gray-100 shadow-sm"
+        className="space-y-5 bg-white dark:bg-neutral-800 transition-colors duration-300 ease-in-out p-6 rounded-lg border border-gray-100 dark:border-neutral-700 shadow-sm"
       >
         {["username", "phone", "email"].map((field) => {
           const labels = {
@@ -75,58 +79,60 @@ function PatientDetails({ setActiveModal, setPatientId }) {
             phone: "Teléfono",
             email: "Correo",
           };
+
           const icons = {
-            username: "fas fa-user",
-            phone: "fas fa-phone-alt",
-            email: "fas fa-envelope",
+            username: "fa-user",
+            phone: "fa-phone-alt",
+            email: "fa-envelope",
           };
+
           return (
             <div key={field}>
-              <label
-                className={`block text-sm font-medium flex items-center gap-2 ${
-                  onEdit ? "text-teal-500" : "text-gray-700"
-                }`}
-              >
-                <i
-                  className={`${icons[field]} ${
-                    onEdit ? "text-teal-400" : "text-gray-400"
-                  }`}
-                ></i>
-                {labels[field]}
-              </label>
-              <input
-                disabled={!onEdit}
+              <Input
                 type={field === "email" ? "email" : "text"}
                 name={field}
+                label={labels[field]}
+                icon={icons[field]}
                 value={formData[field]}
                 onChange={handleChange}
-                className={`mt-1 block w-full px-4 py-2 border rounded-xl text-sm ${
-                  onEdit
-                    ? "border-teal-300 focus:ring-2 focus:ring-teal-500 focus:outline-none"
-                    : "bg-gray-100 cursor-not-allowed border border-gray-200"
-                }`}
+                disabled={!onEdit}
+                placeholder={`Ingrese ${labels[field].toLowerCase()}`}
               />
             </div>
           );
         })}
 
-        <div className="flex justify-between items-center pt-2">
-          <button
-            type="button"
-            onClick={onEdit ? handleOffEdit : handleOnEdit}
-            className="cursor-pointer text-sm text-teal-500 hover:underline"
-          >
-            {onEdit ? "Cancelar" : "Editar Datos"}
-          </button>
+        <div className="flex flex-col gap-3">
           {onEdit && (
-            <button
-              type="submit"
-              className="cursor-pointer bg-teal-500 text-white text-sm px-4 py-2 rounded-xl hover:bg-teal-400 transition hover:brightness-110 font-medium flex items-center justify-center gap-2 border"
-            >
-              <i className="fa-solid fa-floppy-disk text-white hidden sm:inline-flex"></i>
-              Actualizar
-            </button>
+            <Button
+              type="bg1"
+              icon="fa-floppy-disk"
+              label="Actualizar"
+              submit={true}
+              full={true}
+              classes="text-sm py-3 px-4 inline-flex hover:brightness-110"
+            />
           )}
+          <div className="flex flex-row justify-between w-full">
+            <button
+              type="button"
+              onClick={onEdit ? handleOffEdit : handleOnEdit}
+              className="cursor-pointer text-sm font-medium bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent hover:scale-102 transition ease-in duration-200"
+            >
+              {onEdit ? "Cancelar" : "Editar Datos"}
+            </button>
+            {!onEdit && (
+              <button
+                type="button"
+                onClick={() => {
+                  setOnExport(true);
+                }}
+                className="cursor-pointer text-sm font-medium bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent hover:scale-102 transition ease-in duration-200"
+              >
+                Exportar Reporte Clínico
+              </button>
+            )}
+          </div>
         </div>
       </form>
 
@@ -134,55 +140,108 @@ function PatientDetails({ setActiveModal, setPatientId }) {
         {[
           {
             label: "Tratamientos",
-            icon: "fas fa-pills",
+            icon: "fa-pills",
             modal: "treatments",
-            color: "bg-teal-500",
+            type: "bg1",
           },
           {
             label: "Datos Clínicos",
-            icon: "fas fa-notes-medical",
+            icon: "fa-notes-medical",
             modal: "clinical",
-            color: "bg-teal-500",
+            type: "bg2",
           },
           {
             label: "Evaluar Paciente",
-            icon: "fas fa-heartbeat",
+            icon: "fa-heartbeat",
             modal: "evaluate",
-            color: "bg-teal-500",
+            type: "bg3",
           },
           {
             label: "Contenido Visto",
-            icon: "fas fa-book-reader",
+            icon: "fa-book-reader",
             modal: "educate",
-            color: "bg-teal-500",
+            type: "bg4",
           },
           {
             label: "Citas Médicas",
-            icon: "fas fa-calendar-check",
+            icon: "fa-calendar-check",
             modal: "appointments",
-            color: "bg-teal-500",
+            type: "bg5",
           },
           {
             label: "Alertas",
-            icon: "fas fa-bell",
+            icon: "fa-bell",
             modal: "alerts",
-            color: "bg-rose-600",
+            type: "alert",
           },
         ].map((item) => (
-          <button
+          <Button
             key={item.modal}
-            type="button"
+            type={item.type}
+            icon={item.icon}
+            label={item.label}
             onClick={() => {
               setActiveModal(item.modal);
               setPatientId(selectedPatient._id);
             }}
-            className={`cursor-pointer w-full ${item.color} text-white py-3 px-4 rounded-lg hover:brightness-110 transition font-medium flex items-center justify-center gap-2 text-sm`}
-          >
-            <i className={`${item.icon} text-white hidden sm:inline-flex`}></i>
-            {item.label}
-          </button>
+            classes="text-sm py-3 px-4 inline-flex hover:brightness-110"
+          />
         ))}
       </div>
+      {onExport && (
+        <div
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+          onClick={() => setOnExport(false)}
+        >
+          <div
+            className="bg-white dark:bg-neutral-900 transition-colors duration-300 ease-in-out rounded-2xl shadow-2xl p-8 text-center space-y-4 max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-center w-12 h-12 rounded-full mx-auto bg-teal-100 text-teal-500 transition-colors duration-300 ease-in-out">
+              <i className="fa-solid fa-download text-lg" />
+            </div>
+
+            <h2 className="text-xl font-bold text-gray-900 dark:text-neutral-50 transition-colors duration-300 ease-in-out text-center mb-2">
+              Reporte Clínico
+            </h2>
+
+            <p className="text-sm text-gray-500 dark:text-neutral-400 transition-colors duration-300 ease-in-out">
+              Selecciona el formato de exportación.
+            </p>
+
+            <div className="grid grid-cols-3 gap-3 pt-2">
+              <button
+                onClick={() => handleExportPDF(selectedPatient._id)}
+                className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-medium shadow-md bg-gradient-to-r from-red-500 to-red-600 transition-transform transform hover:scale-102 "
+              >
+                <i className="fa-solid fa-file-pdf text-white" />
+                PDF
+              </button>
+              <button
+                onClick={() => handleExportExcel(selectedPatient._id)}
+                className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-medium shadow-md bg-gradient-to-r from-green-500 to-emerald-600 transition-transform transform hover:scale-102"
+              >
+                <i className="fa-solid fa-file-excel text-white" />
+                Excel
+              </button>
+              <button
+                onClick={() => handleExportCSV(selectedPatient._id)}
+                className="cursor-pointer flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-white text-sm font-medium shadow-md bg-gradient-to-r from-blue-500 to-indigo-600 transition-transform transform hover:scale-102 "
+              >
+                <i className="fa-solid fa-file-csv text-white" />
+                CSV
+              </button>
+            </div>
+
+            <button
+              onClick={() => setOnExport(false)}
+              className="cursor-pointer w-full px-4 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-neutral-300 bg-gray-100 dark:bg-neutral-800 hover:bg-gray-200 dark:hover:bg-neutral-700 transition "
+            >
+              Volver
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

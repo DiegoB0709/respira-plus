@@ -33,42 +33,33 @@ function AuthPage() {
 
   const SwitchToRegister = () => setIsRegisterActive(true);
   const SwitchToLogin = () => setIsRegisterActive(false);
+
   return (
-    <div className="flex min-h-screen items-center justify-center px-6 py-12 bg-gray-50">
-      <div className="w-full max-w-sm md:max-w-md bg-white md:scale-[1.25] rounded-2xl shadow-xl p-12">
-        <div className="flex justify-center items-center gap-2 mb-6">
-          <i className="fa-solid fa-lungs text-teal-400 text-4xl"></i>
-          <p className="text-teal-500 text-3xl font-bold tracking-wide">
-            Respira
-            <span className="text-teal-400 text-5xl font-bold tracking-wide">
-              +
-            </span>
-          </p>
+    <div className="flex min-h-screen items-center justify-center px-6 py-12 bg-gray-50 dark:bg-neutral-900 transition-colors duration-300 ease-in-out">
+      <div className="w-full max-w-sm md:max-w-md bg-white dark:bg-neutral-800 md:scale-[1.25] rounded-2xl shadow-xl p-12 transition-colors duration-300 ease-in-out">
+        <div className="flex justify-center items-center gap-2 mb-3">
+          <span className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">
+            <i className="fa-solid fa-lungs text-4xl"></i>
+            <p className="text-3xl font-extrabold tracking-wide flex items-end">
+              Respira
+              <span className="text-5xl font-extrabold tracking-wide ml-1">
+                +
+              </span>
+            </p>
+          </span>
         </div>
 
-        <h2 className="mt-2 text-center text-2xl font-bold tracking-tight text-gray-900 mb-6">
-          {isRegisterActive ? "Crear perfil" : "Ingresa a tu cuenta"}
+        <h2 className="text-center text-2xl font-bold tracking-tight text-gray-900 dark:text-neutral-50 mb-6 transition-colors duration-300 ease-in-out">
+          {isRegisterActive ? "Crear tu perfil" : "Ingresa a tu cuenta"}
         </h2>
 
-        {isRegisterActive ? (
-          <RegisterForm
-            inputClassName="rounded-xl border-gray-300 focus:ring-teal-400 focus:border-teal-400"
-            buttonClassName="rounded-2xl bg-teal-500 hover:bg-teal-400 text-white py-3 px-6 mt-4 w-full"
-            labelIcon={(iconClass) => <i className={`${iconClass} mr-2`}></i>}
-          />
-        ) : (
-          <LoginForm
-            inputClassName="rounded-xl border-gray-300 focus:ring-teal-400 focus:border-teal-400"
-            buttonClassName="rounded-2xl bg-teal-500 hover:bg-teal-400 text-white py-3 px-6 mt-4 w-full"
-            labelIcon={(iconClass) => <i className={`${iconClass} mr-2`}></i>}
-          />
-        )}
+        {isRegisterActive ? <RegisterForm /> : <LoginForm />}
 
-        <p className="mt-5 text-center text-sm text-gray-500">
+        <p className="mt-5 text-center text-sm text-gray-500 dark:text-neutral-400 transition-colors duration-300 ease-in-out">
           {isRegisterActive ? "¿Ya tienes cuenta?" : "¿No tienes cuenta?"}{" "}
           <a
             href="#"
-            className="font-semibold text-teal-500 hover:text-teal-400 cursor-pointer duration-150 ease-in-out"
+            className="font-semibold bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent cursor-pointer duration-300 ease-in-out hover:from-cyan-500 hover:to-teal-400"
             onClick={(e) => {
               e.preventDefault();
               isRegisterActive ? SwitchToLogin() : SwitchToRegister();

@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useClinicalDetails } from "../../../context/ClinicalDetailsContext";
 import { useAuth } from "../../../context/AuthContext";
+import Button from "../Buttons/Button";
 
 function ClinicalData({ patientId, setActiveModal }) {
   const { clinicalDetails, fetchClinicalDetails } = useClinicalDetails();
@@ -19,172 +20,169 @@ function ClinicalData({ patientId, setActiveModal }) {
     });
   };
 
-  const Row = ({ icon, label, value, color = "teal" }) => (
-    <div className="flex items-start gap-3 py-2 border-b border-gray-100 last:border-none">
-      <i className={`fa ${icon} text-${color}-500 mt-1`} />
-      <div className="flex flex-col text-sm sm:text-base">
-        <span className="text-gray-500 font-medium">{label}</span>
-        <span className="text-gray-800">{value}</span>
+  const Row = ({ icon, label, value, color = "text-teal-400" }) => {
+    return (
+      <div className="flex items-start gap-3 py-3">
+        <i className={`fa ${icon} text-base mt-1 ${color}`} />
+        <div className="flex flex-col">
+          <span className="text-sm text-gray-300 font-medium">{label}</span>
+          <span className="text-base text-white">{value}</span>
+        </div>
       </div>
+    );
+  };
+
+  const Section = ({ title, children }) => (
+    <div className="bg-neutral-800 rounded-xl shadow-md p-6 space-y-4 transition-colors">
+      <h2 className="relative font-semibold text-lg pb-1 bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">
+        {title}
+        <span className="absolute left-0 bottom-0 w-full h-[1px] bg-gradient-to-r from-teal-400 to-cyan-500"></span>
+      </h2>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">{children}</div>
     </div>
   );
 
   return (
-    <div className="p-4 sm:p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl sm:text-3xl font-bold text-teal-500 text-center mb-6 flex items-center justify-center gap-2">
-        <i className="fa fa-notes-medical text-teal-400" />
-        Datos Clínicos
-      </h1>
-
+    <div className="px-4 sm:p-6 max-w-4xl mx-auto">
       {clinicalDetails ? (
-        <div className="bg-white rounded-2xl p-6 sm:p-8 space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-teal-500 font-semibold text-lg border-b pb-1">
-              Datos básicos
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Row
-                icon="fa-weight"
-                label="Peso:"
-                value={`${clinicalDetails.weight} kg`}
-              />
-              <Row
-                icon="fa-ruler-vertical"
-                label="Talla:"
-                value={`${clinicalDetails.height} cm`}
-              />
-              <Row
-                icon="fa-calculator"
-                label="IMC:"
-                value={clinicalDetails.bmi}
-              />
-              <Row
-                icon="fa-calendar-alt"
-                label="Fecha de diagnóstico:"
-                value={formatDate(clinicalDetails.diagnosisDate)}
-                color="blue"
-              />
-            </div>
-          </div>
+        <div className="space-y-6">
+          <Section title="Datos básicos">
+            <Row
+              icon="fa-weight"
+              label="Peso:"
+              value={`${clinicalDetails.weight} kg`}
+              color="text-teal-400"
+            />
+            <Row
+              icon="fa-ruler-vertical"
+              label="Talla:"
+              value={`${clinicalDetails.height} cm`}
+              color="text-teal-400"
+            />
+            <Row
+              icon="fa-calculator"
+              label="IMC:"
+              value={clinicalDetails.bmi}
+              color="text-teal-400"
+            />
+            <Row
+              icon="fa-calendar-alt"
+              label="Fecha de diagnóstico:"
+              value={formatDate(clinicalDetails.diagnosisDate)}
+              color="text-blue-400"
+            />
+          </Section>
 
-          <div className="space-y-2">
-            <h2 className="text-teal-500 font-semibold text-lg border-b pb-1">
-              Estado clínico
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Section title="Estado clínico">
+            <Row
+              icon="fa-vials"
+              label="Estado bacteriológico:"
+              value={clinicalDetails.bacteriologicalStatus}
+              color="text-purple-400"
+            />
+            {user.role === "doctor" && (
               <Row
-                icon="fa-vials"
-                label="Estado bacteriológico:"
-                value={clinicalDetails.bacteriologicalStatus}
-                color="purple"
+                icon="fa-pills"
+                label="Esquema de tratamiento:"
+                value={clinicalDetails.treatmentScheme}
+                color="text-purple-400"
               />
-              {user.role === "doctor" && (
-                <Row
-                  icon="fa-pills"
-                  label="Esquema de tratamiento:"
-                  value={clinicalDetails.treatmentScheme}
-                  color="purple"
-                />
-              )}
+            )}
+            <Row
+              icon="fa-hourglass-half"
+              label="Fase:"
+              value={clinicalDetails.phase}
+              color="text-indigo-400"
+            />
+            <Row
+              icon="fa-stethoscope"
+              label="Síntomas:"
+              value={clinicalDetails.symptoms?.join(", ") || "Ninguno"}
+              color="text-rose-400"
+            />
+            {user.role === "doctor" && (
+              <Row
+                icon="fa-exclamation-circle"
+                label="Riesgo de adherencia:"
+                value={clinicalDetails.adherenceRisk}
+                color="text-red-400"
+              />
+            )}
+            <Row
+              icon="fa-file-medical-alt"
+              label="Notas clínicas:"
+              value={clinicalDetails.clinicalNotes || "Sin notas"}
+              color="text-gray-400"
+            />
+          </Section>
 
-              <Row
-                icon="fa-hourglass-half"
-                label="Fase:"
-                value={clinicalDetails.phase}
-                color="indigo"
-              />
-              <Row
-                icon="fa-stethoscope"
-                label="Síntomas:"
-                value={clinicalDetails.symptoms?.join(", ") || "Ninguno"}
-                color="rose"
-              />
-              {user.role === "doctor" && (
-                <Row
-                  icon="fa-exclamation-circle"
-                  label="Riesgo de adherencia:"
-                  value={clinicalDetails.adherenceRisk}
-                  color="red"
-                />
-              )}
-              <Row
-                icon="fa-file-medical-alt"
-                label="Notas clínicas:"
-                value={clinicalDetails.clinicalNotes || "Sin notas"}
-                color="gray"
-              />
-            </div>
-          </div>
+          <Section title="Antecedentes clínicos">
+            <Row
+              icon="fa-heartbeat"
+              label="Comorbilidades:"
+              value={clinicalDetails.comorbidities?.join(", ") || "Ninguna"}
+              color="text-rose-400"
+            />
+            <Row
+              icon="fa-virus"
+              label="Estado VIH:"
+              value={clinicalDetails.hivStatus}
+              color="text-red-400"
+            />
+            <Row
+              icon="fa-smoking"
+              label="Fuma:"
+              value={clinicalDetails.smoking ? "Sí" : "No"}
+              color="text-yellow-400"
+            />
+            <Row
+              icon="fa-wine-bottle"
+              label="Consumo de alcohol:"
+              value={clinicalDetails.alcoholUse ? "Sí" : "No"}
+              color="text-amber-400"
+            />
+            <Row
+              icon="fa-head-side-mask"
+              label="Contacto con TB:"
+              value={clinicalDetails.contactWithTb ? "Sí" : "No"}
+              color="text-cyan-400"
+            />
+            <Row
+              icon="fa-history"
+              label="Tratamiento previo de TB:"
+              value={clinicalDetails.priorTbTreatment ? "Sí" : "No"}
+              color="text-cyan-400"
+            />
+          </Section>
 
-          <div className="space-y-2">
-            <h2 className="text-teal-500 font-semibold text-lg border-b pb-1">
-              Antecedentes
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <Row
-                icon="fa-heartbeat"
-                label="Comorbilidades:"
-                value={clinicalDetails.comorbidities?.join(", ") || "Ninguna"}
-                color="rose"
-              />
-              <Row
-                icon="fa-virus"
-                label="Estado VIH:"
-                value={clinicalDetails.hivStatus}
-                color="red"
-              />
-              <Row
-                icon="fa-smoking"
-                label="Fuma:"
-                value={clinicalDetails.smoking ? "Sí" : "No"}
-                color="yellow"
-              />
-              <Row
-                icon="fa-wine-bottle"
-                label="Consumo de alcohol:"
-                value={clinicalDetails.alcoholUse ? "Sí" : "No"}
-                color="amber"
-              />
-              <Row
-                icon="fa-head-side-mask"
-                label="Contacto con TB:"
-                value={clinicalDetails.contactWithTb ? "Sí" : "No"}
-                color="cyan"
-              />
-              <Row
-                icon="fa-history"
-                label="Tratamiento previo de TB:"
-                value={clinicalDetails.priorTbTreatment ? "Sí" : "No"}
-                color="cyan"
-              />
-            </div>
-          </div>
           {user.role === "doctor" && (
-            <div className="pt-6 text-center">
-              <button
+            <div className="pt-4">
+              <Button
                 onClick={setActiveModal}
-                className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold text-sm sm:text-base py-2 px-5 rounded-2xl shadow transition"
-              >
-                <i className="fa fa-pen" />
-                Editar Datos Clínicos
-              </button>
+                type="bg1"
+                icon="fa-pen"
+                label="Editar Datos Clínicos"
+                full={true}
+                classes={"text-base"}
+              />
             </div>
           )}
         </div>
       ) : (
-        <div className="mt-10 flex flex-col items-center justify-center text-center bg-gray-50 p-10 rounded-xl border border-dashed border-gray-300 shadow-sm">
+        <div className="mt-10 flex flex-col items-center justify-center text-center bg-neutral-800 p-10 rounded-xl shadow-md">
           <i className="fa fa-notes-medical text-5xl text-gray-400 mb-4" />
-          <p className="text-gray-600 text-lg mb-6 max-w-md">
+          <p className="text-gray-300 text-lg mb-6 max-w-md">
             No se encontraron datos clínicos registrados para este paciente.
           </p>
           {user.role === "doctor" && (
-            <button
+            <Button
               onClick={setActiveModal}
-              className="cursor-pointer inline-flex items-center gap-2 bg-teal-500 hover:bg-teal-400 text-white font-medium text-sm sm:text-base py-2 px-6 rounded-2xl shadow-md transition"
-            >
-              <i className="fa fa-plus" />
-              Añadir Datos Clínicos
-            </button>
+              type="bg1"
+              icon="fa-plus"
+              label="Añadir Datos Clínicos"
+              full={true}
+              classes={"mt-4 px-8 py-3 text-sm sm:text-base"}
+            />
           )}
         </div>
       )}

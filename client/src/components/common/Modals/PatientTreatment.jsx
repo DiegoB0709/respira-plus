@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useTreatment } from "../../../context/TreatmentContext";
 import { useAuth } from "../../../context/AuthContext";
+import Button from "../Buttons/Button";
+import Modal from "./Modal";
 
 function PatientTreatment({ patientId, setActiveModal }) {
   const { treatment, fetchTreatmentByPatient, removeTreatment } =
@@ -20,18 +22,15 @@ function PatientTreatment({ patientId, setActiveModal }) {
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
-      <h1 className="text-2xl sm:text-3xl font-bold text-center text-teal-500 mb-6 flex flex-col items-center justify-center gap-2">
-        <i className="fas fa-user-md text-teal-400 text-3xl sm:text-4xl" />
-        <span>Tratamiento del Paciente</span>
-      </h1>
-
       {treatment ? (
-        <section className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700 text-sm sm:text-base">
-            <p className="flex items-center gap-3">
-              <i className="fas fa-calendar-alt text-teal-400 text-lg" />
+        <section className="bg-white dark:bg-neutral-800 transition-colors duration-300 ease-in-out rounded-2xl border border-gray-100 dark:border-neutral-700 shadow-md hover:shadow-lg p-6 space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700 dark:text-neutral-300 transition-colors duration-300 ease-in-out text-sm sm:text-base divide-y sm:divide-y-0 sm:divide-x divide-gray-100 dark:divide-neutral-800">
+            <p className="flex items-center gap-3 py-1 sm:pr-4">
+              <i className="fas fa-calendar-alt bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent text-lg" />
               <span>
-                <span className="font-semibold text-teal-500">Inicio:</span>{" "}
+                <span className="font-medium text-gray-900 dark:text-neutral-50 transition-colors duration-300 ease-in-out">
+                  Inicio:
+                </span>{" "}
                 {new Date(treatment.startDate).toLocaleDateString("es-PE", {
                   year: "numeric",
                   month: "long",
@@ -39,10 +38,12 @@ function PatientTreatment({ patientId, setActiveModal }) {
                 })}
               </span>
             </p>
-            <p className="flex items-center gap-3">
-              <i className="fas fa-calendar-check text-teal-400 text-lg" />
+            <p className="flex items-center gap-3 py-1 sm:pl-4">
+              <i className="fas fa-calendar-check bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent text-lg" />
               <span>
-                <span className="font-semibold text-teal-500">Fin:</span>{" "}
+                <span className="font-medium text-gray-900 dark:text-neutral-50 transition-colors duration-300 ease-in-out">
+                  Fin:
+                </span>{" "}
                 {new Date(treatment.endDate).toLocaleDateString("es-PE", {
                   year: "numeric",
                   month: "long",
@@ -50,25 +51,27 @@ function PatientTreatment({ patientId, setActiveModal }) {
                 })}
               </span>
             </p>
-            <p className="flex items-start gap-3 sm:col-span-2">
-              <i className="fas fa-sticky-note text-teal-400 text-lg pt-1" />
+            <p className="flex items-start gap-3 sm:col-span-2 pt-3 sm:pt-4">
+              <i className="fas fa-sticky-note bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent text-lg pt-1" />
               <span>
-                <span className="font-semibold text-teal-500">Notas:</span>{" "}
+                <span className="font-medium text-gray-900 dark:text-neutral-50 transition-colors duration-300 ease-in-out">
+                  Notas:
+                </span>{" "}
                 {treatment.notes || "Sin notas registradas."}
               </span>
             </p>
           </div>
 
           <div>
-            <h4 className="text-base sm:text-lg font-semibold text-teal-500 mb-3 flex items-center gap-2">
-              <i className="fas fa-pills" />
+            <h4 className="text-base sm:text-lg font-semibold text-gray-900 dark:text-neutral-50 transition-colors duration-300 ease-in-out mb-3 flex items-center gap-2">
+              <i className="fas fa-pills bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent" />
               Medicamentos
             </h4>
             <ul className="flex flex-wrap gap-2">
               {treatment.medications.map((med, index) => (
                 <li
                   key={index}
-                  className="px-3 py-1 rounded-full bg-teal-50 text-teal-600 text-sm font-medium border border-teal-200"
+                  className="px-3 py-1.5 rounded-full bg-teal-50 dark:bg-neutral-800 transition-colors duration-300 ease-in-out bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent text-sm font-medium border border-teal-100 dark:border-neutral-700 shadow-sm"
                 >
                   {med.name} · {med.dosage} · {med.frequency}
                 </li>
@@ -81,41 +84,39 @@ function PatientTreatment({ patientId, setActiveModal }) {
               user.role === "doctor"
                 ? "flex-col sm:flex-row justify-end"
                 : "flex-col"
-            } gap-3 pt-4`}
+            } gap-3 pt-4 border-t border-gray-100 dark:border-neutral-800 transition-colors duration-300 ease-in-out`}
           >
             {user.role === "doctor" && (
               <>
-                <button
+                <Button
                   onClick={() => setShowConfirm(true)}
-                  className="cursor-pointer flex items-center gap-2 bg-rose-600 hover:bg-rose-700 text-white font-medium px-5 py-2 rounded-xl transition-colors"
-                >
-                  <i className="fas fa-trash-alt text-sm" />
-                  Eliminar
-                </button>
-                <button
+                  type="alert"
+                  icon="fa-trash-alt"
+                  label="Eliminar"
+                  full={true}
+                />
+                <Button
                   onClick={() => setActiveModal("treatmentForm")}
-                  className="cursor-pointer flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-medium px-5 py-2 rounded-xl transition-colors"
-                >
-                  <i className="fas fa-edit text-sm" />
-                  Editar
-                </button>
+                  type="bg1"
+                  icon="fa-edit"
+                  label="Editar"
+                  full={true}
+                />
               </>
             )}
-            <button
+            <Button
               onClick={() => setActiveModal("treatmentHistory")}
-              className={`cursor-pointer flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-medium px-5 py-2 rounded-xl transition-colors ${
-                user.role !== "doctor" ? "w-full justify-center" : ""
-              }`}
-            >
-              <i className="fas fa-history text-sm" />
-              Historial
-            </button>
+              type={user.role === "doctor" ? "bg6" : "bg1"}
+              icon="fa-history"
+              label="Historial"
+              full={true}
+            />
           </div>
         </section>
       ) : (
-        <div className="mt-10 flex flex-col items-center justify-center text-center bg-gray-50 p-10 rounded-2xl border border-dashed border-gray-300">
-          <i className="fa fa-pills text-5xl text-gray-400 mb-4" />
-          <p className="text-gray-600 text-lg mb-6 max-w-md">
+        <div className="mt-2 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-neutral-800 transition-colors duration-300 ease-in-out p-10 rounded-2xl border border-dashed border-gray-300 dark:border-neutral-700">
+          <i className="fa fa-pills text-5xl text-gray-400 dark:text-neutral-400 transition-colors duration-300 ease-in-out mb-4" />
+          <p className="text-gray-600 dark:text-neutral-300 transition-colors duration-300 ease-in-out text-lg mb-6 max-w-md">
             No se encontraron tratamientos registrados para este paciente.
           </p>
 
@@ -125,60 +126,38 @@ function PatientTreatment({ patientId, setActiveModal }) {
             } justify-center gap-4 w-full sm:w-auto`}
           >
             {user.role === "doctor" && (
-              <button
+              <Button
                 onClick={() => setActiveModal("treatmentForm")}
-                className="cursor-pointer flex items-center justify-center gap-2 bg-teal-500 hover:bg-teal-600 text-white font-medium px-6 py-3 rounded-xl transition-colors"
-              >
-                Añadir Tratamiento
-              </button>
+                type="bg1"
+                icon="fa-plus"
+                label="Añadir Tratamiento"
+                full={false}
+                classes="px-6 py-3"
+              />
             )}
 
-            <button
+            <Button
               onClick={() => setActiveModal("treatmentHistory")}
-              className={`cursor-pointer flex items-center justify-center gap-2 bg-gray-500 hover:bg-gray-600 text-white font-medium px-6 py-3 rounded-xl transition-colors ${
-                user.role !== "doctor" ? "w-full" : ""
-              }`}
-            >
-              Ver Historial
-            </button>
+              type={user.role === "doctor" ? "bg6" : "bg1"}
+              label="Ver Historial"
+              full={user.role !== "doctor"}
+              classes="px-6 py-3"
+            />
           </div>
         </div>
       )}
 
       {showConfirm && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl border border-gray-200 w-full max-w-sm overflow-hidden animate-[fadeIn_0.2s_ease-out]">
-            <div className="p-6 flex flex-col items-center space-y-4">
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-600">
-                <i className="fas fa-exclamation-triangle text-lg" />
-              </div>
-              <h3 className="text-lg font-semibold text-gray-800 text-center">
-                ¿Estás seguro de eliminar este tratamiento?
-              </h3>
-              <p className="text-sm text-gray-500 text-center">
-                Esta acción no se puede deshacer.
-              </p>
-              <div className="flex w-full gap-3 pt-2">
-                <button
-                  onClick={() => setShowConfirm(false)}
-                  className="cursor-pointer w-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 py-2 rounded-xl text-sm font-medium transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  onClick={handleDeleteTreatment}
-                  className="cursor-pointer w-1/2 bg-red-500 hover:bg-red-600 text-white py-2 rounded-xl text-sm font-medium transition-colors"
-                >
-                  Confirmar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal
+          type="alert"
+          title="¿Estás seguro de eliminar este tratamiento?"
+          message="Esta acción no se puede deshacer."
+          onClose={() => setShowConfirm(false)}
+          onSubmit={handleDeleteTreatment}
+        />
       )}
     </div>
   );
-
 }
 
 export default PatientTreatment;

@@ -1,73 +1,65 @@
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
+import Button from "../common/Buttons/Button";
+import Input from "../common/Imput/Input";
 
 function LoginForm() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({mode: "onChange",});
   const { signin, errors: signinErrors } = useAuth();
 
   const onSubmit = handleSubmit((data) => {
     signin(data);
   });
 
+  const fields = [
+    {
+      name: "email",
+      type: "email",
+      label: "Correo Electrónico",
+      icon: "fa-envelope",
+      placeholder: "ejemplo@correo.com",
+      rules: { required: "Correo requerido" },
+    },
+    {
+      name: "password",
+      type: "password",
+      label: "Contraseña",
+      icon: "fa-lock",
+      placeholder: "********",
+      rules: { required: "Contraseña requerida" },
+    },
+  ];
+
   return (
     <form onSubmit={onSubmit} className="mt-10 space-y-6">
-      <div>
-        <label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-900 flex items-center gap-2"
-        >
-          <i className="fa-solid fa-envelope text-teal-500"></i>
-          Correo Electrónico
-        </label>
-        <div className="mt-2">
-          <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            {...register("email", { required: "Correo requerido" })}
-            className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
+      {fields.map((field) => (
+        <div key={field.name} className="mb-6">
+          <Input
+            type={field.type}
+            name={field.name}
+            label={field.label}
+            icon={field.icon}
+            placeholder={field.placeholder}
+            {...register(field.name, field.rules)}
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-600">{errors.email.message}</p>
-          )}
-        </div>
-      </div>
-
-      <div>
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-gray-900 flex items-center gap-2"
-        >
-          <i className="fa-solid fa-lock text-teal-500"></i>
-          Contraseña
-        </label>
-        <div className="mt-2">
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            {...register("password", { required: "Contraseña requerida" })}
-            className="block w-full rounded-xl bg-white px-3 py-2 text-base text-gray-900 placeholder:text-gray-400 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-teal-500 sm:text-sm"
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-red-600">
-              {errors.password.message}
+          {errors[field.name] && (
+            <p className="mt-1 text-xs text-red-600">
+              {errors[field.name].message}
             </p>
           )}
         </div>
-      </div>
+      ))}
 
       <div>
-        <button
-          type="submit"
-          className="cursor-pointer flex w-full justify-center rounded-2xl bg-teal-500 px-4 py-3 text-sm font-semibold text-white shadow hover:bg-teal-400 duration-150 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
-        >
-          Inicia Sesión
-        </button>
+        <Button
+          type={"bg1"}
+          label={"Inicia Sesión"}
+          submit={true}
+        />
       </div>
 
       {signinErrors.length > 0 && (

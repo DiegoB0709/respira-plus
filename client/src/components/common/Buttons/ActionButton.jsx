@@ -7,12 +7,12 @@ function ActionButton({
   const baseClasses =
     "text-white text-sm px-3 py-1 rounded-xl flex items-center justify-center gap-1 transition-all";
   const typeClasses = {
-    info: "bg-teal-500 hover:bg-teal-400",
-    danger: "bg-red-500 hover:bg-red-400",
-    warning: "bg-yellow-500 hover:bg-yellow-400 text-black",
-    success: "bg-green-500 hover:bg-green-400",
-    view: " bg-teal-400 hover:bg-teal-300 text-white",
-    viewed: "bg-slate-300 hover:bg-slate-200 text-gray-700",
+    info: "bg-gradient-to-r from-teal-400 to-cyan-500",
+    danger: "bg-red-500 ",
+    warning: "bg-yellow-500  text-black",
+    success: "bg-green-500 ",
+    view: " bg-gradient-to-r from-teal-400 to-cyan-500 text-white",
+    viewed: "bg-gradient-to-r from-gray-300 to-gray-400 text-white",
   };
   const icons = {
     info: "fa-solid fa-circle-info",
@@ -27,7 +27,7 @@ function ActionButton({
     <div className="w-full flex justify-center">
       <button
         onClick={onClick}
-        className={`${baseClasses} ${typeClasses[type]} disabled:opacity-50 cursor-pointer`}
+        className={`${baseClasses} ${typeClasses[type]} hover:brightness-110 disabled:opacity-50 cursor-pointer`}
         title={title}
         disabled={disabled}
       >

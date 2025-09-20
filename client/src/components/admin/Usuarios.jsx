@@ -5,6 +5,9 @@ import Card from "../common/Table/Card";
 import ModalContainer from "../common/Modals/ModalContainer";
 import ResponsiveTable from "../common/Table/ResponsiveTable";
 import RegisterToken from "../common/Modals/RegisterToken";
+import Title from "../Title";
+import Input from "../common/Imput/Input";
+import Button from "../common/Buttons/Button";
 
 function Usuarios() {
   const { fetchUsers, users, totalUsers, loading, errors } = useUser();
@@ -72,83 +75,63 @@ function Usuarios() {
     fetchUsers(extraFilters);
   }, [filters, onlyWithToken]);
 
+  const fields = [
+    {
+      type: "select",
+      name: "role",
+      label: "Rol",
+      icon: "fa-users",
+      placeholder: "Todos",
+      options: [
+        { value: "doctor", label: "Doctor" },
+        { value: "patient", label: "Paciente" },
+      ],
+    },
+    {
+      type: "text",
+      name: "username",
+      label: "Nombre",
+      icon: "fa-user",
+      placeholder: "Ej. Juan Pérez",
+      disabled: onlyWithToken,
+    },
+    {
+      type: "text",
+      name: "email",
+      label: "Email",
+      icon: "fa-envelope",
+      placeholder: "Ej. correo@ejemplo.com",
+      disabled: onlyWithToken,
+    },
+    {
+      type: "number",
+      name: "phone",
+      label: "Teléfono",
+      icon: "fa-phone",
+      placeholder: "Ej. 999 999 999",
+      disabled: onlyWithToken,
+    },
+  ];
+
+
   return (
     <>
       <div className="p-4 max-w-7xl mx-auto overflow-x-hidden">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-teal-500 flex items-center gap-3">
-          <i className="fas fa-users text-teal-400 text-2xl"></i>
-          Usuarios
-        </h2>
+        <Title icon="fa-users" title="Usuarios" />
 
-        <h3 className="text-lg font-semibold text-gray-700 mb-2 col-span-full">
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-neutral-300 mb-2 col-span-full">
           Filtrar por:
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <i className="fas fa-users text-gray-500"></i>
-              Rol
-            </label>
-            <select
-              name="role"
-              value={filters.role}
+          {fields.map((field, i) => (
+            <Input
+              key={i}
+              {...field}
+              value={filters[field.name]}
               onChange={handleChange}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm cursor-pointer focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
-            >
-              <option value="">Todos</option>
-              <option value="doctor">Doctor</option>
-              <option value="patient">Paciente</option>
-            </select>
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <i className="fas fa-user text-gray-500"></i>
-              Nombre
-            </label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Ej. Juan Pérez"
-              value={filters.username}
-              onChange={handleChange}
-              disabled={onlyWithToken}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <i className="fas fa-envelope text-gray-500"></i>
-              Email
-            </label>
-            <input
-              type="text"
-              name="email"
-              placeholder="Ej. correo@ejemplo.com"
-              value={filters.email}
-              onChange={handleChange}
-              disabled={onlyWithToken}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <i className="fas fa-phone text-gray-500"></i>
-              Teléfono
-            </label>
-            <input
-              type="text"
-              name="phone"
-              placeholder="Ej. 999 999 999"
-              value={filters.phone}
-              onChange={handleChange}
-              disabled={onlyWithToken}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
-            />
-          </div>
+          ))}
         </div>
 
         <div className="mb-4 flex items-center justify-between flex-wrap gap-3">
@@ -167,21 +150,20 @@ function Usuarios() {
                 }}
                 className="sr-only peer"
               />
-              <div className="w-10 h-5 bg-gray-300 rounded-full shadow-inner peer-checked:bg-teal-500 transition-colors duration-300"></div>
+              <div className="w-10 h-5 bg-gray-300 dark:bg-neutral-700 rounded-full shadow-inner peer-checked:bg-teal-300 transition-colors duration-300"></div>
               <div className="absolute top-0 left-0 w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-300 peer-checked:translate-x-full"></div>
             </div>
-            <span className="ml-3 text-sm text-gray-700 font-medium">
+            <span className="ml-3 text-sm text-gray-700 font-medium dark:text-neutral-300">
               Mostrar tokens de registro
             </span>
           </label>
-
-          <button
+          <Button
+            type="bg1"
             onClick={() => setOpenGenerator(true)}
-            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-2xl text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
-          >
-            <i className="fas fa-key"></i>
-            Generar token de registro
-          </button>
+            icon="fa-key"
+            label="Generar token de registro"
+            full={false}
+          />
         </div>
 
         {errors.length > 0 && (
@@ -261,7 +243,11 @@ function Usuarios() {
       </div>
 
       {openGenerator && (
-        <ModalContainer onClose={() => setOpenGenerator(false)}>
+        <ModalContainer
+          onClose={() => setOpenGenerator(false)}
+          title={"Token de Registro"}
+          icon={"fa-key"}
+        >
           <RegisterToken />
         </ModalContainer>
       )}

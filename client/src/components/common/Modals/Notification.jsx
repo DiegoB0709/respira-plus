@@ -1,5 +1,6 @@
 import { useNotifications } from "../../../context/NotificationContext";
 import { useEffect } from "react";
+import Button from "../Buttons/Button";
 
 function Notification() {
   const {
@@ -19,25 +20,11 @@ function Notification() {
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
-    <div className="p-4 sm:p-6 max-w-5xl mx-auto">
-      <header className="mb-6 text-center">
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2">
-          <i className="fas fa-bell text-teal-400 text-2xl sm:text-3xl" />
-          <h1 className="text-2xl sm:text-3xl font-bold text-teal-500">
-            Notificaciones
-          </h1>
-          {unreadCount > 0 && (
-            <div className="w-8 h-8 rounded-full shadow-md flex items-center justify-center animate-pulse bg-rose-500">
-              <span className="flex items-center justify-center w-full h-full text-white text-sm font-bold leading-none">
-                {unreadCount > 99 ? "99+" : unreadCount}
-              </span>
-            </div>
-          )}
-        </div>
-      </header>
-
+    <div className="p-4 sm:p-6 max-w-5xl mx-auto transition-colors duration-300 ease-in-out">
       {loading && (
-        <p className="text-center text-gray-500 animate-pulse">Cargando...</p>
+        <p className="text-center text-gray-500 dark:text-neutral-400 animate-pulse transition-colors duration-300 ease-in-out">
+          Cargando...
+        </p>
       )}
 
       {error.length > 0 && (
@@ -50,37 +37,47 @@ function Notification() {
 
       <div className="space-y-3">
         {notifications.length === 0 ? (
-          <div className="mt-10 flex flex-col items-center justify-center text-center bg-gray-50 p-10 rounded-2xl border border-dashed border-gray-300">
-            <i className="fa fa-bell text-5xl text-gray-400 mb-4" />
-            <p className="text-gray-600 text-lg mb-2 max-w-md">
+          <div className="mt-10 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-neutral-800 p-10 rounded-2xl border border-dashed border-gray-300 dark:border-neutral-700 transition-colors duration-300 ease-in-out">
+            <i className="fa fa-bell text-5xl text-gray-400 dark:text-neutral-400 mb-4 transition-colors duration-300 ease-in-out" />
+            <p className="text-gray-600 dark:text-neutral-400 text-lg mb-2 max-w-md transition-colors duration-300 ease-in-out">
               No tienes notificaciones en este momento.
             </p>
           </div>
         ) : (
           <>
-            <div className="bg-white rounded-xl shadow-md hover:shadow-lg transition overflow-hidden">
-              <div className="max-h-[550px] overflow-y-auto divide-y divide-gray-100 px-4 py-4 space-y-3">
+            <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-md hover:shadow-lg transition-colors duration-300 ease-in-out overflow-hidden">
+              <div className="max-h-[550px] overflow-y-auto divide-y divide-gray-100 dark:divide-neutral-800 px-4 py-4 space-y-3 transition-colors duration-300 ease-in-out">
                 {notifications.map((n) => {
-                  const showBothButtons = !n.read;
                   return (
                     <div
                       key={n._id}
-                      className={`relative p-4 rounded-xl transition-all duration-200 ${
+                      className={`relative p-4 rounded-xl transition-all duration-300 shadow-sm hover:shadow-md overflow-hidden ${
                         n.read
-                          ? "bg-gray-50 border-l-4 border-gray-200"
-                          : "bg-white border-l-4 border-teal-500"
-                      } shadow-sm hover:shadow-md`}
+                          ? "bg-gray-50 dark:bg-neutral-700"
+                          : "bg-white dark:bg-neutral-800"
+                      }`}
                     >
-                      <div className="flex items-start justify-between gap-3">
+                      <div
+                        className={`absolute left-0 top-0 h-full w-1.5 ${
+                          n.read
+                            ? "bg-gray-300 dark:bg-neutral-500"
+                            : "bg-gradient-to-b from-teal-400 to-sky-600"
+                        }`}
+                      />
+                      <div className="flex items-start justify-between gap-3 ml-2">
                         <div className="flex-1">
-                          <h2
-                            className={`text-base font-medium mb-1 ${
-                              n.read ? "text-gray-500" : "text-teal-600"
-                            }`}
-                          >
-                            {n.title}
+                          <h2 className="text-base font-semibold mb-1">
+                            <span
+                              className={`${
+                                n.read
+                                  ? "text-gray-500 dark:text-neutral-400 transition-colors duration-300 ease-in-out"
+                                  : "bg-gradient-to-r from-teal-400 to-sky-600 bg-clip-text text-transparent"
+                              }`}
+                            >
+                              {n.title}
+                            </span>
                           </h2>
-                          <p className="text-xs text-gray-400">
+                          <p className="text-xs text-gray-400 dark:text-neutral-400 transition-colors duration-300 ease-in-out">
                             {new Date(n.createdAt).toLocaleDateString("es-PE", {
                               day: "2-digit",
                               month: "2-digit",
@@ -91,51 +88,45 @@ function Notification() {
                               minute: "2-digit",
                             })}
                           </p>
-                          <p className="text-sm text-gray-700 mt-2">
+                          <p className="text-sm text-gray-700 dark:text-neutral-300 mt-2 transition-colors duration-300 ease-in-out">
                             {n.message}
                           </p>
 
                           <div className="mt-3 flex sm:hidden gap-2">
                             {!n.read && (
-                              <button
+                              <Button
                                 onClick={() => markNotificationAsRead(n._id)}
-                                className={`cursor-pointer w-full ${
-                                  showBothButtons ? "sm:w-1/2" : "sm:w-full"
-                                } text-sm text-white bg-teal-500 hover:bg-teal-600 px-3 py-2 rounded-lg shadow transition flex items-center justify-center gap-2`}
-                              >
-                                <i className="fa-regular fa-circle-check text-base" />
-                                Leer
-                              </button>
+                                icon="fa-circle-check"
+                                type="bg1"
+                                full={true}
+                              />
                             )}
-                            <button
+                            <Button
                               onClick={() => removeNotification(n._id)}
-                              className={`cursor-pointer w-full ${
-                                showBothButtons ? "sm:w-1/2" : "sm:w-full"
-                              } text-sm text-white bg-red-600 hover:bg-red-700 px-3 py-2 rounded-lg shadow transition flex items-center justify-center gap-2`}
-                            >
-                              <i className="fa-solid fa-trash text-base" />
-                              Eliminar
-                            </button>
+                              icon="fa-trash"
+                              type="alert"
+                              full={true}
+                            />
                           </div>
                         </div>
 
                         <div className="hidden sm:flex items-center gap-2 ml-4 self-center">
                           {!n.read && (
-                            <button
+                            <Button
                               onClick={() => markNotificationAsRead(n._id)}
-                              title="Marcar como leída"
-                              className="p-2 rounded-full text-teal-500 hover:bg-teal-50 hover:text-teal-600 transition"
-                            >
-                              <i className="fa-regular fa-circle-check text-base" />
-                            </button>
+                              icon="fa-circle-check"
+                              type="bg3"
+                              full={false}
+                              classes={"rounded-full !px-2 !py-2"}
+                            />
                           )}
-                          <button
+                          <Button
                             onClick={() => removeNotification(n._id)}
-                            title="Eliminar notificación"
-                            className="p-2 rounded-full text-red-600 hover:bg-red-50 hover:text-red-700 transition"
-                          >
-                            <i className="fa-solid fa-trash text-base" />
-                          </button>
+                            icon="fa-trash"
+                            type="alert"
+                            full={false}
+                            classes={"rounded-full !px-2 !py-2"}
+                          />
                         </div>
                       </div>
                     </div>
@@ -145,17 +136,14 @@ function Notification() {
             </div>
 
             {unreadCount > 0 && (
-              <div className="flex justify-end mt-4">
-                <button
+              <div className="flex justify-end mt-6">
+                <Button
                   onClick={markAllNotificationsAsRead}
-                  title="Marcar todas como leídas"
-                  className="bg-teal-500 hover:bg-teal-600 text-white py-2 px-5 rounded-full shadow-md transition flex items-center justify-center gap-2"
-                >
-                  <i className="fa-solid fa-envelope-open text-lg" />
-                  <span className="text-sm font-medium">
-                    Marcar todas como leídas
-                  </span>
-                </button>
+                  icon="fa-envelope-open"
+                  label="Marcar todas como leídas"
+                  type="bg1"
+                  full={false}
+                />
               </div>
             )}
           </>

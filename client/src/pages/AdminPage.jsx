@@ -1,20 +1,21 @@
 import PageContainer from "../components/common/PageContainer";
-import Logo from "../components/common/SideBar/Logo";
-import SideBar from "../components/common/SideBar/SideBar";
-import Option from "../components/common/SideBar/Option";
-import { toggleSidebar } from "../utils/SideBar";
 import { useState } from "react";
 import Dashboard from "../components/admin/Dashboard";
 import Usuarios from "../components/admin/Usuarios";
 import ProfileContainer from "../components/common/Modals/ProfileContainer";
 import { useAuth } from "../context/AuthContext";
 import ModalContainer from "../components/common/Modals/ModalContainer";
+import SidebarToggle from "../components/common/SideBar/SidebarToggle";
+import Sidebar from "../components/common/SideBar/Sidebar";
+import SidebarItem from "../components/common/SideBar/SidebarItem";
 
 function AdminPage() {
   const { signout } = useAuth();
   const [activeSection, setActiveSection] = useState("DashBoard");
 
   const [activeProfile, setActiveProfile] = useState(false);
+
+  const [open, setOpen] = useState(false);
 
   const handleOpenProfile = () => setActiveProfile(true);
   const handleCloseProfile = () => setActiveProfile(false);
@@ -36,10 +37,10 @@ function AdminPage() {
   };
 
   const menuOptions = [
-    { name: "DashBoard", icon: "chart-simple", number:0 },
-    { name: "Usuarios", icon: "users", number:0 },
-    { name: "Perfil", icon: "user", number:0 },
-    { name: "Cerrar Sesion", icon: "power-off", number:0 },
+    { name: "DashBoard", icon: "fa-chart-simple", number: 0 },
+    { name: "Usuarios", icon: "fa-users", number: 0 },
+    { name: "Perfil", icon: "fa-user", number: 0 },
+    { name: "Cerrar Sesion", icon: "fa-right-from-bracket", number: 0 },
   ];
 
   const renderContent = () => {
@@ -55,24 +56,24 @@ function AdminPage() {
 
   return (
     <PageContainer>
-      <SideBar>
-        <Logo toggleSidebar={toggleSidebar} />
+      <SidebarToggle isOpen={open} onClick={() => setOpen(!open)} />
+      <Sidebar isOpen={open}>
         {menuOptions.map((option) => (
-          <Option
+          <SidebarItem
             key={option.name}
+            label={option.name}
             icon={option.icon}
-            name={option.name}
-            number={option.number}
+            badge={option.number}
             active={activeSection === option.name}
             handleSectionClick={handleSectionClick}
           />
         ))}
-      </SideBar>
-      <main>
-        <div className="main-content">
+      </Sidebar>
+      <main className="overflow-y-auto p-[min(30px,7%)]">
+        <div>
           {renderContent()}
           {activeProfile && (
-            <ModalContainer onClose={handleCloseProfile}>
+            <ModalContainer onClose={handleCloseProfile} icon title>
               <ProfileContainer />
             </ModalContainer>
           )}

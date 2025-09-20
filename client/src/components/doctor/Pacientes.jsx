@@ -20,6 +20,9 @@ import UpdateAlert from "./Modal Content/UpdateAlert";
 import AppointmentForm from "../common/Modals/AppointmentForm";
 import HistoryAppointment from "./Modal Content/HistoryAppointment";
 import UpdateStatusAppo from "../common/Modals/UpdateStatusAppo";
+import Title from "../Title";
+import Input from "../common/Imput/Input";
+import Button from "../common/Buttons/Button";
 
 function Pacientes() {
   const {
@@ -84,66 +87,51 @@ function Pacientes() {
     fetchMyPatients(searchParams);
   }, [filters, onlyWithToken]);
 
+  const fields = [
+    {
+      type: "text",
+      name: "username",
+      label: "Nombre",
+      icon: "fa-user",
+      placeholder: "Ej. Diego Barreto",
+      disabled: onlyWithToken,
+    },
+    {
+      type: "text",
+      name: "email",
+      label: "Email",
+      icon: "fa-envelope",
+      placeholder: "Ej. correo@ejemplo.com",
+      disabled: onlyWithToken,
+    },
+    {
+      type: "number",
+      name: "phone",
+      label: "Teléfono",
+      icon: "fa-phone",
+      placeholder: "Ej. 999 999 999",
+      disabled: onlyWithToken,
+    },
+  ];
+
   return (
     <>
-      <div className="p-4 max-w-7xl mx-auto overflow-x-hidden">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-teal-500 flex items-center gap-3">
-          <i className="fas fa-user-injured text-teal-400 text-2xl"></i>
-          Pacientes
-        </h2>
+      <div className="p-4 max-w-7xl mx-auto overflow-x-hidden transition-colors duration-300 ease-in-out">
+        <Title icon="fa-user-injured" title="Pacientes" />
 
-        <h3 className="text-lg font-semibold text-gray-700 mb-2 col-span-full">
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-neutral-300 mb-2 col-span-full transition-colors duration-300 ease-in-out">
           Filtrar por:
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <i className="fas fa-user text-gray-500"></i>
-              Nombre
-            </label>
-            <input
-              type="text"
-              name="username"
-              placeholder="Ej. Diego Barreto"
-              value={filters.username}
+          {fields.map((field, i) => (
+            <Input
+              key={i}
+              {...field}
+              value={filters[field.name]}
               onChange={handleChange}
-              disabled={onlyWithToken}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
             />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <i className="fas fa-envelope text-gray-500"></i>
-              Email
-            </label>
-            <input
-              type="text"
-              name="email"
-              placeholder="Ej. correo@ejemplo.com"
-              value={filters.email}
-              onChange={handleChange}
-              disabled={onlyWithToken}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label className="text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
-              <i className="fas fa-phone text-gray-500"></i>
-              Teléfono
-            </label>
-            <input
-              type="text"
-              name="phone"
-              placeholder="Ej. 999 999 999"
-              value={filters.phone}
-              onChange={handleChange}
-              disabled={onlyWithToken}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition outline-none disabled:bg-gray-100"
-            />
-          </div>
+          ))}
         </div>
 
         <div className="mb-4 flex items-center justify-between flex-wrap gap-3">
@@ -159,25 +147,24 @@ function Pacientes() {
                 onChange={() => setOnlyWithToken((prev) => !prev)}
                 className="sr-only peer"
               />
-              <div className="w-10 h-5 bg-gray-300 rounded-full shadow-inner peer-checked:bg-teal-500 transition-colors duration-300"></div>
-              <div className="absolute top-0 left-0 w-5 h-5 bg-white rounded-full shadow transform transition-transform duration-300 peer-checked:translate-x-full"></div>
+              <div className="w-10 h-5 bg-gray-300 dark:bg-neutral-700 rounded-full shadow-inner peer-checked:bg-teal-300 transition-colors duration-300 ease-in-out"></div>
+              <div className="absolute top-0 left-0 w-5 h-5 bg-white  rounded-full shadow transform transition-transform duration-300 peer-checked:translate-x-full"></div>
             </div>
-            <span className="ml-3 text-sm text-gray-700 font-medium">
+            <span className="ml-3 text-sm text-gray-700 dark:text-neutral-300 font-medium transition-colors duration-300 ease-in-out">
               Mostrar tokens de registro
             </span>
           </label>
-
-          <button
+          <Button
+            type="bg1"
             onClick={() => setActiveModal("generator")}
-            className="bg-teal-500 hover:bg-teal-400 text-white px-4 py-2 rounded-2xl text-sm transition font-bold cursor-pointer inline-flex items-center gap-2"
-          >
-            <i className="fas fa-key"></i>
-            Generar token de registro
-          </button>
+            icon="fa-key"
+            label="Generar token de registro"
+            full={false}
+          />
         </div>
 
         {errors.length > 0 && (
-          <div className="mt-4 bg-red-100 text-red-700 p-4 rounded-lg">
+          <div className="mt-4 bg-red-100 dark:bg-neutral-800 text-red-700 dark:text-red-400 p-4 rounded-lg transition-colors duration-300 ease-in-out">
             <h4 className="font-semibold mb-2">Errores:</h4>
             <ul className="list-disc list-inside text-sm">
               {errors.map((e, i) => (
@@ -269,12 +256,20 @@ function Pacientes() {
       </div>
 
       {activeModal === "generator" && (
-        <ModalContainer onClose={() => setActiveModal(null)}>
+        <ModalContainer
+          onClose={() => setActiveModal(null)}
+          title={"Token de Registro"}
+          icon={"fa-key"}
+        >
           <RegisterToken patientId={patientId} />
         </ModalContainer>
       )}
       {activeModal === "patient" && (
-        <ModalContainer onClose={() => setActiveModal(null)}>
+        <ModalContainer
+          onClose={() => setActiveModal(null)}
+          title={"Perfil del Paciente"}
+          icon={"fa-user-injured"}
+        >
           <PatientDetails
             patientId={patientId}
             setPatientId={setPatientId}
@@ -283,7 +278,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "treatments" && (
-        <ModalContainer onClose={() => setActiveModal("patient")}>
+        <ModalContainer
+          onClose={() => setActiveModal("patient")}
+          title="Tratamiento"
+          icon="fa-pills"
+        >
           <PatientTreatment
             patientId={patientId}
             setActiveModal={setActiveModal}
@@ -291,7 +290,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "treatmentForm" && (
-        <ModalContainer onClose={() => setActiveModal("treatments")}>
+        <ModalContainer
+          onClose={() => setActiveModal("treatments")}
+          title="Tratamiento"
+          icon="fa-notes-medical"
+        >
           <TreatmentForm
             patientId={patientId}
             setActiveModal={() => setActiveModal("treatments")}
@@ -299,7 +302,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "treatmentHistory" && (
-        <ModalContainer onClose={() => setActiveModal("treatments")}>
+        <ModalContainer
+          onClose={() => setActiveModal("treatments")}
+          title="Historial de Tratamientos"
+          icon="fa-history"
+        >
           <TreatmentsHistory
             patientId={patientId}
             setActiveModal={() => setActiveModal("treatments")}
@@ -307,7 +314,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "clinical" && (
-        <ModalContainer onClose={() => setActiveModal("patient")}>
+        <ModalContainer
+          onClose={() => setActiveModal("patient")}
+          title="Datos Clínicos"
+          icon="fa-notes-medical"
+        >
           <ClinicalData
             patientId={patientId}
             setActiveModal={() => setActiveModal("clinicalForm")}
@@ -315,7 +326,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "clinicalForm" && (
-        <ModalContainer onClose={() => setActiveModal("clinical")}>
+        <ModalContainer
+          onClose={() => setActiveModal("clinical")}
+          title="Editar Datos Clínicos"
+          icon="fa-pen"
+        >
           <ClinicalForm
             patientId={patientId}
             setActiveModal={() => setActiveModal("clinical")}
@@ -323,17 +338,29 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "evaluate" && (
-        <ModalContainer onClose={() => setActiveModal("patient")}>
+        <ModalContainer
+          onClose={() => setActiveModal("patient")}
+          title="Evaluar Paciente"
+          icon="fa-stethoscope"
+        >
           <EvaluatePatient patientId={patientId} />
         </ModalContainer>
       )}
       {activeModal === "educate" && (
-        <ModalContainer onClose={() => setActiveModal("patient")}>
+        <ModalContainer
+          onClose={() => setActiveModal("patient")}
+          title="Contenido Visualizado"
+          icon="fa-book-open"
+        >
           <ViewedContent patientId={patientId} />
         </ModalContainer>
       )}
       {activeModal === "appointments" && (
-        <ModalContainer onClose={() => setActiveModal("patient")}>
+        <ModalContainer
+          onClose={() => setActiveModal("patient")}
+          title="Citas Médicas"
+          icon="fa-calendar-check"
+        >
           <PatientAppointments
             patientId={patientId}
             setActiveModal={setActiveModal}
@@ -342,7 +369,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "createAppointment" && (
-        <ModalContainer onClose={() => setActiveModal("appointments")}>
+        <ModalContainer
+          onClose={() => setActiveModal("appointments")}
+          title={"Agendar Cita Médica"}
+          icon={"fa-calendar-plus"}
+        >
           <AppointmentForm
             setActiveModal={() => setActiveModal("appointments")}
             patientId={patientId}
@@ -350,7 +381,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "editAppointment" && (
-        <ModalContainer onClose={() => setActiveModal("appointments")}>
+        <ModalContainer
+          onClose={() => setActiveModal("appointments")}
+          title={"Reprogramar  Cita Médica"}
+          icon={"fa-calendar-plus"}
+        >
           <AppointmentForm
             setActiveModal={() => setActiveModal("appointments")}
             selectedAppointment={selectedAppointment}
@@ -358,12 +393,20 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "historyAppoint" && (
-        <ModalContainer onClose={() => setActiveModal("appointments")}>
+        <ModalContainer
+          onClose={() => setActiveModal("appointments")}
+          title={"Historial"}
+          icon={"fa-history"}
+        >
           <HistoryAppointment selectedAppointment={selectedAppointment} />
         </ModalContainer>
       )}
       {activeModal === "updateAppointStatus" && (
-        <ModalContainer onClose={() => setActiveModal("appointments")}>
+        <ModalContainer
+          onClose={() => setActiveModal("appointments")}
+          title={"Actualizar Estado"}
+          icon={"fa-edit"}
+        >
           <UpdateStatusAppo
             selectedAppointment={selectedAppointment}
             activeModal={() => setActiveModal("appointments")}
@@ -371,7 +414,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "alerts" && (
-        <ModalContainer onClose={() => setActiveModal("patient")}>
+        <ModalContainer
+          onClose={() => setActiveModal("patient")}
+          title={"Alertas Médicas"}
+          icon={"fa-bell"}
+        >
           <PatientAlerts
             patientId={patientId}
             setAlertId={setAlertId}
@@ -380,7 +427,11 @@ function Pacientes() {
         </ModalContainer>
       )}
       {activeModal === "UpdateAlert" && (
-        <ModalContainer onClose={() => setActiveModal("alerts")}>
+        <ModalContainer
+          onClose={() => setActiveModal("alerts")}
+          title={"Actualizar Alerta"}
+          icon={"fa-edit"}
+        >
           <UpdateAlert setActiveModal={setActiveModal} alertId={alertId} />
         </ModalContainer>
       )}

@@ -131,9 +131,6 @@ export const getTreatmentByPatient = async (req, res) => {
     }
 
     const treatment = await Treatment.findOne({ patient: patientId });
-    if (!treatment) {
-      return res.status(404).json({ message: "Tratamiento no encontrado" });
-    }
 
     res.status(200).json(treatment);
   } catch (error) {
