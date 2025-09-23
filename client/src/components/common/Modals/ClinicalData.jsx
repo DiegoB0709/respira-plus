@@ -25,15 +25,19 @@ function ClinicalData({ patientId, setActiveModal }) {
       <div className="flex items-start gap-3 py-3">
         <i className={`fa ${icon} text-base mt-1 ${color}`} />
         <div className="flex flex-col">
-          <span className="text-sm text-gray-300 font-medium">{label}</span>
-          <span className="text-base text-white">{value}</span>
+          <span className="text-sm dark:text-gray-300 text-gray-700 font-medium">
+            {label}
+          </span>
+          <span className="text-base dark:text-white text-gray-900">
+            {value}
+          </span>
         </div>
       </div>
     );
   };
 
   const Section = ({ title, children }) => (
-    <div className="bg-neutral-800 rounded-xl shadow-md p-6 space-y-4 transition-colors">
+    <div className="dark:bg-neutral-800 bg-white rounded-xl shadow-md p-6 space-y-4 transition-colors">
       <h2 className="relative font-semibold text-lg pb-1 bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">
         {title}
         <span className="absolute left-0 bottom-0 w-full h-[1px] bg-gradient-to-r from-teal-400 to-cyan-500"></span>
@@ -169,9 +173,9 @@ function ClinicalData({ patientId, setActiveModal }) {
           )}
         </div>
       ) : (
-        <div className="mt-10 flex flex-col items-center justify-center text-center bg-neutral-800 p-10 rounded-xl shadow-md">
-          <i className="fa fa-notes-medical text-5xl text-gray-400 mb-4" />
-          <p className="text-gray-300 text-lg mb-6 max-w-md">
+        <div className="mt-10 flex flex-col items-center justify-center text-center dark:bg-neutral-800 bg-white p-10 rounded-xl shadow-md">
+          <i className="fa fa-notes-medical text-5xl dark:text-gray-400 text-gray-600 mb-4" />
+          <p className="dark:text-gray-300 text-gray-700 text-lg mb-6 max-w-md">
             No se encontraron datos clínicos registrados para este paciente.
           </p>
           {user.role === "doctor" && (
