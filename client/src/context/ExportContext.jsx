@@ -64,6 +64,8 @@ export const ExportProvider = ({ children }) => {
     }
   };
 
+  useAutoClearErrors(error, setError);
+
   return (
     <ExportContext.Provider
       value={{

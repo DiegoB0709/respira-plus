@@ -10,9 +10,10 @@ import EducContent from "../common/Modals/EducContent";
 import Title from "../Title";
 import Input from "../common/Imput/Input";
 import Button from "../common/Buttons/Button";
+import Toast from "../common/Toast/Toast";
 
 function ContenidoMedico() {
-  const { fetchMyUploads, doctorUploads } = useEducational();
+  const { fetchMyUploads, doctorUploads, errors } = useEducational();
   const { items: myUploads, total, page, totalPages } = doctorUploads;
 
   const [activeModal, setActiveModal] = useState(null);
@@ -86,6 +87,8 @@ function ContenidoMedico() {
 
   return (
     <>
+      {errors.length > 0 &&
+        errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
       <div className="p-4 max-w-7xl mx-auto transition-colors duration-300 ease-in-out">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4 gap-3">
           <Title icon="fa-book-medical" title="Contenido Médico" />

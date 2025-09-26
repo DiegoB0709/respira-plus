@@ -39,6 +39,8 @@ export const MetricsProvider = ({ children }) => {
     }
   };
 
+  useAutoClearErrors(error, setError);
+
   return (
     <MetricsContext.Provider
       value={{

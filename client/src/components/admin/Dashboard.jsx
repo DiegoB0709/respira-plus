@@ -8,7 +8,8 @@ import ChartArea from "@/components/common/Dashboard/ChartArea";
 import MetricCard from "@/components/common/Dashboard/MetricCard";
 import Title from "../Title";
 
-import { Users, } from "lucide-react";
+import { Users } from "lucide-react";
+import Toast from "../common/Toast/Toast";
 
 function Dashboard() {
   const { adminMetrics, error, fetchAdminMetrics } = useMetrics();
@@ -16,14 +17,6 @@ function Dashboard() {
   useEffect(() => {
     fetchAdminMetrics();
   }, []);
-
-  if (error && error.length > 0) {
-    return (
-      <div className="p-4 text-red-500 text-center">
-        Error al cargar métricas: {error}
-      </div>
-    );
-  }
 
   if (!adminMetrics) {
     return (
@@ -76,59 +69,63 @@ function Dashboard() {
   }));
 
   return (
-    <div className="p-4 max-w-7xl mx-auto space-y-8">
-      <Title icon="fa-chart-simple" title="Dashboard" />
+    <>
+      {error.length > 0 &&
+        error.map((e, i) => <Toast key={i} type="error" message={e} />)}
+      <div className="p-4 max-w-7xl mx-auto space-y-8">
+        <Title icon="fa-chart-simple" title="Dashboard" />
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <MetricCard
-          label="Usuarios Totales"
-          value={usuarios.total}
-          icon={Users}
-        />
-        <MetricCard
-          label="Pendientes de Registro"
-          value={usuarios.pendientesRegistro}
-          icon={Users}
-          color="bg-yellow-500"
-        />
-        <MetricCard
-          label="Doctores"
-          value={usuarios.doctores}
-          icon={Users}
-          color="bg-blue-500"
-        />
-        <MetricCard
-          label="Pacientes"
-          value={usuarios.pacientes}
-          icon={Users}
-          color="bg-emerald-500"
-        />
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <CardWrapper title="Tratamientos">
-          <ChartDonut
-            data={donutTratamientosData}
-            colors={donutTratamientosColors}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          <MetricCard
+            label="Usuarios Totales"
+            value={usuarios.total}
+            icon={Users}
           />
-        </CardWrapper>
-        <CardWrapper title="Distribución de Citas">
-          <ChartDonut data={donutCitasData} colors={donutCitasColors} />
-        </CardWrapper>
-        <CardWrapper title="Alertas por Severidad">
-          <ChartDonut data={donutAlertasData} colors={donutAlertasColors} />
-        </CardWrapper>
-      </div>
+          <MetricCard
+            label="Pendientes de Registro"
+            value={usuarios.pendientesRegistro}
+            icon={Users}
+            color="bg-yellow-500"
+          />
+          <MetricCard
+            label="Doctores"
+            value={usuarios.doctores}
+            icon={Users}
+            color="bg-blue-500"
+          />
+          <MetricCard
+            label="Pacientes"
+            value={usuarios.pacientes}
+            icon={Users}
+            color="bg-emerald-500"
+          />
+        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <CardWrapper title="Evolución Mensual de Citas">
-          <ChartBar data={barCitasData} dataKey="cantidad" />
-        </CardWrapper>
-        <CardWrapper title="Tratamientos por Mes">
-          <ChartArea data={areaTratamientosData} dataKey="cantidad" />
-        </CardWrapper>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <CardWrapper title="Tratamientos">
+            <ChartDonut
+              data={donutTratamientosData}
+              colors={donutTratamientosColors}
+            />
+          </CardWrapper>
+          <CardWrapper title="Distribución de Citas">
+            <ChartDonut data={donutCitasData} colors={donutCitasColors} />
+          </CardWrapper>
+          <CardWrapper title="Alertas por Severidad">
+            <ChartDonut data={donutAlertasData} colors={donutAlertasColors} />
+          </CardWrapper>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CardWrapper title="Evolución Mensual de Citas">
+            <ChartBar data={barCitasData} dataKey="cantidad" />
+          </CardWrapper>
+          <CardWrapper title="Tratamientos por Mes">
+            <ChartArea data={areaTratamientosData} dataKey="cantidad" />
+          </CardWrapper>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

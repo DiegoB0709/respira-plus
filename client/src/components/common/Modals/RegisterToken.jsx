@@ -4,6 +4,7 @@ import { useUser } from "../../../context/UserContext";
 import Input from "../Imput/Input";
 import Button from "../Buttons/Button";
 import Modal from "./Modal";
+import Toast from "../Toast/Toast";
 
 function RegisterToken() {
   const { user, createRegistrationToken, errors: tokenErrors } = useAuth();
@@ -70,15 +71,7 @@ function RegisterToken() {
         )}
 
         {tokenErrors &&
-          tokenErrors.map((error, i) => (
-            <div
-              key={i}
-              className="text-red-600 text-sm flex items-center gap-2"
-            >
-              <i className="fas fa-exclamation-circle"></i>
-              {error}
-            </div>
-          ))}
+          tokenErrors.map((e, i) => <Toast key={i} type="error" message={e} />)}
 
         <Button
           type="bg1"

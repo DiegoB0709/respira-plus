@@ -8,6 +8,7 @@ import ModalContainer from "../common/Modals/ModalContainer";
 import ActionButton from "../common/Buttons/ActionButton";
 import Title from "../Title";
 import Input from "../common/Imput/Input";
+import Toast from "../common/Toast/Toast";
 
 function EducationalContent() {
   const {
@@ -16,6 +17,7 @@ function EducationalContent() {
     publicContent,
     recommendedContent,
     publicMeta,
+    errors,
   } = useEducational();
 
   const [filters, setFilters] = useState({
@@ -112,6 +114,8 @@ function EducationalContent() {
 
   return (
     <>
+      {errors.length > 0 &&
+        errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
       <div className="p-4 max-w-7xl mx-auto transition-colors duration-300 ease-in-out">
         <Title icon="fa-book-medical" title="Contenido Educativo" />
 

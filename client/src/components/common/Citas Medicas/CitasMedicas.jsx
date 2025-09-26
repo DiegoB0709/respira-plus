@@ -13,6 +13,7 @@ import HistoryAppointment from "../../doctor/Modal Content/HistoryAppointment";
 import Title from "../../Title";
 import Input from "../Imput/Input";
 import Button from "../Buttons/Button";
+import Toast from "../Toast/Toast";
 
 function CitasMedicas() {
   const { user } = useAuth();
@@ -151,9 +152,11 @@ function CitasMedicas() {
     },
   ];
 
-
   return (
     <>
+      {errors.length > 0 &&
+        errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
+
       <div className="p-4 max-w-7xl mx-auto overflow-x-hidden transition-colors duration-300 ease-in-out">
         <Title icon="fa-calendar-check" title="Citas Médicas" />
 
@@ -209,16 +212,6 @@ function CitasMedicas() {
             full={false}
           />
         </div>
-
-        {errors.length > 0 && (
-          <div className="mt-4 bg-red-100 dark:bg-neutral-800 border border-red-300 dark:border-neutral-700 text-red-700 dark:text-neutral-300 p-4 rounded-lg transition-colors duration-300 ease-in-out">
-            <ul className="list-disc list-inside text-sm">
-              {errors.map((e, i) => (
-                <li key={i}>{e}</li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         <ResponsiveTable
           headers={headers}

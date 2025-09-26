@@ -18,7 +18,6 @@ export const TreatmentProvider = ({ children }) => {
   const [treatments, setTreatments] = useState([]);
   const [history, setHistory] = useState([]);
   const [error, setError] = useState([]);
-  useAutoClearErrors(setError);
 
   const fetchTreatmentByPatient = useCallback(async (patientId) => {
     setTreatment(null);
@@ -82,6 +81,8 @@ export const TreatmentProvider = ({ children }) => {
       );
     }
   }, []);
+
+  useAutoClearErrors(error, setError);
 
   return (
     <TreatmentContext.Provider

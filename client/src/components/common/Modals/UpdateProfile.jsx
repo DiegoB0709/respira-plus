@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import Button from "../Buttons/Button";
 import Input from "../Imput/Input";
 import Modal from "./Modal";
+import Toast from "../Toast/Toast";
 
 function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
   const {
@@ -74,6 +75,8 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
 
   return (
     <>
+      {updateErrors.length > 0 &&
+        updateErrors.map((e, i) => <Toast key={i} type="error" message={e} />)}
       <div className="sm:p-6 sm:px-12 max-w-3xl mx-auto rounded-2xl transition-colors duration-300 ease-in-out">
         <h1 className="text-2xl sm:text-3xl font-bold text-center bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent mb-6 flex flex-col sm:flex-row items-center justify-center gap-3">
           <i className="fas fa-user-edit bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent text-3xl" />
@@ -193,14 +196,6 @@ function UpdateProfile({ onCloseUpdate, onOpenProfile }) {
               submit={true}
             />
           </div>
-
-          {updateErrors.length > 0 && (
-            <div className="text-sm text-red-500 space-y-1 mt-2">
-              {updateErrors.map((err, i) => (
-                <div key={i}>{err}</div>
-              ))}
-            </div>
-          )}
         </form>
       </div>
 

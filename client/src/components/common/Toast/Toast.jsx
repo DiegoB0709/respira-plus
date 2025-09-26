@@ -17,7 +17,7 @@ function Toast({ type = "notification", message, onClose }) {
 
   useEffect(() => {
     setVisible(true);
-    const timer = setTimeout(() => handleClose(), 3000);
+    const timer = setTimeout(() => handleClose(), 5000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -32,7 +32,7 @@ function Toast({ type = "notification", message, onClose }) {
     <div
       className={`fixed top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0
         flex items-center gap-3 max-w-sm w-full px-4 py-3 rounded-lg shadow-md
-        transform transition-all duration-300 ease-out
+        transform transition-all duration-300 ease-out z-1000
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}
         ${typeStyles[type]}`}
     >
@@ -42,7 +42,7 @@ function Toast({ type = "notification", message, onClose }) {
 
       <button
         onClick={handleClose}
-        className="ml-2 text-white/80 hover:text-white transition"
+        className="ml-2 text-white/80 hover:text-white transition cursor-pointer"
       >
         <i className="fa-solid fa-xmark"></i>
       </button>

@@ -5,6 +5,7 @@ import { useAuth } from "../../../context/AuthContext";
 import Input from "../Imput/Input";
 import Button from "../Buttons/Button";
 import Modal from "./Modal";
+import Toast from "../Toast/Toast";
 
 function AppointmentForm({
   setActiveModal,
@@ -100,18 +101,10 @@ function AppointmentForm({
 
  return (
    <>
-     <div className="relative sm:p-8 p-6 max-w-lg mx-auto space-y-6">
-       {errors.length > 0 && (
-         <div className="bg-red-100 text-red-700 border border-red-300 p-4 rounded-xl text-sm space-y-1">
-           {errors.map((err, i) => (
-             <p key={i} className="flex items-center gap-2">
-               <i className="fas fa-exclamation-circle text-red-500"></i>
-               {err}
-             </p>
-           ))}
-         </div>
-       )}
+     {errors.length > 0 &&
+       errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
 
+     <div className="relative sm:p-8 p-6 max-w-lg mx-auto space-y-6">
        <form onSubmit={handleSubmit} className="space-y-5">
          {isDoctor && (
            <Input

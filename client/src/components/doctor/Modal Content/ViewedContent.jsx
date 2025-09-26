@@ -4,9 +4,10 @@ import dayjs from "dayjs";
 import EducContent from "../../common/Modals/EducContent";
 import ModalContainer from "../../common/Modals/ModalContainer";
 import Button from "../../common/Buttons/Button";
+import Toast from "@/components/common/Toast/Toast";
 
 function ViewedContent({ patientId }) {
-  const { history, fetchEducationalHistory } = useEducational();
+  const { history, fetchEducationalHistory, errors } = useEducational();
   const [openModal, setOpenModal] = useState(false);
   const [selectedContent, setSelectedContent] = useState(null);
 
@@ -23,19 +24,25 @@ function ViewedContent({ patientId }) {
 
   if (!history || history.length === 0) {
     return (
-      <div className="p-6 max-w-5xl mx-auto space-y-8 transition-colors duration-300 ease-in-out">
-        <div className="p-12 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-neutral-800 rounded-xl border border-dashed border-gray-300 dark:border-neutral-700 transition-colors duration-300 ease-in-out">
-          <i className="fa fa-book-open text-5xl text-gray-400 dark:text-neutral-400 mb-4" />
-          <p className="text-gray-600 dark:text-neutral-300 text-lg max-w-md leading-relaxed">
-            El paciente aún no ha visto contenidos.
-          </p>
+      <>
+        {errors.length > 0 &&
+          errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
+        <div className="p-6 max-w-5xl mx-auto space-y-8 transition-colors duration-300 ease-in-out">
+          <div className="p-12 flex flex-col items-center justify-center text-center bg-gray-50 dark:bg-neutral-800 rounded-xl border border-dashed border-gray-300 dark:border-neutral-700 transition-colors duration-300 ease-in-out">
+            <i className="fa fa-book-open text-5xl text-gray-400 dark:text-neutral-400 mb-4" />
+            <p className="text-gray-600 dark:text-neutral-300 text-lg max-w-md leading-relaxed">
+              El paciente aún no ha visto contenidos.
+            </p>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
     <>
+      {errors.length > 0 &&
+        errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
       <div className="p-6 max-w-5xl mx-auto space-y-8 transition-colors duration-300 ease-in-out">
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2">
           {history.map((item) => {

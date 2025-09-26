@@ -20,8 +20,6 @@ export const NotificationProvider = ({ children }) => {
 
   const { isAuthenticated } = useAuth();
 
-  useAutoClearErrors(error, setError);
-
   const fetchNotifications = async () => {
     setLoading(true);
     try {
@@ -75,6 +73,8 @@ export const NotificationProvider = ({ children }) => {
       handleApiError(err, "No se pudo eliminar la notificación.", setError);
     }
   };
+
+  useAutoClearErrors(error, setError);
 
   useEffect(() => {
     if (isAuthenticated) {

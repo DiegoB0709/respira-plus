@@ -5,6 +5,7 @@ import EducationalForm from "../../doctor/Modal Content/EducationalForm";
 import ModalContainer from "./ModalContainer";
 import Button from "../Buttons/Button";
 import Modal from "./Modal";
+import Toast from "../Toast/Toast";
 
 function EducContent({ onClose, contentId }) {
   const { user } = useAuth();
@@ -14,6 +15,7 @@ function EducContent({ onClose, contentId }) {
     contentDetails,
     removeEducationalContent,
     markContentAsViewed,
+    errors,
   } = useEducational();
 
   const [showConfirm, setShowConfirm] = useState(false);
@@ -137,6 +139,9 @@ function EducContent({ onClose, contentId }) {
 
   return (
     <>
+      {errors.length > 0 &&
+        errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-auto max-h-[75vh] overflow-auto">
         <div className="lg:col-span-2 bg-gray-100 dark:bg-neutral-800 rounded-lg overflow-y-auto h-full p-4 flex flex-col gap-4 items-center justify-center transition-colors duration-300 ease-in-out">
           {renderMedia()}

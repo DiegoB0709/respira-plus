@@ -3,6 +3,7 @@ import { useEducational } from "../../../context/EducationalContext";
 import Input from "../../common/Imput/Input";
 import Button from "../../common/Buttons/Button";
 import Modal from "../../common/Modals/Modal";
+import Toast from "@/components/common/Toast/Toast";
 
 function EducationalForm({ setActiveModal, contentId = null }) {
   const {
@@ -10,6 +11,7 @@ function EducationalForm({ setActiveModal, contentId = null }) {
     editEducationalContent,
     fetchEducationalContentById,
     contentDetails,
+    errors,
   } = useEducational();
 
   const [form, setForm] = useState({
@@ -172,181 +174,189 @@ function EducationalForm({ setActiveModal, contentId = null }) {
   };
 
   return (
-    <div className="p-1 max-w-4xl mx-auto">
-      <form
-        onSubmit={handleSubmit}
-        className="bg-white dark:bg-neutral-900 rounded-lg p-6 pt-0 space-y-4 mt-4 transition-colors duration-300 ease-in-out"
-      >
-        {fields.map((field, i) => (
-          <Input
-            key={i}
-            type={field.type}
-            name={field.name}
-            label={field.label}
-            icon={field.icon}
-            placeholder={field.placeholder}
-            options={field.options}
-            value={form[field.name]}
-            onChange={handleChange}
-            required={field.required}
-          />
-        ))}
+    <>
+      {errors.length > 0 &&
+        errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
+      <div className="p-1 max-w-4xl mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white dark:bg-neutral-900 rounded-lg p-6 pt-0 space-y-4 mt-4 transition-colors duration-300 ease-in-out"
+        >
+          {fields.map((field, i) => (
+            <Input
+              key={i}
+              type={field.type}
+              name={field.name}
+              label={field.label}
+              icon={field.icon}
+              placeholder={field.placeholder}
+              options={field.options}
+              value={form[field.name]}
+              onChange={handleChange}
+              required={field.required}
+            />
+          ))}
 
-        <div className="flex flex-col">
-          <label className="block text-gray-700 dark:text-neutral-50 font-medium mb-1 flex items-center gap-2 text-sm transition-colors duration-300 ease-in-out">
-            <i className="fa fa-tags bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent" />
-            Etiquetas Clínicas
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {tagsOptions.map((tag) => (
+          <div className="flex flex-col">
+            <label className="block text-gray-700 dark:text-neutral-50 font-medium mb-1 flex items-center gap-2 text-sm transition-colors duration-300 ease-in-out">
+              <i className="fa fa-tags bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent" />
+              Etiquetas Clínicas
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {tagsOptions.map((tag) => (
+                <button
+                  type="button"
+                  key={tag.value}
+                  onClick={() => toggleTag(tag.value)}
+                  className={`px-3 py-1 rounded-full border text-sm transition-colors duration-300 ease-in-out ${
+                    form.clinicalTags.includes(tag.value)
+                      ? "bg-gradient-to-r from-teal-400 to-sky-500 text-white"
+                      : "bg-white dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 border-gray-300 dark:border-neutral-700 hover:bg-teal-50 dark:hover:bg-neutral-700"
+                  }`}
+                >
+                  {tag.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {!contentId && !form.file && (
+            <Input
+              type="file"
+              name="file-upload"
+              label="Archivo *"
+              icon="fa-file-upload"
+              onChange={handleChange}
+            />
+          )}
+
+          {form.file && (
+            <div className="flex items-center justify-between bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl px-4 py-3 mt-3 transition-colors duration-300 ease-in-out">
+              <div className="flex items-center gap-3 overflow-hidden">
+                <div className="flex items-center justify-center w-10 h-10 bg-teal-100 text-teal-500 rounded-full">
+                  <i className="fa fa-file text-lg bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent" />
+                </div>
+                <span className="text-sm font-medium text-gray-800 dark:text-neutral-50 truncate max-w-[180px] sm:max-w-[260px] transition-colors duration-300 ease-in-out">
+                  {form.file.name}
+                </span>
+              </div>
               <button
                 type="button"
-                key={tag.value}
-                onClick={() => toggleTag(tag.value)}
-                className={`px-3 py-1 rounded-full border text-sm transition-colors duration-300 ease-in-out ${
-                  form.clinicalTags.includes(tag.value)
-                    ? "bg-gradient-to-r from-teal-400 to-sky-500 text-white"
-                    : "bg-white dark:bg-neutral-800 text-gray-700 dark:text-neutral-300 border-gray-300 dark:border-neutral-700 hover:bg-teal-50 dark:hover:bg-neutral-700"
-                }`}
+                onClick={() => setForm((prev) => ({ ...prev, file: null }))}
+                className="cursor-pointer flex items-center gap-2 text-red-500 hover:text-red-600 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium"
               >
-                {tag.label}
+                <i className="fa fa-times-circle text-base" />
+                Eliminar
               </button>
-            ))}
-          </div>
-        </div>
+            </div>
+          )}
 
-        {!contentId && !form.file && (
-          <Input
-            type="file"
-            name="file-upload"
-            label="Archivo *"
-            icon="fa-file-upload"
-            onChange={handleChange}
+          {contentId && contentDetails && (
+            <div className="flex flex-col gap-2 mb-4">
+              {contentDetails.fileType === "image" ? (
+                <img
+                  src={contentDetails.mediaUrls[0]}
+                  alt={contentDetails.title}
+                  className="w-full object-contain rounded-xl border border-teal-200 p-1"
+                />
+              ) : (
+                <video
+                  src={contentDetails.mediaUrls[0]}
+                  controls
+                  className="w-full object-contain rounded-xl border border-teal-200 p-1"
+                />
+              )}
+              <p className="text-gray-500 dark:text-neutral-400 text-sm mt-1 transition-colors duration-300 ease-in-out">
+                Este archivo no se puede modificar.
+              </p>
+            </div>
+          )}
+
+          <label
+            htmlFor="isPublic"
+            className="flex items-center cursor-pointer select-none mt-2"
+          >
+            <div className="relative">
+              <input
+                type="checkbox"
+                id="isPublic"
+                name="isPublic"
+                checked={form.isPublic}
+                onChange={handleChange}
+                className="sr-only peer"
+              />
+
+              <div
+                className="
+            w-11 h-6 rounded-full shadow-inner
+            bg-gray-300 dark:bg-neutral-700
+            transition-colors duration-300 ease-in-out
+            peer-checked:bg-gradient-to-r peer-checked:from-teal-400 peer-checked:to-cyan-500
+          "
+              ></div>
+
+              <div
+                className="
+            absolute top-0 left-0 w-6 h-6 bg-white  rounded-full shadow
+            transform transition-transform duration-300
+            peer-checked:translate-x-full
+          "
+              ></div>
+            </div>
+
+            <span className="ml-3 text-sm font-medium text-gray-700 dark:text-neutral-50 transition-colors duration-300 ease-in-out">
+              {form.isPublic ? "Contenido público" : "Contenido privado"}
+            </span>
+          </label>
+
+          <Button
+            submit={true}
+            type="bg1"
+            icon="fa-upload"
+            disabled={loading}
+            label={
+              loading
+                ? contentId
+                  ? "Actualizando..."
+                  : "Subiendo..."
+                : contentId
+                ? "Actualizar Contenido"
+                : "Subir Contenido"
+            }
+          />
+        </form>
+
+        {loading && (
+          <Modal
+            type="loading"
+            title="Cargando"
+            message="Por favor espere..."
           />
         )}
 
-        {form.file && (
-          <div className="flex items-center justify-between bg-white dark:bg-neutral-900 border border-gray-200 dark:border-neutral-700 rounded-2xl px-4 py-3 mt-3 transition-colors duration-300 ease-in-out">
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div className="flex items-center justify-center w-10 h-10 bg-teal-100 text-teal-500 rounded-full">
-                <i className="fa fa-file text-lg bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent" />
-              </div>
-              <span className="text-sm font-medium text-gray-800 dark:text-neutral-50 truncate max-w-[180px] sm:max-w-[260px] transition-colors duration-300 ease-in-out">
-                {form.file.name}
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => setForm((prev) => ({ ...prev, file: null }))}
-              className="cursor-pointer flex items-center gap-2 text-red-500 hover:text-red-600 px-3 py-1.5 rounded-lg transition-colors text-sm font-medium"
-            >
-              <i className="fa fa-times-circle text-base" />
-              Eliminar
-            </button>
-          </div>
+        {success && (
+          <Modal
+            type="success"
+            title={contentId ? "Contenido actualizado" : "Contenido subido"}
+            message={
+              contentId
+                ? "El contenido fue actualizado exitosamente."
+                : "El contenido fue subido exitosamente."
+            }
+            onSubmit={resetForm}
+          />
         )}
 
-        {contentId && contentDetails && (
-          <div className="flex flex-col gap-2 mb-4">
-            {contentDetails.fileType === "image" ? (
-              <img
-                src={contentDetails.mediaUrls[0]}
-                alt={contentDetails.title}
-                className="w-full object-contain rounded-xl border border-teal-200 p-1"
-              />
-            ) : (
-              <video
-                src={contentDetails.mediaUrls[0]}
-                controls
-                className="w-full object-contain rounded-xl border border-teal-200 p-1"
-              />
-            )}
-            <p className="text-gray-500 dark:text-neutral-400 text-sm mt-1 transition-colors duration-300 ease-in-out">
-              Este archivo no se puede modificar.
-            </p>
-          </div>
+        {errorModal && (
+          <Modal
+            title={"Ocurrió un error"}
+            type="error"
+            message="Ocurrió un error al subir el contenido. Intenta nuevamente."
+            onSubmit={() => setErrorModal(false)}
+          />
         )}
-
-        <label
-          htmlFor="isPublic"
-          className="flex items-center cursor-pointer select-none mt-2"
-        >
-          <div className="relative">
-            <input
-              type="checkbox"
-              id="isPublic"
-              name="isPublic"
-              checked={form.isPublic}
-              onChange={handleChange}
-              className="sr-only peer"
-            />
-
-            <div
-              className="
-          w-11 h-6 rounded-full shadow-inner
-          bg-gray-300 dark:bg-neutral-700
-          transition-colors duration-300 ease-in-out
-          peer-checked:bg-gradient-to-r peer-checked:from-teal-400 peer-checked:to-cyan-500
-        "
-            ></div>
-
-            <div
-              className="
-          absolute top-0 left-0 w-6 h-6 bg-white  rounded-full shadow
-          transform transition-transform duration-300
-          peer-checked:translate-x-full
-        "
-            ></div>
-          </div>
-
-          <span className="ml-3 text-sm font-medium text-gray-700 dark:text-neutral-50 transition-colors duration-300 ease-in-out">
-            {form.isPublic ? "Contenido público" : "Contenido privado"}
-          </span>
-        </label>
-
-        <Button
-          submit={true}
-          type="bg1"
-          icon="fa-upload"
-          disabled={loading}
-          label={
-            loading
-              ? contentId
-                ? "Actualizando..."
-                : "Subiendo..."
-              : contentId
-              ? "Actualizar Contenido"
-              : "Subir Contenido"
-          }
-        />
-      </form>
-
-      {loading && (
-        <Modal type="loading" title="Cargando" message="Por favor espere..." />
-      )}
-
-      {success && (
-        <Modal
-          type="success"
-          title={contentId ? "Contenido actualizado" : "Contenido subido"}
-          message={
-            contentId
-              ? "El contenido fue actualizado exitosamente."
-              : "El contenido fue subido exitosamente."
-          }
-          onSubmit={resetForm}
-        />
-      )}
-
-      {errorModal && (
-        <Modal
-          title={"Ocurrió un error"}
-          type="error"
-          message="Ocurrió un error al subir el contenido. Intenta nuevamente."
-          onSubmit={() => setErrorModal(false)}
-        />
-      )}
-    </div>
+      </div>
+    </>
   );
 }
 

@@ -8,6 +8,7 @@ import RegisterToken from "../common/Modals/RegisterToken";
 import Title from "../Title";
 import Input from "../common/Imput/Input";
 import Button from "../common/Buttons/Button";
+import Toast from "../common/Toast/Toast";
 
 function Usuarios() {
   const { fetchUsers, users, totalUsers, loading, errors } = useUser();
@@ -113,9 +114,10 @@ function Usuarios() {
     },
   ];
 
-
   return (
     <>
+      {errors.length > 0 &&
+        errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
       <div className="p-4 max-w-7xl mx-auto overflow-x-hidden">
         <Title icon="fa-users" title="Usuarios" />
 
@@ -165,17 +167,6 @@ function Usuarios() {
             full={false}
           />
         </div>
-
-        {errors.length > 0 && (
-          <div className="mt-4 bg-red-100 text-red-700 p-4 rounded-xl">
-            <h4 className="font-semibold mb-2">Errores:</h4>
-            <ul className="list-disc list-inside text-sm">
-              {errors.map((e, i) => (
-                <li key={i}>{e}</li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         <ResponsiveTable
           headers={headers}

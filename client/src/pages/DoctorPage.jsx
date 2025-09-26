@@ -42,7 +42,6 @@ function DoctorPage() {
     }
     setActiveSection(section);
   };
-  
 
   const handleSignout = async () => {
     await signout();

@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import Button from "../common/Buttons/Button";
 import Input from "../common/Imput/Input";
+import Toast from "../common/Toast/Toast";
 
 function RegisterForm() {
   const {
@@ -82,44 +83,40 @@ function RegisterForm() {
   ];
 
   return (
-    <form onSubmit={onSubmit} className="mt-10 space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {fields.map((field) => (
-          <div
-            key={field.name}
-            className={`mb-1 col-span-1 ${
-              field.colSpan === 2 ? "md:col-span-2" : ""
-            }`}
-          >
-            <Input
-              type={field.type}
-              name={field.name}
-              label={field.label}
-              icon={field.icon}
-              placeholder={field.placeholder}
-              {...register(field.name, field.rules)}
-            />
-            {errors[field.name] && (
-              <p className="mt-1 text-sm text-red-600">
-                {errors[field.name].message}
-              </p>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div>
-        <Button type={"bg1"} label={"Registrarse"} submit={true} />
-      </div>
-
-      {signupErrors.length > 0 && (
-        <div className="text-sm text-red-600 space-y-1">
-          {signupErrors.map((error, i) => (
-            <div key={i}>{error}</div>
+    <>
+      {signupErrors.length > 0 &&
+        signupErrors.map((e, i) => <Toast key={i} type="error" message={e} />)}
+      <form onSubmit={onSubmit} className="mt-10 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {fields.map((field) => (
+            <div
+              key={field.name}
+              className={`mb-1 col-span-1 ${
+                field.colSpan === 2 ? "md:col-span-2" : ""
+              }`}
+            >
+              <Input
+                type={field.type}
+                name={field.name}
+                label={field.label}
+                icon={field.icon}
+                placeholder={field.placeholder}
+                {...register(field.name, field.rules)}
+              />
+              {errors[field.name] && (
+                <p className="mt-1 text-sm text-red-600">
+                  {errors[field.name].message}
+                </p>
+              )}
+            </div>
           ))}
         </div>
-      )}
-    </form>
+
+        <div>
+          <Button type={"bg1"} label={"Registrarse"} submit={true} />
+        </div>
+      </form>
+    </>
   );
 }
 

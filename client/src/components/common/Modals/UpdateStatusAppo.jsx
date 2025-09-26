@@ -3,9 +3,10 @@ import { useAppointments } from "../../../context/AppointmentContext";
 import Input from "../Imput/Input";
 import Button from "../Buttons/Button";
 import Modal from "./Modal";
+import Toast from "../Toast/Toast";
 
 function UpdateStatusAppo({ selectedAppointment, activeModal }) {
-  const { updateAppointmentStatus } = useAppointments();
+  const { updateAppointmentStatus, errors } = useAppointments();
   const [appointmentId, setAppointmentId] = useState("");
   const [newStatus, setNewStatus] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
@@ -28,6 +29,8 @@ function UpdateStatusAppo({ selectedAppointment, activeModal }) {
 
  return (
    <>
+     {errors.length > 0 &&
+       errors.map((e, i) => <Toast key={i} type="error" message={e} />)}
      <div className="p-6 max-w-md mx-auto space-y-6">
        <form onSubmit={handleSubmit} className="space-y-5">
          <Input

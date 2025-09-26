@@ -9,6 +9,7 @@ import MetricCard from "@/components/common/Dashboard/MetricCard";
 import Title from "../Title";
 
 import { Users, Calendar, Bell, Activity } from "lucide-react";
+import Toast from "../common/Toast/Toast";
 
 function Dashboard() {
   const { doctorMetrics, error, fetchDoctorMetrics } = useMetrics();
@@ -16,14 +17,6 @@ function Dashboard() {
   useEffect(() => {
     fetchDoctorMetrics();
   }, []);
-
-  if (error && error.length > 0) {
-    return (
-      <div className="p-4 text-red-500 text-center">
-        Error al cargar métricas: {error}
-      </div>
-    );
-  }
 
   if (!doctorMetrics) {
     return (
@@ -74,66 +67,70 @@ function Dashboard() {
   }));
 
   return (
-    <div className="p-4 max-w-7xl mx-auto space-y-8">
-      <Title icon="fa-chart-simple" title="Dashboard" />
+    <>
+      {error.length > 0 &&
+        error.map((e, i) => <Toast key={i} type="error" message={e} />)}
+      <div className="p-4 max-w-7xl mx-auto space-y-8">
+        <Title icon="fa-chart-simple" title="Dashboard" />
 
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-        <MetricCard
-          label="Pacientes Asignados"
-          value={pacientes.asignados}
-          icon={Users}
-        />
-        <MetricCard
-          label="Pendientes de Registro"
-          value={pacientes.pendientesRegistro}
-          icon={Users}
-          color="bg-yellow-500"
-        />
-        <MetricCard
-          label="En Tratamiento"
-          value={pacientes.enTratamiento}
-          icon={Activity}
-          color="bg-blue-500"
-        />
-        <MetricCard
-          label="Próximas Citas"
-          value={citas.proximas}
-          icon={Calendar}
-          color="bg-emerald-500"
-        />
-        <MetricCard
-          label="Alertas Activas"
-          value={alertas.activas}
-          icon={Bell}
-          color="bg-rose-500"
-        />
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+          <MetricCard
+            label="Pacientes Asignados"
+            value={pacientes.asignados}
+            icon={Users}
+          />
+          <MetricCard
+            label="Pendientes de Registro"
+            value={pacientes.pendientesRegistro}
+            icon={Users}
+            color="bg-yellow-500"
+          />
+          <MetricCard
+            label="En Tratamiento"
+            value={pacientes.enTratamiento}
+            icon={Activity}
+            color="bg-blue-500"
+          />
+          <MetricCard
+            label="Próximas Citas"
+            value={citas.proximas}
+            icon={Calendar}
+            color="bg-emerald-500"
+          />
+          <MetricCard
+            label="Alertas Activas"
+            value={alertas.activas}
+            icon={Bell}
+            color="bg-rose-500"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <CardWrapper title="Riesgo de Pacientes">
+            <ChartDonut data={donutRiesgoData} colors={donutRiesgoColors} />
+          </CardWrapper>
+          <CardWrapper title="Fase de Tratamiento">
+            <ChartDonut data={donutFaseData} colors={donutFaseColors} />
+          </CardWrapper>
+          <CardWrapper title="Alertas por Severidad">
+            <ChartDonut data={donutAlertasData} colors={donutAlertasColors} />
+          </CardWrapper>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <CardWrapper title="Distribución de Citas">
+            <ChartDonut data={donutCitasData} colors={donutCitasColors} />
+          </CardWrapper>
+          <CardWrapper title="Historial de Citas">
+            <ChartBar data={barHistorialData} dataKey="cantidad" />
+          </CardWrapper>
+        </div>
+
+        <CardWrapper title="Tratamientos por Mes">
+          <ChartArea data={areaTratamientosData} dataKey="cantidad" />
+        </CardWrapper>
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <CardWrapper title="Riesgo de Pacientes">
-          <ChartDonut data={donutRiesgoData} colors={donutRiesgoColors} />
-        </CardWrapper>
-        <CardWrapper title="Fase de Tratamiento">
-          <ChartDonut data={donutFaseData} colors={donutFaseColors} />
-        </CardWrapper>
-        <CardWrapper title="Alertas por Severidad">
-          <ChartDonut data={donutAlertasData} colors={donutAlertasColors} />
-        </CardWrapper>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <CardWrapper title="Distribución de Citas">
-          <ChartDonut data={donutCitasData} colors={donutCitasColors} />
-        </CardWrapper>
-        <CardWrapper title="Historial de Citas">
-          <ChartBar data={barHistorialData} dataKey="cantidad" />
-        </CardWrapper>
-      </div>
-
-      <CardWrapper title="Tratamientos por Mes">
-        <ChartArea data={areaTratamientosData} dataKey="cantidad" />
-      </CardWrapper>
-    </div>
+    </>
   );
 }
 
