@@ -47,7 +47,7 @@ export const register = async (req, res, next) => {
       await crearNotificacion({
         recipientId: userByToken.doctor,
         title: "Nuevo Paciente",
-        message: `Un paciente se registró a las ${new Date().toLocaleString()}.`,
+        message: `El paciente ${username} se registró a las ${new Date().toLocaleString()}.`,
         type: "info",
       });
     }
@@ -98,7 +98,6 @@ export const login = async (req, res, next) => {
       email: userFound.email,
       phone: userFound.phone,
       role: userFound.role,
-      token
     });
   } catch (error) {
     res.status(500).json({ message: "Error interno al iniciar sesión" });

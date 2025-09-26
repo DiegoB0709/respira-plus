@@ -1,4 +1,5 @@
 import Alert from "../models/alert.model.js";
+import { sendAlert } from "./socketEvents.service.js";
 
 export async function createAlertIfNotExists({
   patientId,
@@ -32,6 +33,16 @@ export async function createAlertIfNotExists({
     });
 
     await newAlert.save();
+
+    if (doctorId) {
+      sendAlert(doctorId, {
+        id: newAlert._id,
+        type,
+        description,
+        severity,
+        createdAt: newAlert.createdAt,
+      });
+    }
 
     return { created: true, alert: newAlert };
   } catch (error) {

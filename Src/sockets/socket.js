@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import { Server } from "socket.io";
 
 let io;
-const connectedUsers = new Map();
 
 export const initSocketServer = (httpServer) => {
   io = new Server(httpServer, {
@@ -10,29 +9,52 @@ export const initSocketServer = (httpServer) => {
       origin: "http://localhost:5173",
       credentials: true,
     },
+    pingTimeout: 60000,
+    pingInterval: 25000,
   });
 
   io.use((socket, next) => {
-    const token = socket.handshake.auth.token;
-    if (!token) return next(new Error("Token no proporcionado"));
+    try {
+      const token = socket.handshake.auth?.token;
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) return next(new Error("Token inválido"));
+      if (!token || typeof token !== "string") {
+        return next(new Error("Token no válido o no proporcionado"));
+      }
 
-      socket.userId = decoded.id;
-      next();
-    });
+      jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+        if (err) {
+          return next(new Error("Token inválido o expirado"));
+        }
+
+        if (!decoded?.id) {
+          return next(new Error("Token mal formado"));
+        }
+
+        socket.userId = decoded.id.toString();
+        next();
+      });
+    } catch (error) {
+      next(new Error("Error en autenticación"));
+    }
   });
 
   io.on("connection", (socket) => {
     const userId = socket.userId;
 
-    connectedUsers.set(userId, socket.id);
-    console.log(`[Socket] Usuario conectado: ${userId}`);
+    if (!userId) {
+      socket.disconnect();
+      return;
+    }
 
-    socket.on("disconnect", () => {
-      connectedUsers.delete(userId);
-      console.log(`[Socket] Usuario desconectado: ${userId}`);
+    socket.join(userId);
+    console.log(`[SOCKET] Usuario conectado: ${userId}`);
+
+    socket.on("disconnect", (reason) => {
+      console.log(`[SOCKET] Usuario desconectado: ${userId}. Razón: ${reason}`);
+    });
+
+    socket.on("error", (error) => {
+      console.error(`[SOCKET] Error para usuario ${userId}:`, error);
     });
   });
 
@@ -40,8 +62,10 @@ export const initSocketServer = (httpServer) => {
 };
 
 export const getIO = () => {
-  if (!io) throw new Error("[Error] Socket.IO no está inicializado");
+  if (!io) {
+    const error = "[ERROR] Socket.IO no está inicializado";
+    console.error(error);
+    throw new Error(error);
+  }
   return io;
 };
-
-export const getSocketIdByUserId = (userId) => connectedUsers.get(userId);

@@ -1,5 +1,5 @@
 import Notification from "../models/notification.model.js";
-import { getIO, getSocketIdByUserId } from "../sockets/socket.js";
+import { sendNotification } from "./socketEvents.service.js";
 
 export const crearNotificacion = async ({
   recipientId,
@@ -17,21 +17,15 @@ export const crearNotificacion = async ({
 
     const saved = await nuevaNotificacion.save();
 
-    const socketId = getSocketIdByUserId(String(recipientId));
-    if (socketId) {
-      const io = getIO();
-      io.to(socketId).emit("nuevaNotificacion", {
-        _id: saved._id,
-        title: saved.title,
-        message: saved.message,
-        type: saved.type,
-        createdAt: saved.createdAt,
-        read: saved.read,
-      });
-    }
+    sendNotification(recipientId, {
+      id: saved._id,
+      title,
+      message,
+      type,
+      createdAt: saved.createdAt,
+    });
 
     return saved;
-
   } catch (error) {
     console.error("[Error] Error al crear notificación:", error);
     throw new Error("No se pudo crear la notificación");

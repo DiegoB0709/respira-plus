@@ -10,31 +10,34 @@ import { MetricsProvider } from "./MetricsContext";
 import { NotificationProvider } from "./NotificationContext";
 import { TreatmentProvider } from "./TreatmentContext";
 import { UserProvider } from "./UserContext";
+import { SocketProvider } from "./SocketContext";
 
 function ContextContainer({ children }) {
   return (
     <AuthProvider>
-      <AiProvider>
-        <AlertsProvider>
-          <AppointmentProvider>
-            <ClinicalDetailsProvider>
-              <DoctorProvider>
-                <EducationalProvider>
-                  <ExportProvider>
-                    <MetricsProvider>
-                      <NotificationProvider>
-                        <TreatmentProvider>
-                          <UserProvider>{children}</UserProvider>
-                        </TreatmentProvider>
-                      </NotificationProvider>
-                    </MetricsProvider>
-                  </ExportProvider>
-                </EducationalProvider>
-              </DoctorProvider>
-            </ClinicalDetailsProvider>
-          </AppointmentProvider>
-        </AlertsProvider>
-      </AiProvider>
+      <SocketProvider>
+        <AiProvider>
+          <AlertsProvider>
+            <AppointmentProvider>
+              <ClinicalDetailsProvider>
+                <DoctorProvider>
+                  <EducationalProvider>
+                    <ExportProvider>
+                      <MetricsProvider>
+                        <NotificationProvider>
+                          <TreatmentProvider>
+                            <UserProvider>{children}</UserProvider>
+                          </TreatmentProvider>
+                        </NotificationProvider>
+                      </MetricsProvider>
+                    </ExportProvider>
+                  </EducationalProvider>
+                </DoctorProvider>
+              </ClinicalDetailsProvider>
+            </AppointmentProvider>
+          </AlertsProvider>
+        </AiProvider>
+      </SocketProvider>
     </AuthProvider>
   );
 }

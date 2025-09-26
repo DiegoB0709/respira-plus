@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
-function Toast({ type = "notification", message, onClose }) {
+function Toast({
+  type = "notification",
+  message,
+  onClose,
+  fixed = true,
+}) {
   const [visible, setVisible] = useState(false);
 
   const typeStyles = {
@@ -14,6 +19,10 @@ function Toast({ type = "notification", message, onClose }) {
     alert: "fa-solid fa-triangle-exclamation",
     error: "fa-solid fa-circle-xmark",
   };
+
+  const containerClasses = fixed
+    ? "fixed top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0"
+    : "relative";
 
   useEffect(() => {
     setVisible(true);
@@ -30,7 +39,7 @@ function Toast({ type = "notification", message, onClose }) {
 
   return (
     <div
-      className={`fixed top-6 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0
+      className={`${containerClasses}
         flex items-center gap-3 max-w-sm w-full px-4 py-3 rounded-lg shadow-md
         transform transition-all duration-300 ease-out z-1000
         ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"}
