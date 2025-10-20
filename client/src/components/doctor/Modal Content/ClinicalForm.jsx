@@ -8,6 +8,8 @@ import Toast from "@/components/common/Toast/Toast";
 function ClinicalForm({ patientId, setActiveModal }) {
   const { clinicalDetails, saveClinicalDetails, errors } = useClinicalDetails();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [form, setForm] = useState({
     weight: "",
@@ -61,7 +63,7 @@ function ClinicalForm({ patientId, setActiveModal }) {
     setForm({ ...form, [name]: items });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const numericForm = {
       ...form,
@@ -69,8 +71,22 @@ function ClinicalForm({ patientId, setActiveModal }) {
       height: parseFloat(form.height),
       bmi: parseFloat(form.bmi),
     };
-    saveClinicalDetails(patientId, numericForm);
-    setShowSuccess(true);
+    try {
+      const res = await saveClinicalDetails(patientId, numericForm);
+      if (res && res.status >= 200 && res.status < 300) {
+        setShowSuccess(true);
+      } else {
+        setErrorMessage(
+          res?.data?.message || "Error al guardar los datos clínicos"
+        );
+        setShowError(true);
+      }
+    } catch (err) {
+      setErrorMessage(
+        err?.response?.data?.message || "Error al guardar los datos clínicos"
+      );
+      setShowError(true);
+    }
   };
 
   const handleCloseSuccess = () => {
@@ -94,7 +110,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               onChange={handleChange}
               placeholder="Ingrese el peso"
             />
-
             <Input
               type="number"
               name="height"
@@ -104,7 +119,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               onChange={handleChange}
               placeholder="Ingrese la talla"
             />
-
             <Input
               type="number"
               step="0.1"
@@ -115,7 +129,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               readOnly
               disabled
             />
-
             <Input
               type="date"
               name="diagnosisDate"
@@ -124,7 +137,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               value={form.diagnosisDate}
               onChange={handleChange}
             />
-
             <Input
               type="select"
               name="bacteriologicalStatus"
@@ -137,7 +149,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
                 { value: "negativo", label: "Negativo" },
               ]}
             />
-
             <Input
               name="treatmentScheme"
               label="Esquema de tratamiento"
@@ -146,7 +157,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               onChange={handleChange}
               placeholder="Ingrese el esquema"
             />
-
             <Input
               type="select"
               name="phase"
@@ -161,7 +171,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
                 { value: "indefinido", label: "Indefinido" },
               ]}
             />
-
             <Input
               type="select"
               name="hivStatus"
@@ -175,7 +184,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               ]}
             />
           </div>
-
           <Input
             name="comorbidities"
             label="Comorbilidades"
@@ -184,7 +192,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
             onChange={(e) => handleMultiSelect("comorbidities", e.target.value)}
             placeholder="Ingrese comorbilidades"
           />
-
           <div className="grid sm:grid-cols-2 gap-4">
             <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-neutral-300 transition-colors duration-300 ease-in-out">
               <input
@@ -197,7 +204,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
                 <i className="fa fa-smoking text-yellow-500" /> Fuma
               </span>
             </label>
-
             <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-neutral-300 transition-colors duration-300 ease-in-out">
               <input
                 type="checkbox"
@@ -210,7 +216,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
                 alcohol
               </span>
             </label>
-
             <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-neutral-300 transition-colors duration-300 ease-in-out">
               <input
                 type="checkbox"
@@ -223,7 +228,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
                 con TB
               </span>
             </label>
-
             <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-neutral-300 transition-colors duration-300 ease-in-out">
               <input
                 type="checkbox"
@@ -237,7 +241,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               </span>
             </label>
           </div>
-
           <Input
             name="symptoms"
             label="Síntomas"
@@ -246,7 +249,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
             onChange={(e) => handleMultiSelect("symptoms", e.target.value)}
             placeholder="Ingrese síntomas"
           />
-
           <Input
             type="textarea"
             name="clinicalNotes"
@@ -257,7 +259,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
             rows={3}
             placeholder="Ingrese notas clínicas"
           />
-
           <Input
             type="select"
             name="adherenceRisk"
@@ -271,7 +272,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
               { value: "bajo", label: "Bajo" },
             ]}
           />
-
           <div className="text-center">
             <Button
               type="bg1"
@@ -283,7 +283,6 @@ function ClinicalForm({ patientId, setActiveModal }) {
             />
           </div>
         </form>
-
         {showSuccess && (
           <Modal
             type="success"
@@ -291,6 +290,15 @@ function ClinicalForm({ patientId, setActiveModal }) {
             message="La información fue registrada correctamente."
             onSubmit={handleCloseSuccess}
             onClose={handleCloseSuccess}
+          />
+        )}
+        {showError && (
+          <Modal
+            type="error"
+            title="Error al guardar"
+            message={errorMessage}
+            onSubmit={() => setShowError(false)}
+            onClose={() => setShowError(false)}
           />
         )}
       </div>

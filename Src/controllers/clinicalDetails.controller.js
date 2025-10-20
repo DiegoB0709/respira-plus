@@ -22,9 +22,89 @@ export const createOrUpdateClinicalDetails = async (req, res) => {
     }
 
     if (String(patient.doctor) !== String(doctorId)) {
-      return res.status(403).json({
-        message: "No autorizado para modificar este paciente",
-      });
+      return res
+        .status(403)
+        .json({ message: "No autorizado para modificar este paciente" });
+    }
+
+    if (data.weight && (data.weight < 20 || data.weight > 300)) {
+      return res
+        .status(400)
+        .json({ message: "El peso debe estar entre 20 y 300 kg" });
+    }
+
+    if (data.height && (data.height < 80 || data.height > 250)) {
+      return res
+        .status(400)
+        .json({ message: "La altura debe estar entre 80 y 250 cm" });
+    }
+
+    if (
+      data.bacteriologicalStatus &&
+      !["positivo", "negativo", "no confirmado"].includes(
+        data.bacteriologicalStatus
+      )
+    ) {
+      return res
+        .status(400)
+        .json({ message: "Estado bacteriológico inválido" });
+    }
+
+    if (
+      data.phase &&
+      !["inicio", "intermedio", "final", "indefinido"].includes(data.phase)
+    ) {
+      return res.status(400).json({ message: "Fase inválida" });
+    }
+
+    if (
+      data.hivStatus &&
+      !["positivo", "negativo", "desconocido"].includes(data.hivStatus)
+    ) {
+      return res.status(400).json({ message: "Estado VIH inválido" });
+    }
+
+    if (
+      data.adherenceRisk &&
+      !["bajo", "medio", "alto"].includes(data.adherenceRisk)
+    ) {
+      return res.status(400).json({ message: "Nivel de adherencia inválido" });
+    }
+
+    if (data.clinicalNotes && data.clinicalNotes.length > 1000) {
+      return res
+        .status(400)
+        .json({
+          message: "Las notas clínicas no deben superar los 1000 caracteres",
+        });
+    }
+
+    if (data.symptoms && data.symptoms.some((s) => s.length > 200)) {
+      return res
+        .status(400)
+        .json({ message: "Cada síntoma no debe superar los 200 caracteres" });
+    }
+
+    if (data.comorbidities && data.comorbidities.some((c) => c.length > 200)) {
+      return res
+        .status(400)
+        .json({
+          message: "Cada comorbilidad no debe superar los 200 caracteres",
+        });
+    }
+
+    const booleanFields = [
+      "smoking",
+      "alcoholUse",
+      "contactWithTb",
+      "priorTbTreatment",
+    ];
+    for (const field of booleanFields) {
+      if (data[field] !== undefined && typeof data[field] !== "boolean") {
+        return res
+          .status(400)
+          .json({ message: `El campo ${field} debe ser booleano` });
+      }
     }
 
     let result;

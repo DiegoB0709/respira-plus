@@ -30,6 +30,7 @@ export const ClinicalDetailsProvider = ({ children }) => {
       const res = await saveClinicalDetailsRequest(patientId, data);
       setClinicalDetails(res.data);
       setUpdated(true);
+      return res;
     } catch (error) {
       handleApiError(
         error,
