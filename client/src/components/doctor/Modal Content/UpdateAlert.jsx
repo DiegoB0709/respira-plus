@@ -52,7 +52,6 @@ function UpdateAlert({ setActiveModal, alertId }) {
             onChange={(e) => setStatus(e.target.value)}
             options={[
               { value: "activa", label: "Activa" },
-              { value: "revisada", label: "Revisada" },
               { value: "resuelta", label: "Resuelta" },
             ]}
           />

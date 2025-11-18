@@ -14,8 +14,7 @@ export const getAlertsByDoctor = async (req, res) => {
             $switch: {
               branches: [
                 { case: { $eq: ["$status", "activa"] }, then: 1 },
-                { case: { $eq: ["$status", "revisada"] }, then: 2 },
-                { case: { $eq: ["$status", "resuelta"] }, then: 3 },
+                { case: { $eq: ["$status", "resuelta"] }, then: 2 },
               ],
               default: 4,
             },
@@ -73,8 +72,7 @@ export const getAlertsByPatient = async (req, res) => {
             $switch: {
               branches: [
                 { case: { $eq: ["$status", "activa"] }, then: 1 },
-                { case: { $eq: ["$status", "revisada"] }, then: 2 },
-                { case: { $eq: ["$status", "resuelta"] }, then: 3 },
+                { case: { $eq: ["$status", "resuelta"] }, then: 2 },
               ],
               default: 4,
             },
@@ -108,7 +106,7 @@ export const updateAlertStatus = async (req, res) => {
     const { id } = req.params;
     const { status, actionTaken } = req.body;
 
-    const allowedStatuses = ["activa", "revisada", "resuelta"];
+    const allowedStatuses = ["activa", "resuelta"];
     if (!allowedStatuses.includes(status)) {
       return res.status(400).json({
         message:

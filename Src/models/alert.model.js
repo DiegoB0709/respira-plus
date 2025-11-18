@@ -40,7 +40,7 @@ const alertSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["activa", "revisada", "resuelta"],
+      enum: ["activa", "resuelta"],
       default: "activa",
     },
     actionTaken: {
