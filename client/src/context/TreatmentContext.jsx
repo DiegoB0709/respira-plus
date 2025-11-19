@@ -5,6 +5,8 @@ import {
   getAllTreatmentsForDoctor,
   deleteTreatment,
   getTreatmentHistory,
+  recordDailyCompliance,
+  finishTreatment,
 } from "../api/treatment";
 import { handleApiError } from "../utils/handleError";
 import { useAutoClearErrors } from "../hooks/useAutoClearErrors";
@@ -82,6 +84,31 @@ export const TreatmentProvider = ({ children }) => {
     }
   }, []);
 
+  const recordCompliance = useCallback(async (patientId, complianceData) => {
+    try {
+      await recordDailyCompliance(patientId, complianceData);
+    } catch (err) {
+      handleApiError(
+        err,
+        "Error al registrar el cumplimiento diario",
+        setError
+      );
+    }
+  }, []);
+
+  const finalizeTreatment = useCallback(async (patientId, finishData) => {
+    try {
+      const { data } = await finishTreatment(patientId, finishData);
+      setTreatment(data);
+    } catch (err) {
+      handleApiError(
+        err,
+        "Error al añadir las observaciones finales",
+        setError
+      );
+    }
+  }, []);
+
   useAutoClearErrors(error, setError);
 
   return (
@@ -96,6 +123,8 @@ export const TreatmentProvider = ({ children }) => {
         saveTreatment,
         removeTreatment,
         fetchTreatmentHistory,
+        recordCompliance,
+        finalizeTreatment,
       }}
     >
       {children}

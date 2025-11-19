@@ -13,3 +13,9 @@ export const deleteTreatment = (patientId) =>
 
 export const getTreatmentHistory = (patientId) =>
   axios.get(`/treatments/history/${patientId}`);
+
+export const recordDailyCompliance = (patientId, data) =>
+  axios.post(`/treatments/${patientId}/compliance`, data);
+
+export const finishTreatment = (patientId, data) =>
+  axios.put(`/treatments/${patientId}/finish`, data);

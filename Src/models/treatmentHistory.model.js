@@ -33,11 +33,25 @@ const treatmentHistorySchema = new mongoose.Schema(
         },
       ],
       notes: String,
+      finalObservation: String,
+      isRecurrence: {
+        type: Boolean,
+        default: false,
+      },
+      abandonment: {
+        type: Boolean,
+        default: false,
+      },
+      recurrenceReason: String,
+      observationDate: Date,
     },
     actionBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
       required: true,
+    },
+    observation: {
+      type: String,
     },
     timestamp: {
       type: Date,

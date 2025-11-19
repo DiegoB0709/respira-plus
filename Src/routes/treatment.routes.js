@@ -5,6 +5,8 @@ import {
   getAllTreatmentsForDoctor,
   deleteTreatment,
   getTreatmentHistory,
+  recordDailyCompliance,
+  finishTreatment,
 } from "../controllers/treatment.controller.js";
 import { authorizeRole } from "../middlewares/authorizeRole.js";
 import { authRequired } from "../middlewares/authRequired.js";
@@ -31,5 +33,13 @@ router.delete(
   deleteTreatment
 );
 router.get("/history/:patientId", authRequired, getTreatmentHistory);
+
+router.post(
+  "/:patientId/compliance",
+  authorizeRole("patient"),
+  recordDailyCompliance
+);
+
+router.put("/:patientId/finish", authorizeRole("doctor"), finishTreatment);
 
 export default router;

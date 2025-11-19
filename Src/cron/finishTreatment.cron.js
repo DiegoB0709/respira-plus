@@ -1,7 +1,6 @@
 import cron from "node-cron";
 import mongoose from "mongoose";
 import Treatment from "../models/treatment.model.js";
-import TreatmentHistory from "../models/treatmentHistory.model.js";
 import { crearNotificacion } from "../services/notification.service.js";
 
 const SERVER_USER_ID = new mongoose.Types.ObjectId(process.env.SERVER_USER_ID);
@@ -17,50 +16,53 @@ export const startTreatmentCron = async () => {
 };
 
 const runTreatmentCheck = async () => {
-  console.log("[CRON] Ejecutando verificación de tratamientos vencidos...");
+  console.log(
+    "[CRON] Ejecutando verificación de tratamientos vencidos y actualización de estado..."
+  );
   const now = new Date();
 
   try {
-    const expiredTreatments = await Treatment.find({
+    const treatmentsToExpire = await Treatment.find({
+      status: "Activo",
       endDate: { $lte: now },
     }).populate("patient doctor");
 
-    if (expiredTreatments.length === 0) {
-      console.log("[CRON] No se encontraron tratamientos vencidos");
+    if (treatmentsToExpire.length === 0) {
+      console.log("[CRON] No se encontraron tratamientos activos vencidos");
       return;
     }
 
-    for (const treatment of expiredTreatments) {
-      await TreatmentHistory.create({
-        action: "finished",
-        patient: treatment.patient._id,
-        doctor: treatment.doctor._id,
-        treatment: treatment._id,
-        treatmentSnapshot: {
-          startDate: treatment.startDate,
-          endDate: treatment.endDate,
-          medications: treatment.medications,
-          notes: treatment.notes,
-        },
-        actionBy: SERVER_USER_ID,
-      });
+    for (const treatment of treatmentsToExpire) {
+      await Treatment.findOneAndUpdate(
+        { _id: treatment._id },
+        { $set: { status: "Finalizado", updatedAt: new Date() } }
+      );
 
       await crearNotificacion({
         recipientId: treatment.patient._id,
         title: "Tratamiento Finalizado",
-        message: "Tu tratamiento anterior finalizó.",
+        message: "Tu tratamiento ha finalizado automáticamente por fecha.",
         type: "info",
+        actionBy: SERVER_USER_ID,
       });
 
-      await Treatment.deleteOne({ _id: treatment._id });
+      await crearNotificacion({
+        recipientId: treatment.doctor._id,
+        title: "Tratamiento Finalizado: Pendiente de Observación",
+        message: `El tratamiento del paciente ${
+          treatment.patient.username || treatment.patient.email
+        } ha finalizado automáticamente y requiere que ingrese las observaciones finales.`,
+        type: "info",
+        actionBy: SERVER_USER_ID,
+      });
 
       console.log(
-        `[CRON] Tratamiento finalizado para paciente ${treatment.patient._id}`
+        `[CRON] Tratamiento finalizado para paciente ${treatment.patient._id}. Notificado a paciente y doctor.`
       );
     }
 
     console.log(
-      `[CRON] Finalización de tratamientos completada. Procesados: ${expiredTreatments.length}`
+      `[CRON] Finalización de tratamientos completada. Procesados: ${treatmentsToExpire.length}`
     );
   } catch (error) {
     console.error(

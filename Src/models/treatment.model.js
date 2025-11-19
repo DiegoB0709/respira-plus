@@ -29,6 +29,23 @@ const treatmentSchema = new mongoose.Schema(
       },
     ],
     notes: String,
+    status: {
+      type: String,
+      enum: ["Activo", "Finalizado"],
+      default: "Activo",
+    },
+
+    finalObservation: String,
+    isRecurrence: {
+      type: Boolean,
+      default: false,
+    },
+    recurrenceReason: String,
+    observationDate: Date,
+    abandonment: {
+      type: Boolean,
+      default: false,
+    },
     updatedAt: {
       type: Date,
       default: Date.now,
