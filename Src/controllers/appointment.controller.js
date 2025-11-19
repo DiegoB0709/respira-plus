@@ -463,3 +463,93 @@ export const getAppointmentHistory = async (req, res) => {
     res.status(500).json({ message: "Error al obtener historial de cita" });
   }
 };
+
+export const updateAppointmentTimes = async (req, res) => {
+  const { appointmentId } = req.params;
+  const { actionType } = req.body;
+  const userId = req.user.id;
+  const userRole = req.user.role;
+
+  try {
+    const appointment = await Appointment.findById(appointmentId);
+    if (!appointment) {
+      return res.status(404).json({ message: "Cita no encontrada" });
+    }
+
+    const isDoctor =
+      String(appointment.doctor) === String(userId) && userRole === "doctor";
+    const isPatient =
+      String(appointment.patient) === String(userId) && userRole === "patient";
+
+    if (!isDoctor && !isPatient) {
+      return res
+        .status(403)
+        .json({ message: "No autorizado para modificar esta cita" });
+    }
+
+    const now = new Date();
+    let updateField = {};
+    let historyAction = "";
+    let notificationTitle = "";
+    let notificationMessage = "";
+    let recipientId;
+
+    if (actionType === "arrivalTime" && isPatient) {
+      if (appointment.arrivalTime) {
+        return res
+          .status(400)
+          .json({ message: "La hora de llegada ya ha sido marcada" });
+      }
+      updateField = { arrivalTime: now };
+      historyAction = "llegada registrada";
+      recipientId = appointment.doctor;
+      notificationTitle = "Paciente ha llegado";
+      notificationMessage = `El paciente ${req.user.username} ha marcado su hora de llegada para la cita.`;
+    } else if (actionType === "consultationStartTime" && isDoctor) {
+      if (!appointment.arrivalTime) {
+        return res
+          .status(400)
+          .json({
+            message:
+              "No se puede iniciar la atención sin registrar la hora de llegada del paciente",
+          });
+      }
+      if (appointment.consultationStartTime) {
+        return res
+          .status(400)
+          .json({ message: "La hora de atención ya ha sido marcada" });
+      }
+      updateField = { consultationStartTime: now };
+      historyAction = "atención iniciada";
+      recipientId = appointment.patient;
+      notificationTitle = "Consulta iniciada";
+      notificationMessage = `El doctor ${req.user.username} ha iniciado la consulta.`;
+    } else {
+      return res
+        .status(400)
+        .json({ message: "Acción o rol no válido para esta operación" });
+    }
+
+    Object.assign(appointment, updateField);
+
+    appointment.history.push({
+      action: historyAction,
+      date: now,
+      updatedBy: userId,
+    });
+
+    await appointment.save();
+
+    await crearNotificacion({
+      recipientId,
+      title: notificationTitle,
+      message: notificationMessage,
+      type: "cita",
+    });
+
+    res.status(200).json(appointment);
+  } catch (error) {
+    console.error("[Error] Error en updateAppointmentTimes:", error);
+    res.status(500).json({ message: "Error al actualizar tiempos de cita" });
+  }
+};

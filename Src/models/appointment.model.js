@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
+
 const appointmentStatusEnum = [
   "pendiente",
   "asistió",
   "no asistió",
   "cancelada",
   "confirmada",
-  "solicitada"
+  "solicitada",
 ];
 
 const appointmentHistorySchema = new mongoose.Schema(
@@ -19,7 +20,7 @@ const appointmentHistorySchema = new mongoose.Schema(
         "cancelada",
         "confirmada",
         "reprogramada",
-        "solicitada"
+        "solicitada",
       ],
       required: true,
     },
@@ -60,6 +61,14 @@ const appointmentSchema = new mongoose.Schema(
       type: String,
       enum: appointmentStatusEnum,
       default: "pendiente",
+    },
+    arrivalTime: {
+      type: Date,
+      default: null,
+    },
+    consultationStartTime: {
+      type: Date,
+      default: null,
     },
     notes: {
       type: String,

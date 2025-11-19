@@ -6,6 +6,7 @@ import {
   rescheduleAppointment as rescheduleAppointmentRequest,
   deleteAppointment as deleteAppointmentRequest,
   getAppointments,
+  updateAppointmentTimes as updateAppointmentTimesRequest,
 } from "../api/appointment";
 import { handleApiError } from "../utils/handleError";
 import { useAutoClearErrors } from "../hooks/useAutoClearErrors";
@@ -105,6 +106,28 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
+  const updateAppointmentTimes = async (appointmentId, actionType) => {
+    setErrors([]);
+    try {
+      const res = await updateAppointmentTimesRequest(
+        appointmentId,
+        actionType
+      );
+      setSelectedAppointment(res.data);
+      setAppointments((prev) =>
+        prev.map((a) => (a._id === appointmentId ? res.data : a))
+      );
+      return res.data;
+    } catch (error) {
+      handleApiError(
+        error,
+        "Error al actualizar los tiempos de la cita",
+        setErrors
+      );
+      return null;
+    }
+  };
+
   useAutoClearErrors(errors, setErrors);
 
   return (
@@ -121,6 +144,7 @@ export const AppointmentProvider = ({ children }) => {
         deleteAppointment,
         fetchAppointments,
         totalAppointments,
+        updateAppointmentTimes,
       }}
     >
       {children}

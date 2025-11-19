@@ -6,6 +6,7 @@ import {
   rescheduleAppointment,
   deleteAppointment,
   getAppointments,
+  updateAppointmentTimes,
 } from "../controllers/appointment.controller.js";
 import { authRequired } from "../middlewares/authRequired.js";
 import { authorizeRole } from "../middlewares/authorizeRole.js";
@@ -35,5 +36,12 @@ router.put(
 );
 
 router.delete("/:appointmentId", authRequired, deleteAppointment);
+
+router.put(
+  "/:appointmentId/times",
+  authRequired,
+  authorizeRole(["doctor", "patient"]),
+  updateAppointmentTimes
+);
 
 export default router;
