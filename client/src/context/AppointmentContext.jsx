@@ -106,17 +106,13 @@ export const AppointmentProvider = ({ children }) => {
     }
   };
 
-  const updateAppointmentTimes = async (appointmentId, actionType) => {
+  const updateAppointmentTimes = async (appointmentId) => {
     setErrors([]);
     try {
       const res = await updateAppointmentTimesRequest(
-        appointmentId,
-        actionType
+        appointmentId
       );
       setSelectedAppointment(res.data);
-      setAppointments((prev) =>
-        prev.map((a) => (a._id === appointmentId ? res.data : a))
-      );
       return res.data;
     } catch (error) {
       handleApiError(

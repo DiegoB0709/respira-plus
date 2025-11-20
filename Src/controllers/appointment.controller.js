@@ -466,7 +466,6 @@ export const getAppointmentHistory = async (req, res) => {
 
 export const updateAppointmentTimes = async (req, res) => {
   const { appointmentId } = req.params;
-  const { actionType } = req.body;
   const userId = req.user.id;
   const userRole = req.user.role;
 
@@ -494,49 +493,51 @@ export const updateAppointmentTimes = async (req, res) => {
     let notificationMessage = "";
     let recipientId;
 
-    if (actionType === "arrivalTime" && isPatient) {
+    if (isPatient) {
       if (appointment.arrivalTime) {
         return res
           .status(400)
           .json({ message: "La hora de llegada ya ha sido marcada" });
       }
       updateField = { arrivalTime: now };
-      historyAction = "llegada registrada";
       recipientId = appointment.doctor;
       notificationTitle = "Paciente ha llegado";
       notificationMessage = `El paciente ${req.user.username} ha marcado su hora de llegada para la cita.`;
-    } else if (actionType === "consultationStartTime" && isDoctor) {
+    } else if (isDoctor) {
       if (!appointment.arrivalTime) {
-        return res
-          .status(400)
-          .json({
-            message:
-              "No se puede iniciar la atención sin registrar la hora de llegada del paciente",
-          });
+        return res.status(400).json({
+          message:
+            "No se puede iniciar la atención sin registrar la hora de llegada del paciente",
+        });
       }
       if (appointment.consultationStartTime) {
         return res
           .status(400)
           .json({ message: "La hora de atención ya ha sido marcada" });
       }
-      updateField = { consultationStartTime: now };
-      historyAction = "atención iniciada";
+      updateField = {
+        consultationStartTime: now,
+        status: "asistió",
+      };
+      historyAction = "asistió";
       recipientId = appointment.patient;
       notificationTitle = "Consulta iniciada";
       notificationMessage = `El doctor ${req.user.username} ha iniciado la consulta.`;
     } else {
       return res
         .status(400)
-        .json({ message: "Acción o rol no válido para esta operación" });
+        .json({ message: "Rol no válido para esta operación de tiempo" });
     }
 
     Object.assign(appointment, updateField);
 
-    appointment.history.push({
-      action: historyAction,
-      date: now,
-      updatedBy: userId,
-    });
+    if (historyAction) {
+      appointment.history.push({
+        action: historyAction,
+        date: now,
+        updatedBy: userId,
+      });
+    }
 
     await appointment.save();
 

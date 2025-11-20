@@ -37,7 +37,7 @@ router.put(
 
 router.delete("/:appointmentId", authRequired, deleteAppointment);
 
-router.put(
+router.patch(
   "/:appointmentId/times",
   authRequired,
   authorizeRole(["doctor", "patient"]),

@@ -7,7 +7,6 @@ const SERVER_USER_ID = new mongoose.Types.ObjectId(process.env.SERVER_USER_ID);
 
 export const startUpdateAppointmentsCron = async () => {
   console.log("[CRON] Iniciando CRON de actualización automática de citas...");
-
   await runUpdateAppointments();
 
   cron.schedule("0 * * * *", async () => {
@@ -18,11 +17,16 @@ export const startUpdateAppointmentsCron = async () => {
 const runUpdateAppointments = async () => {
   console.log("[CRON] Ejecutando verificación de citas vencidas...");
   const now = new Date();
+
   const twoHoursAgo = new Date(now.getTime() - 2 * 60 * 60 * 1000);
+  const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
   try {
+    const operations = [];
+
     const pendingAppointments = await Appointment.find({
       status: { $in: ["pendiente", "solicitada"] },
+      date: { $lt: now },
     }).populate("patient doctor");
 
     const appointmentsToCancel = pendingAppointments.filter((appt) => {
@@ -36,9 +40,14 @@ const runUpdateAppointments = async () => {
     const appointmentsToNoShow = await Appointment.find({
       status: "confirmada",
       date: { $lt: twoHoursAgo },
+      arrivalTime: null,
     }).populate("patient doctor");
 
-    const operations = [];
+    const appointmentsToNoAttended = await Appointment.find({
+      status: { $in: ["pendiente", "confirmada"] },
+      arrivalTime: { $ne: null, $lt: oneHourAgo },
+      consultationStartTime: null,
+    }).populate("patient doctor");
 
     for (const appt of appointmentsToCancel) {
       operations.push({
@@ -104,10 +113,43 @@ const runUpdateAppointments = async () => {
       });
     }
 
+    for (const appt of appointmentsToNoAttended) {
+      operations.push({
+        updateOne: {
+          filter: { _id: appt._id },
+          update: {
+            $set: { status: "no atendida" },
+            $push: {
+              history: {
+                action: "no atendida",
+                date: now,
+                updatedBy: SERVER_USER_ID,
+              },
+            },
+          },
+        },
+      });
+
+      await crearNotificacion({
+        recipientId: appt.patient._id,
+        title: "Cita Marcada como No Atendida",
+        message:
+          "Llegaste a tu cita, pero no pudiste ser atendido después de 1 hora de espera.",
+        type: "cita",
+      });
+
+      await crearNotificacion({
+        recipientId: appt.doctor._id,
+        title: "Cita No Atendida (Paciente Esperó Demasiado)",
+        message: `La cita del paciente ${appt.patient.username} fue marcada automáticamente como 'No Atendida' tras 1 hora de espera después de su llegada registrada.`,
+        type: "cita",
+      });
+    }
+
     if (operations.length > 0) {
       await Appointment.bulkWrite(operations);
       console.log(
-        `[CRON] Actualización completada. Canceladas: ${appointmentsToCancel.length}, No asistió: ${appointmentsToNoShow.length}`
+        `[CRON] Actualización completada. Canceladas: ${appointmentsToCancel.length}, No asistió: ${appointmentsToNoShow.length}, No atendida: ${appointmentsToNoAttended.length}`
       );
     } else {
       console.log("[CRON] No se encontraron citas para actualizar");

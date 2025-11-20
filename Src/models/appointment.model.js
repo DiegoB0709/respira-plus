@@ -7,6 +7,7 @@ const appointmentStatusEnum = [
   "cancelada",
   "confirmada",
   "solicitada",
+  "no atendida",
 ];
 
 const appointmentHistorySchema = new mongoose.Schema(
@@ -21,6 +22,7 @@ const appointmentHistorySchema = new mongoose.Schema(
         "confirmada",
         "reprogramada",
         "solicitada",
+        "no atendida",
       ],
       required: true,
     },

@@ -5,12 +5,25 @@ import Modal from "../Modals/Modal";
 import Button from "../Buttons/Button";
 import Toast from "../Toast/Toast";
 
+const checkTimeTolerance = (appointmentDate) => {
+  const now = new Date();
+  const appointmentTime = new Date(appointmentDate).getTime();
+
+  const thirtyMinutes = 30 * 60 * 1000;
+
+  const earlyTime = appointmentTime - thirtyMinutes;
+  const lateTime = appointmentTime + thirtyMinutes;
+
+  return now.getTime() >= earlyTime && now.getTime() <= lateTime;
+};
+
 function AppointDetail({
   selectedAppointment,
   setActiveModal,
   onAppointmentDeleted,
 }) {
-  const { deleteAppointment, errors } = useAppointments();
+  const { deleteAppointment, updateAppointmentTimes, errors } =
+    useAppointments();
   const [showConfirm, setShowConfirm] = useState(false);
   const { user } = useAuth();
 
@@ -21,25 +34,78 @@ function AppointDetail({
     setActiveModal(null);
   };
 
+  const handleMarkArrival = async () => {
+    try {
+      await updateAppointmentTimes(selectedAppointment._id);
+      setActiveModal(null);
+    } catch (error) {
+      console.error("Error al marcar llegada:", error);
+    }
+  };
+
+  const handleMarkConsultationStart = async () => {
+    try {
+      await updateAppointmentTimes(selectedAppointment._id);
+      if (onAppointmentDeleted) onAppointmentDeleted();
+      setActiveModal(null);
+    } catch (error) {
+      console.error("Error al marcar inicio de atención:", error);
+    }
+  };
+
   const status = selectedAppointment.status?.toLowerCase();
   const isPatient = user.role === "patient";
   const isDoctor = user.role === "doctor";
+
+  const isWithinTolerance = checkTimeTolerance(selectedAppointment.date);
+  const hasArrived = selectedAppointment.arrivalTime !== null;
+  const hasConsultationStarted =
+    selectedAppointment.consultationStartTime !== null;
+
+  const canMarkArrival =
+    isPatient &&
+    isWithinTolerance &&
+    !hasArrived &&
+    (status === "confirmada" || status === "pendiente");
+
+  const canMarkConsultationStart =
+    isDoctor &&
+    hasArrived &&
+    !hasConsultationStarted &&
+    (status === "confirmada" || status === "pendiente");
+
+  const hasPriorityButton = canMarkArrival || canMarkConsultationStart;
 
   const canDelete =
     status === "pendiente" ||
     status === "confirmada" ||
     status === "solicitada";
 
-  const canReprogram = isDoctor && status === "confirmada";
+  const canReprogram =
+    !hasPriorityButton && isDoctor && status === "confirmada";
+
   const canUpdateStatus =
-    (isPatient && status === "pendiente") ||
-    (isDoctor &&
-      status !== "pendiente" &&
-      status !== "cancelada" &&
-      status !== "no asistió" &&
-      status !== "asistió");
+    !hasPriorityButton &&
+    ((isDoctor && status === "solicitada") ||
+      (isPatient && status === "pendiente"));
 
   const buttons = [
+    {
+      key: "markArrival",
+      show: canMarkArrival,
+      onClick: handleMarkArrival,
+      label: "Marcar Llegada",
+      icon: "fa-map-marker-alt",
+      type: "bg5",
+    },
+    {
+      key: "markConsultationStart",
+      show: canMarkConsultationStart,
+      onClick: handleMarkConsultationStart,
+      label: "Marcar Atención",
+      icon: "fa-user-md",
+      type: "bg5",
+    },
     {
       key: "history",
       show: true,
@@ -75,44 +141,36 @@ function AppointDetail({
   ].filter((b) => b.show);
 
   const renderButtons = () => {
-    if (buttons.length === 1) {
-      return (
-        <div className="grid grid-cols-1 gap-3">
-          <Button {...buttons[0]} full />
-        </div>
-      );
+    const totalButtons = buttons.length;
+
+    if (totalButtons === 0) {
+      return null;
     }
 
-    if (buttons.length === 2) {
-      return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {buttons.map((btn) => (
-            <Button key={btn.key} {...btn} full={false} />
-          ))}
-        </div>
-      );
-    }
+    const historyButton = buttons.find((b) => b.key === "history");
+    const otherButtons = buttons.filter((b) => b.key !== "history");
 
-    if (buttons.length === 3) {
+    if (totalButtons % 2 !== 0) {
+      if (totalButtons === 1) {
+        return (
+          <div className="grid grid-cols-1 gap-3">
+            <Button {...historyButton} full />
+          </div>
+        );
+      }
+
       return (
         <div className="grid grid-cols-1 gap-3">
-          <Button
-            {...buttons.find((b) => b.key === "history")}
-            full
-            classes="!py-2"
-          />
+          {historyButton && <Button {...historyButton} full classes="!py-2" />}
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {buttons
-              .filter((b) => b.key !== "history")
-              .map((btn) => (
-                <Button key={btn.key} {...btn} full={false} />
-              ))}
+            {otherButtons.map((btn) => (
+              <Button key={btn.key} {...btn} full={false} />
+            ))}
           </div>
         </div>
       );
-    }
-
-    if (buttons.length === 4) {
+    } else {
       return (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {buttons.map((btn) => (
@@ -121,10 +179,7 @@ function AppointDetail({
         </div>
       );
     }
-
-    return null;
   };
-
 
   return (
     <>

@@ -17,5 +17,5 @@ export const rescheduleAppointment = (appointmentId, data) =>
 export const deleteAppointment = (appointmentId) =>
   axios.delete(`/appointments/${appointmentId}`);
 
-export const updateAppointmentTimes = (appointmentId, actionType) =>
-  axios.put(`/appointments/${appointmentId}/times`, { actionType });
+export const updateAppointmentTimes = (appointmentId) =>
+  axios.patch(`/appointments/${appointmentId}/times`);
