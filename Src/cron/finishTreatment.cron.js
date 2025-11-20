@@ -10,9 +10,15 @@ export const startTreatmentCron = async () => {
 
   await runTreatmentCheck();
 
-  cron.schedule("0 0 * * *", async () => {
-    await runTreatmentCheck();
-  });
+  cron.schedule(
+    "0 0 * * *",
+    async () => {
+      await runTreatmentCheck();
+    },
+    {
+      timezone: "America/Lima",
+    }
+  );
 };
 
 const runTreatmentCheck = async () => {

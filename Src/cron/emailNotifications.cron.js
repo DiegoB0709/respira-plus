@@ -16,13 +16,19 @@ export const startEmailNotifier = async () => {
     );
   }
 
-  cron.schedule("*/15 * * * *", async () => {
-    console.log("[CRON] Ejecutando CRON de notificaciones por correo...");
-    try {
-      await transporterReady;
-      await sendPendingNotifications();
-    } catch (error) {
-      console.error("[MAIL] Error en CRON de notificaciones:", error.message);
+  cron.schedule(
+    "*/15 * * * *",
+    async () => {
+      console.log("[CRON] Ejecutando CRON de notificaciones por correo...");
+      try {
+        await transporterReady;
+        await sendPendingNotifications();
+      } catch (error) {
+        console.error("[MAIL] Error en CRON de notificaciones:", error.message);
+      }
+    },
+    {
+      timezone: "America/Lima",
     }
-  });
+  );
 };

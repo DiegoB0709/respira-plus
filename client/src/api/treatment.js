@@ -8,14 +8,17 @@ export const getTreatmentByPatient = (patientId) =>
 
 export const getAllTreatmentsForDoctor = () => axios.get("/treatments");
 
-export const deleteTreatment = (patientId) =>
-  axios.delete(`/treatments/${patientId}`);
+export const deleteTreatment = (patientId, data) =>
+  axios.put(`/treatments/delete/${patientId}`, data);
 
 export const getTreatmentHistory = (patientId) =>
   axios.get(`/treatments/history/${patientId}`);
 
-export const recordDailyCompliance = (patientId, data) =>
-  axios.post(`/treatments/${patientId}/compliance`, data);
-
 export const finishTreatment = (patientId, data) =>
   axios.put(`/treatments/${patientId}/finish`, data);
+
+export const recordDailyCompliance = (treatmentId) =>
+  axios.post(`/treatments/record/${treatmentId}`);
+
+export const checkDailyCompliance = (treatmentId) =>
+  axios.get(`/treatments/check/${treatmentId}`);

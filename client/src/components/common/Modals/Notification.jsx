@@ -42,7 +42,7 @@ function Notification() {
           ) : (
             <>
               <div className="bg-white dark:bg-neutral-900 rounded-xl shadow-md hover:shadow-lg transition-colors duration-300 ease-in-out overflow-hidden">
-                <div className="max-h-[550px] overflow-y-auto divide-y divide-gray-100 dark:divide-neutral-800 px-4 py-4 space-y-3 transition-colors duration-300 ease-in-out">
+                <div className="max-h-[550px]  overflow-y-auto divide-y divide-gray-100 dark:divide-neutral-800 px-4 py-4 space-y-3 transition-colors duration-300 ease-in-out">
                   {notifications.map((n) => {
                     return (
                       <div

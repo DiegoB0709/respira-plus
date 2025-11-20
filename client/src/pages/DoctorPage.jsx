@@ -97,7 +97,7 @@ function DoctorPage() {
         ))}
       </Sidebar>
 
-      <main className="overflow-y-auto p-[min(30px,7%)]">
+      <main className="overflow-y-auto p-[min(30px,7%)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
         <div>{renderContent()}</div>
       </main>
       {activeModal === "notification" && (

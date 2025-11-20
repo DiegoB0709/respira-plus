@@ -9,9 +9,15 @@ export const startUpdateAppointmentsCron = async () => {
   console.log("[CRON] Iniciando CRON de actualización automática de citas...");
   await runUpdateAppointments();
 
-  cron.schedule("0 * * * *", async () => {
-    await runUpdateAppointments();
-  });
+  cron.schedule(
+    "0 * * * *",
+    async () => {
+      await runUpdateAppointments();
+    },
+    {
+      timezone: "America/Lima",
+    }
+  );
 };
 
 const runUpdateAppointments = async () => {

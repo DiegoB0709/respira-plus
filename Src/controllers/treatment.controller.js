@@ -30,21 +30,51 @@ export const createOrUpdateTreatment = async (req, res) => {
 
     let existingTreatment = await Treatment.findOne({ patient: patientId });
 
+    const payload = { ...treatmentData, doctor: doctorId };
+
+    const isRecurrenceNormalized =
+      payload.isRecurrence === true ||
+      payload.isRecurrence === "true" ||
+      payload.isRecurrence === 1 ||
+      payload.isRecurrence === "1";
+
+    payload.isRecurrence = isRecurrenceNormalized;
+
+    if (!isRecurrenceNormalized) {
+      payload.recurrenceReason = undefined;
+    } else {
+      if (!payload.recurrenceReason || payload.recurrenceReason.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "La razón de recurrencia es requerida" });
+      }
+    }
+
     if (existingTreatment) {
       if (existingTreatment.status === "Finalizado") {
         await Treatment.findOneAndDelete({ _id: existingTreatment._id });
         existingTreatment = null;
       }
+
       if (existingTreatment && existingTreatment.status === "Activo") {
+        const updateQuery = {
+          $set: {
+            ...payload,
+            updatedAt: new Date(),
+          },
+        };
+
+        delete updateQuery.$set.recurrenceReason;
+
+        if (isRecurrenceNormalized) {
+          updateQuery.$set.recurrenceReason = payload.recurrenceReason;
+        } else {
+          updateQuery.$unset = { recurrenceReason: "" };
+        }
+
         const updated = await Treatment.findOneAndUpdate(
           { patient: patientId },
-          {
-            $set: {
-              ...treatmentData,
-              doctor: doctorId,
-              updatedAt: new Date(),
-            },
-          },
+          updateQuery,
           { new: true }
         );
 
@@ -58,6 +88,8 @@ export const createOrUpdateTreatment = async (req, res) => {
             endDate: updated.endDate,
             medications: updated.medications,
             notes: updated.notes,
+            isRecurrence: updated.isRecurrence,
+            recurrenceReason: updated.recurrenceReason,
           },
           actionBy: doctorId,
         });
@@ -82,10 +114,10 @@ export const createOrUpdateTreatment = async (req, res) => {
 
     if (!existingTreatment) {
       const newTreatment = new Treatment({
-        ...treatmentData,
+        ...payload,
         patient: patientId,
-        doctor: doctorId,
       });
+
       await newTreatment.save();
 
       await TreatmentHistory.create({
@@ -98,6 +130,8 @@ export const createOrUpdateTreatment = async (req, res) => {
           endDate: newTreatment.endDate,
           medications: newTreatment.medications,
           notes: newTreatment.notes,
+          isRecurrence: newTreatment.isRecurrence,
+          recurrenceReason: newTreatment.recurrenceReason,
         },
         actionBy: doctorId,
       });
@@ -182,6 +216,12 @@ export const deleteTreatment = async (req, res) => {
   const doctorId = req.user.id;
   const { observation, abandonment } = req.body;
 
+  if (!observation || observation.trim().length === 0) {
+    return res.status(400).json({
+      message: "La observación final es obligatoria y no puede estar vacía.",
+    });
+  }
+
   try {
     const patient = await Users.findById(patientId);
     if (!patient || patient.role !== "patient") {
@@ -245,12 +285,9 @@ export const deleteTreatment = async (req, res) => {
       type: "info",
     });
 
-    res
-      .status(200)
-      .json({
-        message:
-          "Tratamiento finalizado correctamente (marcado como eliminado)",
-      });
+    res.status(200).json({
+      message: "Tratamiento finalizado correctamente (marcado como eliminado)",
+    });
   } catch (error) {
     console.error("[Error] Error en deleteTreatment:", error);
     res.status(500).json({ message: "Error al finalizar tratamiento" });
@@ -289,81 +326,6 @@ export const getTreatmentHistory = async (req, res) => {
   } catch (error) {
     console.error("[Error] Error en getTreatmentHistory:", error);
     res.status(500).json({ message: "Error al obtener historial" });
-  }
-};
-
-export const recordDailyCompliance = async (req, res) => {
-  const { patientId } = req.params;
-  const userId = req.user.id;
-  const { status, patientNote } = req.body;
-
-  try {
-    if (String(patientId) !== String(userId)) {
-      return res
-        .status(403)
-        .json({
-          message: "No autorizado para registrar cumplimiento de otro paciente",
-        });
-    }
-
-    const patient = await Users.findById(patientId);
-    if (!patient || patient.role !== "patient") {
-      return res.status(404).json({ message: "Paciente no encontrado" });
-    }
-
-    const treatment = await Treatment.findOne({
-      patient: patientId,
-      status: "Activo",
-    });
-    if (!treatment) {
-      return res
-        .status(404)
-        .json({
-          message: "No se encontró un tratamiento activo para el paciente",
-        });
-    }
-
-    if (!["Cumplió", "No Cumplió"].includes(status)) {
-      return res.status(400).json({
-        message: 'El estado de cumplimiento debe ser "Cumplió" o "No Cumplió"',
-      });
-    }
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const existingCompliance = await DailyCompliance.findOne({
-      patient: patientId,
-      date: today,
-    });
-
-    if (existingCompliance) {
-      existingCompliance.status = status;
-      existingCompliance.patientNote = patientNote;
-      await existingCompliance.save();
-      return res.status(200).json(existingCompliance);
-    } else {
-      const newCompliance = new DailyCompliance({
-        treatment: treatment._id,
-        patient: patientId,
-        date: today,
-        status: status,
-        patientNote: patientNote,
-      });
-      await newCompliance.save();
-
-      const evaluation = await evaluatePatient(patientId);
-      await createAlertsFromAI(
-        patientId,
-        treatment.doctor,
-        evaluation.triggeredRules
-      );
-
-      return res.status(201).json(newCompliance);
-    }
-  } catch (error) {
-    console.error("[Error] Error en recordDailyCompliance:", error);
-    res.status(500).json({ message: "Error al registrar cumplimiento diario" });
   }
 };
 
@@ -445,11 +407,126 @@ export const finishTreatment = async (req, res) => {
     return res.status(200).json(updatedTreatment);
   } catch (error) {
     console.error("[Error] Error en finishTreatment:", error);
+    res.status(500).json({
+      message: "Error al actualizar la observación del tratamiento finalizado",
+    });
+  }
+};
+
+export const recordDailyCompliance = async (req, res) => {
+  const treatmentId = req.params.treatmentId;
+  const patientId = req.user.id;
+
+  if (!treatmentId || !mongoose.Types.ObjectId.isValid(treatmentId)) {
+    return res
+      .status(400)
+      .json({ message: "ID de tratamiento inválido o faltante." });
+  }
+
+  if (!patientId) {
+    return res
+      .status(401)
+      .json({
+        message: "Usuario no autenticado o ID de paciente no encontrado.",
+      });
+  }
+
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today);
+    startOfToday.setHours(0, 0, 0, 0);
+    const endOfToday = new Date(today);
+    endOfToday.setHours(23, 59, 59, 999);
+
+    const query = {
+      treatment: treatmentId,
+      patient: patientId,
+      date: {
+        $gte: startOfToday,
+        $lte: endOfToday,
+      },
+    };
+
+    const update = {
+      $set: {
+        status: "Cumplió",
+        date: startOfToday,
+      },
+    };
+
+    const options = {
+      new: true,
+      upsert: true,
+      setDefaultsOnInsert: true,
+    };
+
+    const complianceRecord = await DailyCompliance.findOneAndUpdate(
+      query,
+      update,
+      options
+    );
+
+    res.status(200).json({
+      message: "Registro de cumplimiento diario actualizado a 'Cumplió'.",
+      record: complianceRecord,
+    });
+  } catch (error) {
+    console.error("Error al registrar el cumplimiento diario:", error);
     res
       .status(500)
       .json({
-        message:
-          "Error al actualizar la observación del tratamiento finalizado",
+        message: "Error interno del servidor al registrar el cumplimiento.",
+      });
+  }
+};
+
+export const checkDailyCompliance = async (req, res) => {
+  const treatmentId = req.params.treatmentId;
+  const patientId = req.user.id;
+
+  if (!treatmentId || !mongoose.Types.ObjectId.isValid(treatmentId)) {
+    return res
+      .status(400)
+      .json({ message: "ID de tratamiento inválido o faltante." });
+  }
+
+  if (!patientId) {
+    return res
+      .status(401)
+      .json({
+        message: "Usuario no autenticado o ID de paciente no encontrado.",
+      });
+  }
+
+  try {
+    const today = new Date();
+    const startOfToday = new Date(today);
+    startOfToday.setHours(0, 0, 0, 0);
+    const endOfToday = new Date(today);
+    endOfToday.setHours(23, 59, 59, 999);
+
+    const complianceRecord = await DailyCompliance.findOne({
+      treatment: treatmentId,
+      patient: patientId,
+      status: "Cumplió",
+      date: {
+        $gte: startOfToday,
+        $lte: endOfToday,
+      },
+    })
+      .select("_id")
+      .lean()
+      .exec();
+
+    const complied = !!complianceRecord;
+
+    res.status(200).json(complied);
+  } catch (error) {
+    console.error("Error al verificar el cumplimiento diario:", error);
+    res
+      .status(500)
+      .json({
+        message: "Error interno del servidor al verificar el cumplimiento.",
       });
   }
 };

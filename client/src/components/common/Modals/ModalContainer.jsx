@@ -20,7 +20,7 @@ function ModalContainer({
   }, [onClose]);
   return (
     <div
-      className="fixed inset-0 z-101 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4"
+      className="fixed inset-0 z-101 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 "
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -28,7 +28,7 @@ function ModalContainer({
       <div
         className={`bg-white dark:bg-neutral-900 transition-colors duration-300 ease-in-out rounded-2xl shadow-xl w-full ${
           educational ? "max-w-7xl" : "max-w-xl"
-        } p-6 relative max-h-[90vh] overflow-hidden`}
+        } p-6 relative max-h-[90vh] overflow-hidden `}
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -39,7 +39,7 @@ function ModalContainer({
           <i className="fa-solid fa-xmark text-2xl bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent transition-all duration-300 ease-in-out group-hover:from-cyan-500 group-hover:to-teal-400"></i>
         </button>
 
-        <div className="mt-8 mb-2 overflow-y-auto max-h-[80vh] pr-2 pl-1">
+        <div className="mt-8 mb-2 overflow-y-auto max-h-[80vh] pr-2 pl-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
           <h2
             className={`text-3xl font-bold bg-gradient-to-r ${
               unresolved > 0

@@ -22,7 +22,6 @@ const dailyComplianceSchema = new mongoose.Schema(
       enum: ["Cumplió", "No Cumplió"],
       required: true,
     },
-    patientNote: String,
   },
   { timestamps: true }
 );

@@ -6,6 +6,7 @@ import {
   deleteTreatment,
   getTreatmentHistory,
   recordDailyCompliance,
+  checkDailyCompliance,
   finishTreatment,
 } from "../api/treatment";
 import { handleApiError } from "../utils/handleError";
@@ -20,6 +21,7 @@ export const TreatmentProvider = ({ children }) => {
   const [treatments, setTreatments] = useState([]);
   const [history, setHistory] = useState([]);
   const [error, setError] = useState([]);
+  const [complianceStatus, setComplianceStatus] = useState(false);
 
   const fetchTreatmentByPatient = useCallback(async (patientId) => {
     setTreatment(null);
@@ -60,10 +62,9 @@ export const TreatmentProvider = ({ children }) => {
     }
   }, []);
 
-  const removeTreatment = useCallback(async (patientId) => {
+  const removeTreatment = useCallback(async (patientId, data) => {
     try {
-      await deleteTreatment(patientId);
-      setTreatment(null);
+      await deleteTreatment(patientId, data);
     } catch (err) {
       handleApiError(err, "Error al eliminar el tratamiento", setError);
     }
@@ -84,18 +85,6 @@ export const TreatmentProvider = ({ children }) => {
     }
   }, []);
 
-  const recordCompliance = useCallback(async (patientId, complianceData) => {
-    try {
-      await recordDailyCompliance(patientId, complianceData);
-    } catch (err) {
-      handleApiError(
-        err,
-        "Error al registrar el cumplimiento diario",
-        setError
-      );
-    }
-  }, []);
-
   const finalizeTreatment = useCallback(async (patientId, finishData) => {
     try {
       const { data } = await finishTreatment(patientId, finishData);
@@ -106,6 +95,36 @@ export const TreatmentProvider = ({ children }) => {
         "Error al añadir las observaciones finales",
         setError
       );
+    }
+  }, []);
+
+  const recordCompliance = useCallback(async (treatmentId) => {
+    try {
+      const { data } = await recordDailyCompliance(treatmentId);
+      setComplianceStatus(true);
+      return data;
+    } catch (err) {
+      handleApiError(
+        err,
+        "Error al registrar el cumplimiento diario",
+        setError
+      );
+    }
+  }, []);
+
+  const checkCompliance = useCallback(async (treatmentId) => {
+    setError([]);
+    try {
+      const { data: complied } = await checkDailyCompliance(treatmentId);
+      setComplianceStatus(complied);
+      return complied;
+    } catch (err) {
+      handleApiError(
+        err,
+        "Error al verificar el cumplimiento diario",
+        setError
+      );
+      return false;
     }
   }, []);
 
@@ -123,8 +142,10 @@ export const TreatmentProvider = ({ children }) => {
         saveTreatment,
         removeTreatment,
         fetchTreatmentHistory,
-        recordCompliance,
         finalizeTreatment,
+        recordCompliance,
+        checkCompliance,
+        complianceStatus,
       }}
     >
       {children}

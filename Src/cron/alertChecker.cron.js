@@ -35,14 +35,20 @@ export const startAlertChecker = async () => {
     console.error("[CRON] Error en la revisión inicial:", error);
   }
 
-  cron.schedule("0 */12 * * *", async () => {
-    console.log("[CRON] Iniciando revisión automática de pacientes...");
+  cron.schedule(
+    "0 */12 * * *",
+    async () => {
+      console.log("[CRON] Iniciando revisión automática de pacientes...");
 
-    try {
-      await revisarPacientes();
-      console.log("[CRON] Revisión completa. Alertas clínicas actualizadas.");
-    } catch (error) {
-      console.error("[CRON] Error durante la revisión automática:", error);
+      try {
+        await revisarPacientes();
+        console.log("[CRON] Revisión completa. Alertas clínicas actualizadas.");
+      } catch (error) {
+        console.error("[CRON] Error durante la revisión automática:", error);
+      }
+    },
+    {
+      timezone: "America/Lima",
     }
-  });
+  );
 };

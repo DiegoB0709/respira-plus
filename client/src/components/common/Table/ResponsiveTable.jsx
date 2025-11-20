@@ -35,7 +35,7 @@ function ResponsiveTable({
 
         <div className="max-h-[550px] w-full overflow-y-auto overflow-x-auto max-w-full">
           <table className="w-full table-fixed divide-y divide-gray-200 dark:divide-neutral-700 text-sm transition-colors duration-300 ease-in-out">
-            <tbody className="bg-white dark:bg-neutral-900 divide-y divide-gray-200 dark:divide-neutral-700 transition-colors duration-300 ease-in-out">
+            <tbody className="bg-white dark:bg-neutral-900 divide-y divide-gray-200 dark:divide-neutral-700 transition-colors duration-300 ease-in-out ">
               {loading ? (
                 <tr>
                   <td
