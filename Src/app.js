@@ -16,6 +16,7 @@ import metricsRoutes from "./routes/metrics.routes.js";
 import educationalRoutes from "./routes/educational.routes.js";
 import notificationRoutes from "./routes/notification.routes.js";
 import userRoutes from "./routes/user.routes.js";
+import exportAdminDataRoutes from "./routes/exportAdminData.routes.js";
 
 const app = express();
 
@@ -55,5 +56,6 @@ app.use("/api/metrics", metricsRoutes);
 app.use("/api/educational", educationalRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/user", userRoutes);
+app.use("/api/adminData", exportAdminDataRoutes);
 
 export default app;

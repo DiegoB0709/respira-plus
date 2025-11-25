@@ -9,6 +9,7 @@ import Title from "../Title";
 import Input from "../common/Imput/Input";
 import Button from "../common/Buttons/Button";
 import Toast from "../common/Toast/Toast";
+import ActionButton from "../common/Buttons/ActionButton";
 
 function Usuarios() {
   const { fetchUsers, users, totalUsers, loading, errors } = useUser();
@@ -28,7 +29,7 @@ function Usuarios() {
   const headers = useMemo(() => {
     return onlyWithToken
       ? ["Nombre", "Rol", "Telefono", "Email", "Doctor", "Token"]
-      : ["Nombre", "Rol", "Telefono", "Email", "Doctor"];
+      : ["Nombre", "Rol", "Telefono", "Email", "Doctor", "Acción"];
   }, [onlyWithToken]);
 
   const roleLabels = {
@@ -114,6 +115,10 @@ function Usuarios() {
     },
   ];
 
+  function handleExportData(userId) {
+    console.log("Datos de:", userId);
+  }
+
   return (
     <>
       {errors.length > 0 &&
@@ -190,7 +195,16 @@ function Usuarios() {
                 user.phone ?? "No definido / Por definir",
                 user.email ?? "No definido / Por definir",
                 user.doctor?.username ?? "-",
-                ...(user.registrationToken ? [user.registrationToken] : []),
+                ...(user.registrationToken
+                  ? [user.registrationToken]
+                  : [
+                      <ActionButton
+                        key={`view-${user._id}`}
+                        type="download"
+                        title="Exportar Resumen"
+                        onClick={() => {handleExportData(user._id)}}
+                      />,
+                    ]),
               ]}
             />
           )}
@@ -226,7 +240,19 @@ function Usuarios() {
                         value: user.registrationToken,
                       },
                     ]
-                  : []),
+                  : [
+                      {
+                        label: "Acción",
+                        value: (
+                          <ActionButton
+                            key={`view-${user._id}`}
+                            type="download"
+                            title="Exportar Resumen"
+                            onClick={() => {handleExportData(user._id) }}
+                          />
+                        ),
+                      },
+                    ]),
               ]}
             />
           )}

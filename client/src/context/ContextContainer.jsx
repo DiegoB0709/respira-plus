@@ -6,6 +6,7 @@ import { ClinicalDetailsProvider } from "./ClinicalDetailsContext";
 import { DoctorProvider } from "./DoctorContext";
 import { EducationalProvider } from "./EducationalContext";
 import { ExportProvider } from "./ExportContext";
+import { ExportAdminDataProvider } from "./exportAdminDataContext";
 import { MetricsProvider } from "./MetricsContext";
 import { NotificationProvider } from "./NotificationContext";
 import { TreatmentProvider } from "./TreatmentContext";
@@ -23,13 +24,15 @@ function ContextContainer({ children }) {
                 <DoctorProvider>
                   <EducationalProvider>
                     <ExportProvider>
-                      <MetricsProvider>
-                        <NotificationProvider>
-                          <TreatmentProvider>
-                            <UserProvider>{children}</UserProvider>
-                          </TreatmentProvider>
-                        </NotificationProvider>
-                      </MetricsProvider>
+                      <ExportAdminDataProvider>
+                        <MetricsProvider>
+                          <NotificationProvider>
+                            <TreatmentProvider>
+                              <UserProvider>{children}</UserProvider>
+                            </TreatmentProvider>
+                          </NotificationProvider>
+                        </MetricsProvider>
+                      </ExportAdminDataProvider>
                     </ExportProvider>
                   </EducationalProvider>
                 </DoctorProvider>

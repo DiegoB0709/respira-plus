@@ -10,9 +10,38 @@ import Title from "../Title";
 
 import { Users } from "lucide-react";
 import Toast from "../common/Toast/Toast";
+import { useExportAdminData } from "@/context/exportAdminDataContext";
+
+function ExportButton({ onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label="Cambiar tema"
+      className={`fixed bottom-25 right-8 z-50
+    w-14 h-14 flex items-center justify-center
+    rounded-full shadow-lg cursor-pointer
+    focus:outline-none
+    transform transition-all duration-500 ease-in-out
+    hover:scale-110 active:scale-95
+    bg-slate-800 text-white
+    hover:bg-slate-900
+    dark:bg-yellow-400 dark:text-slate-900
+    dark:hover:bg-yellow-500
+  `}
+    >
+      <i
+        className={`fa-solid transition-transform duration-500 ease-in-out
+      fa-download
+      text-xl
+    `}
+      ></i>
+    </button>
+  );
+}
 
 function Dashboard() {
   const { adminMetrics, error, fetchAdminMetrics } = useMetrics();
+  const {handleExportAllPDF} = useExportAdminData();
 
   useEffect(() => {
     fetchAdminMetrics();
@@ -67,6 +96,10 @@ function Dashboard() {
     name: t.mes,
     cantidad: t.nuevos,
   }));
+
+  function handleExportClick() {
+    handleExportAllPDF();
+  }
 
   return (
     <>
@@ -125,6 +158,7 @@ function Dashboard() {
           </CardWrapper>
         </div>
       </div>
+      <ExportButton onClick={ ()=>{handleExportClick()}} />
     </>
   );
 }

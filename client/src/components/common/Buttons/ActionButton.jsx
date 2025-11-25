@@ -13,6 +13,7 @@ function ActionButton({
     success: "bg-green-500 ",
     view: " bg-gradient-to-r from-teal-400 to-cyan-500 text-white",
     viewed: "bg-gradient-to-r from-gray-300 to-gray-400 text-white",
+    download: "bg-gradient-to-r from-teal-400 to-cyan-500",
   };
   const icons = {
     info: "fa-solid fa-circle-info",
@@ -21,6 +22,7 @@ function ActionButton({
     success: "fa-solid fa-check",
     view: "fa-solid fa-eye",
     viewed: "fa-solid fa-eye",
+    download: "fa-solid fa-download",
   };
 
   return (
