@@ -10,9 +10,12 @@ import Input from "../common/Imput/Input";
 import Button from "../common/Buttons/Button";
 import Toast from "../common/Toast/Toast";
 import ActionButton from "../common/Buttons/ActionButton";
+import { useExportAdminData } from "@/context/ExportAdminDataContext";
 
 function Usuarios() {
   const { fetchUsers, users, totalUsers, loading, errors } = useUser();
+    const { handleExportByIdPDF } = useExportAdminData();
+  
 
   const [onlyWithToken, setOnlyWithToken] = useState(false);
   const [openGenerator, setOpenGenerator] = useState(false);
@@ -116,7 +119,7 @@ function Usuarios() {
   ];
 
   function handleExportData(userId) {
-    console.log("Datos de:", userId);
+    handleExportByIdPDF(userId);
   }
 
   return (

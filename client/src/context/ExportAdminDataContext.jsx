@@ -47,7 +47,7 @@ export const ExportAdminDataProvider = ({ children }) => {
       const { data } = await exportDataById(patientId);
       downloadFile(
         data,
-        buildFileName(`paciente_${patientId}`, "pdf"),
+        buildFileName(`resumen_individual-${patientId}`, "pdf"),
         "application/pdf"
       );
     } catch (err) {
